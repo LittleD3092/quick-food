@@ -10,6 +10,6 @@ You can find meeting notes here:
 
 [iTron - HackMD](https://hackmd.io/team/iTron-robotics-team?nav=overview)
 
-## Methods of Missions
+## Missions
 
 - Alphabet Recognition: use opencv to detect contours
