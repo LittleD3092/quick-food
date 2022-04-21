@@ -1,25 +1,5 @@
-import numpy as np
 import cv2 as cv
-
-
-#################### FIND CORNERS ####################
-# return a picture of dots representing corners
-def detect_corner(img):
-	# convert the image to gray
-	gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-
-	# convert the numbers in gray to float
-	# cv.cornerHarris() needs float image
-	gray = np.float32(gray)
-
-	# detect corners
-	dst = cv.cornerHarris(gray, 2, 3, 0.04)
-	dst = cv.dilate(dst, None)
-
-	return dst
-
-######################################################
-
+import numpy as np
 
 #################### SCAN FOR BOARD ##################
 
@@ -134,28 +114,33 @@ def convert_to_flat(img):
 
 ######################################################
 
-
-####################### MAIN #########################
+######################## MAIN ########################
 
 if __name__ == '__main__':
-	# set filename to the picture location and import image
-	filename = '../pics/T.png'
-	# filename = '../pics/T.png'
-	img = cv.imread(filename)
+	# read image from file
+	#img = cv2.imread('T.jpeg')
+	img = cv.imread('pics/k.png')
 
-	# # scan document
-	# initialize_trackbars()
-	# img = convert_to_flat(img)
-	# # show scanned document
-	# cv.imshow('scanned', img)
-	# cv.waitKey(0)
+	# convert image to flat
+	#################### TODO
 
-	# detect corners
-	dst = detect_corner(img)
+	img2 = img.copy()
 
-	# make red dot on corners and show picture
-	img[dst > 0.01 * dst.max()] = [0, 0, 255]
-	cv.imshow('dst', img)
+	# image --> gray -- 150~200 --> canny
+	img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+	canny = cv.Canny(img, 150, 200)
+
+	# get contour data from canny
+	contours, hier = cv.findContours(canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+
+	# draw contour
+	for cnt in contours:
+		cv.drawContours(img2, cnt, -1, (255, 0, 0), 4)
+		peri = cv.arcLength(cnt, True)
+		vertices = cv.approxPolyDP(cnt, peri * 0.02, True)
+		print(len(vertices))
+	cv.imshow('canny', canny)
+	cv.imshow('img2', img2)
 	cv.waitKey(0)
 
 ######################################################
