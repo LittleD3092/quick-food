@@ -19,7 +19,7 @@ while True:
 	cny = cv2.Canny(gray ,150 ,200)
 
 	# get contour data from canny
-	binary, contours, hier = cv2.findContours(cny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+	contours, hier = cv2.findContours(cny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 	
 	# draw contour
 	for cnt in contours:
