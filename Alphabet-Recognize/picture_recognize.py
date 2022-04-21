@@ -59,11 +59,26 @@ def drawRectangle(img,points,thickness):
 def convert_to_flat(img):
 	img_height, img_width, img_channel = img.shape
 
-	img_blank = np.zeros((img_height, img_width, img_channel), np.uint8)
-
 	# pre processing
+	# only white left
+	img_white_left = img.copy()
+
+
+
+	# Threshold of blue in HSV space
+	lower_white = np.array([0, 0, 190])
+	upper_white = np.array([359, 20, 255])
+	
+	# preparing the mask to overlay
+	hsv = cv.cvtColor(img_white_left, cv.COLOR_BGR2HSV)
+	mask = cv.inRange(hsv, lower_white, upper_white)
+	 
+	# The black region in the mask has the value of 0,
+	# so when multiplied with original image removes all non-white regions
+	img_white_left = cv.bitwise_and(img_white_left, img_white_left, mask = mask)
+
 	# gray
-	img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+	img_gray = cv.cvtColor(img_white_left, cv.COLOR_BGR2GRAY)
 	# blur
 	img_blur = cv.GaussianBlur(img_gray, (5, 5), 1)
 	# canny
@@ -79,7 +94,8 @@ def convert_to_flat(img):
 	contours, hierarchy = cv.findContours(img_threshold, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 	cv.drawContours(img_contours, contours, -1, (0, 255, 0), 2)
 
-	cv.imshow('contours', img_contours)
+	# cv.imshow('contours', img_contours)
+	# cv.waitKey(0)
 
 	# get biggest contour
 	# for display purposes
@@ -101,16 +117,16 @@ def convert_to_flat(img):
 
 	# get scanned paper
 	# remove 20 pixels from each side
-	imgWarpColored = imgWarpColored[20:imgWarpColored.shape[0] - 20, 20:imgWarpColored.shape[1] - 20]
-	imgWarpColored = cv.resize(imgWarpColored,(img_width, img_height))
-	# apply adaptive threshold
-	imgWarpGray = cv.cvtColor(imgWarpColored,cv.COLOR_BGR2GRAY)
-	imgAdaptiveThre = cv.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
-	imgAdaptiveThre = cv.bitwise_not(imgAdaptiveThre)
-	imgAdaptiveThre = cv.medianBlur(imgAdaptiveThre,3)
+	img_warp_colored = img_warp_colored[20:img_warp_colored.shape[0] - 20, 20:img_warp_colored.shape[1] - 20]
+	img_warp_colored = cv.resize(img_warp_colored,(img_width, img_height))
+	# # apply adaptive threshold
+	# imgWarpGray = cv.cvtColor(img_warp_colored,cv.COLOR_BGR2GRAY)
+	# imgAdaptiveThre = cv.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
+	# imgAdaptiveThre = cv.bitwise_not(imgAdaptiveThre)
+	# imgAdaptiveThre = cv.medianBlur(imgAdaptiveThre,3)
 
 	# return result
-	return imgAdaptiveThre
+	return img_warp_colored
 
 ######################################################
 
@@ -118,14 +134,17 @@ def convert_to_flat(img):
 
 if __name__ == '__main__':
 	# read image from file
-	#img = cv2.imread('T.jpeg')
-	img = cv.imread('pics/k.png')
+	img = cv.imread('pics/held_t.jpg')
+	#img = cv.imread('pics/k.png')
+
+	cv.imshow('original', img)
 
 	# convert image to flat
-	#################### TODO
+	initialize_trackbars()
+	img = convert_to_flat(img)
+
 
 	img2 = img.copy()
-
 	# image --> gray -- 150~200 --> canny
 	img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 	canny = cv.Canny(img, 150, 200)
@@ -138,8 +157,8 @@ if __name__ == '__main__':
 		cv.drawContours(img2, cnt, -1, (255, 0, 0), 4)
 		peri = cv.arcLength(cnt, True)
 		vertices = cv.approxPolyDP(cnt, peri * 0.02, True)
-		print(len(vertices))
-	cv.imshow('canny', canny)
+		# print(len(vertices))
+
 	cv.imshow('img2', img2)
 	cv.waitKey(0)
 
