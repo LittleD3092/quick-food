@@ -1,6 +1,5 @@
 import numpy as np
 import cv2 as cv
-import utils
 
 
 #################### FIND CORNERS ####################
@@ -140,7 +139,7 @@ def convert_to_flat(img):
 
 if __name__ == '__main__':
 	# set filename to the picture location and import image
-	filename = '../pics/held_k.jpg'
+	filename = '../pics/T.png'
 	# filename = '../pics/T.png'
 	img = cv.imread(filename)
 
