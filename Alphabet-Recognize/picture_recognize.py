@@ -141,8 +141,11 @@ if __name__ == '__main__':
 
 	# convert image to flat
 	initialize_trackbars()
-	img = convert_to_flat(img)
+	img_flat = convert_to_flat(img)
+	# if img_flat != 1:
+	# 	img = img_flat
 
+	img = img_flat
 
 	img2 = img.copy()
 	# image --> gray -- 150~200 --> canny
@@ -151,7 +154,11 @@ if __name__ == '__main__':
 
 	# get contour data from canny
 	contours, hier = cv.findContours(canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-
+	# contour_coordinates = []
+	# for contour in contours:
+	# 	contour_coordinates.append(contours[contour])
+	a=len(contours)
+	print(a)
 	# draw contour
 	for cnt in contours:
 		cv.drawContours(img2, cnt, -1, (255, 0, 0), 4)
