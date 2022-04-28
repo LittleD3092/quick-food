@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 lower_black = np.array([0,0,0])
-upper_black = np.array([180,255,30])
+upper_black = np.array([180,100,80])
 
 video = cv2.VideoCapture(0) #抓取畫面
 
@@ -16,7 +16,7 @@ while True:
     contours, hierarchy = cv2.findContours(mask_black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
     if len(contours) != 0 :
         for contour in contours:
-            if cv2.contourArea(contour) >500 :
+            if cv2.contourArea(contour) > 1200 :
                 x,y,w,h = cv2.boundingRect(contour)
                 cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,255),3)
 

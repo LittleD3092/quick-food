@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-lower_blue = np.array([100,80,20])
+lower_blue = np.array([100,90,20])
 upper_blue = np.array([124,255,255])
 
 video = cv2.VideoCapture(0) #抓取畫面

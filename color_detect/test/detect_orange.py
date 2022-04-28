@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
 
-lower_orange = np.array([3,60,46])
-upper_orange = np.array([10,255,255])
+lower_orange = np.array([10,60,46])
+upper_orange = np.array([15,255,255])
 
-video = cv2.VideoCapture(0) #抓取畫面
+video = cv2.VideoCapture('/dev/video4') #抓取畫面
 
 while True:
     success,img = video.read()
