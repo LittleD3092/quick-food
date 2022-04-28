@@ -19,18 +19,30 @@ You can find meeting notes here:
 ```mermaid
 flowchart TD
 
-dot_recognize -- 丟3個geometry --> main_control
-alphabet_recognize -- 丟三個geometry --> main_control
+dot_recognize -- 丟一個數字 --> main_control
+alphabet_recognize -- 丟一個字母 --> main_control
 color_detect -- 丟byte --> main_control
+
+distance_from_camera -. 距離或離中間距離 .-> main_control
+main_control -- 目前狀態 --> distance_from_camera
 
 navigation -.得到目前位置座標.-> main_control
 main_control -- 丟一個geometry --> navigation
 
-px4 -- 角度等 --> navigation
-
 navigation -- 丟前進後退等指令 --> motor_control
 motor_control -. 得到速度等資訊 .-> navigation
 ```
+
+- 目前狀態為一個字串，代表需要掃描的東西
+  - `"alphabet"`
+  - `"basketball"`
+  - `"bowling"`
+  - `"dot"`
+- 距離或離中間距離代表會回傳以下東西
+  - 一個距離(數字)
+  - 距離代表的意義
+    - 物體不在中間，`"attitude adjustment"`
+    - 物體在中間，`"distance detect"`
 
 ## Flowchart
 
