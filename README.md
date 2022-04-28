@@ -13,3 +13,44 @@ You can find meeting notes here:
 ## Missions
 
 - Alphabet Recognition: use opencv to detect contours
+
+## Node Graph
+
+```mermaid
+flowchart TD
+
+dot_recognize -- 丟3個geometry --> main_control
+alphabet_recognize -- 丟三個geometry --> main_control
+color_detect -- 丟byte --> main_control
+
+navigation -.得到目前位置座標.-> main_control
+main_control -- 丟一個geometry --> navigation
+
+px4 -- 角度等 --> navigation
+
+navigation -- 丟前進後退等指令 --> motor_control
+motor_control -. 得到速度等資訊 .-> navigation
+```
+
+## Flowchart
+
+```mermaid
+flowchart TD
+
+id1([A]) --> id2[走到I] --> id3{位置準確嗎} -- yes --> id4[夾三顆籃球]
+
+id3 -- no --> id2
+
+id4 --> id5[走到G] --> id6{位置準確嗎} -- yes --> id7[投籃] --> id8{投完了嗎} -- yes --> id9[走到J]
+id6 -- no --> id5
+id8 --no--> id5
+id9 --> id10{位置準確嗎}
+id10 -- yes --> id11[拿保齡球]
+id10 -- no --> id9
+id11 --> id12[走到H] --> id13{位置準確嗎}
+id13 -- yes --> id14[投保齡球]
+id13 -- no --> id12
+id14 --> id15{投完了嗎}
+id15 --yes--> id16([任務結束])
+id15 --no-->id12
+```
