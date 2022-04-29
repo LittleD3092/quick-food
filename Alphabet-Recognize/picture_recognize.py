@@ -22,8 +22,10 @@ def get_biggest_contour(contours, mode = "paper"):
 	else:
 		for i in contours:
 			area = cv.contourArea(i)
+			peri = cv.arcLength(i, True)
+			approx = cv.approxPolyDP(i, 0.02 * peri, True)
 			if area > max_area:
-				biggest_contour = i
+				biggest_contour = approx
 				max_area = area
 	return biggest_contour, max_area
 
@@ -152,11 +154,11 @@ def get_min_y(dots):
 	return min_y
 
 def filter_max_min_y(dots, max_y, min_y):
-	new_dots = np.zeros(1, 2)
+	new_dots = np.zeros((1, 2))
 	init = False
 	for dot in dots:
 		if ( dot[0] > (max_y - 5) or dot[0] < (min_y + 5) ) and init:
-			new_dots = np.append(new_dots, np.reshape(dot, (1, 2)))
+			new_dots = np.append(new_dots, np.reshape(dot, (1, 2)), axis = 0)
 		elif dot[0] > (max_y - 5) or dot[0] < (min_y + 5):
 			new_dots[0][0], new_dots[0][1] = dot[0], dot[1]
 			init = True
@@ -168,6 +170,8 @@ def distance_between_dots(dot1, dot2):
 	dot2_x = dot2[0]
 	dot2_y = dot2[1]
 	distance = sqrt( (dot2_x - dot1_x) ** 2 + (dot2_y - dot1_y) ** 2)
+
+	return distance
 
 def organize_group(group = []):
 	group_size = len(group)
@@ -184,7 +188,7 @@ def organize_group(group = []):
 	return group
 
 def avg_of_cluster(dots, cluster_group):
-	num_of_groups = max(cluster_group)
+	num_of_groups = max(cluster_group) + 1
 	num_of_dots = np.shape(dots)[0]
 	avg_dots = []
 	for group in range(num_of_groups):
@@ -203,7 +207,7 @@ def avg_of_cluster(dots, cluster_group):
 	return avg_dots
 
 def std_deviation_of_cluster(dots, cluster_group):
-	num_of_groups = max(cluster_group)
+	num_of_groups = max(cluster_group) + 1
 	num_of_dots = np.shape(dots)[0]
 	std_deviation_list = []
 	avg_dots = avg_of_cluster(dots, cluster_group)
@@ -228,15 +232,20 @@ def merge_cluster(dots):
 	# standard deviation of cluster
 
 	# asign group to dots, each group is a cluster
-	cluster_group = range(np.shape(dots)[0])
+	cluster_group = []
+	for i in range(np.shape(dots)[0]):
+		cluster_group.append(i)
 
 	for i in range(np.shape(dots)[0]):
 		for j in range(i + 1, np.shape(dots)[0]):
-			if(distance_between_dots(dots[i], dots[j]) < 5):
-				cluster_group[j] = cluster_group[i]
-	
+			if(distance_between_dots(dots[i], dots[j]) < 10):
+				merge_to = cluster_group[i]
+				merge_from = cluster_group[j]
+				for k in range(np.shape(dots)[0]):
+					if cluster_group[k] == merge_from:
+						cluster_group[k] = merge_to
+
 	cluster_group = organize_group(cluster_group)
-	num_of_groups = max(cluster_group) + 1
 
 	# get average point
 	avg_points = avg_of_cluster(dots, cluster_group)
@@ -246,24 +255,41 @@ def merge_cluster(dots):
 
 	return avg_points, std_deviation
 
-def guess_alphabet(dots):
+def guess_alphabet(dots, img = None):
 	max_y = get_max_y(dots)
 	min_y = get_min_y(dots)
+
 	dots = filter_max_min_y(dots, max_y, min_y)
 	feature_points, std_deviation = merge_cluster(dots)
+
+	try:
+		for dot in dots:
+			cv.circle(img,(int(dot[1]), int(dot[0])), 1, (0, 0, 255), -1)
+		for dot in feature_points:
+			cv.circle(img,(int(dot[1]), int(dot[0])), 5, (0, 255, 0), -1)
+		cv.imshow('guess alphabet', img)
+	except:
+		pass
+		
 
 	num_of_verticle_lines = 0
 	max_ratio_of_std_deviation = 0.0
 	for i in range(len(feature_points)):
 		for j in range(i + 1, len(feature_points)):
-			point1_x = feature_points[i][0]
-			point1_y = feature_points[i][1]
-			point2_x = feature_points[j][0]
-			point2_y = feature_points[j][1]
+			point1_y = feature_points[i][0]
+			point1_x = feature_points[i][1]
+			point2_y = feature_points[j][0]
+			point2_x = feature_points[j][1]
 			if abs(point1_x - point2_x) < 10:
 				num_of_verticle_lines += 1
-			if max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j]) > max_ratio_of_std_deviation:
-				max_ratio_of_std_deviation = max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j])
+			try:
+				if max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j]) > max_ratio_of_std_deviation:
+					max_ratio_of_std_deviation = max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j])
+			except:
+				print(std_deviation)
+				print(i, j, len(feature_points))
+				exit()
+
 	if num_of_verticle_lines == 2:
 		return "K"
 	elif max_ratio_of_std_deviation > 2 and num_of_verticle_lines == 1:
@@ -299,9 +325,6 @@ if __name__ == '__main__':
 	# get contour data from canny
 	contours, hier = cv.findContours(canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
 
-	# get biggest contour
-	contours = get_biggest_contour(contours, mode = "closeloop")
-
 	# draw contour
 	for cnt in contours:
 		cv.drawContours(img2, cnt, -1, (255, 0, 0), 3)
@@ -313,7 +336,7 @@ if __name__ == '__main__':
 	cv.drawContours(mask,contours,-1,255,-1)
 	pixelpoints = np.transpose(np.nonzero(mask))
 
-	alphabet = guess_alphabet(pixelpoints)
+	alphabet = guess_alphabet(pixelpoints, img = img2.copy())
 	print("I think it is \'", alphabet, "\'", sep = '')
 
 	cv.imshow('result', img2)
