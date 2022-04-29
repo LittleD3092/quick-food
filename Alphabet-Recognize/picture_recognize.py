@@ -280,7 +280,7 @@ def guess_alphabet(dots, img = None):
 			point1_x = feature_points[i][1]
 			point2_y = feature_points[j][0]
 			point2_x = feature_points[j][1]
-			if abs(point1_x - point2_x) < 10:
+			if abs(point1_x - point2_x) < 20:
 				num_of_verticle_lines += 1
 			try:
 				if max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j]) > max_ratio_of_std_deviation:
@@ -307,7 +307,7 @@ def guess_alphabet(dots, img = None):
 
 if __name__ == '__main__':
 	# read image from file
-	img = cv.imread('pics/held_t.jpg')
+	img = cv.imread('pics/held_k.jpg')
 	#img = cv.imread('pics/k.png')
 
 	cv.imshow('original', img)
