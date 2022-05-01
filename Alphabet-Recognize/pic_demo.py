@@ -16,7 +16,7 @@ def get_biggest_contour(contours, mode = "paper"):
 			area = cv.contourArea(i)
 			peri = cv.arcLength(i, True)
 			approx = cv.approxPolyDP(i, 0.02 * peri, True)
-			if area > max_area and len(approx) == 4:
+			if area > max_area and len(approx) == 4 and area > 2000:
 				biggest_contour = approx
 				max_area = area
 	else:
@@ -63,12 +63,13 @@ def convert_to_flat(img):
 
 
 	# Threshold of blue in HSV space
-	lower_white = np.array([0, 0, 190])
-	upper_white = np.array([359, 20, 255])
+	lower_white = np.array([0, 0, 180])
+	upper_white = np.array([359, 128, 255])
 	
 	# preparing the mask to overlay
 	hsv = cv.cvtColor(img_white_left, cv.COLOR_BGR2HSV)
 	mask = cv.inRange(hsv, lower_white, upper_white)
+	cv.imshow("convert_to_flat", mask)
 	 
 	# The black region in the mask has the value of 0,
 	# so when multiplied with original image removes all non-white regions
@@ -91,7 +92,7 @@ def convert_to_flat(img):
 	contours, hierarchy = cv.findContours(img_canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 	cv.drawContours(img_contours, contours, -1, (0, 255, 0), 2)
 
-	# cv.imshow('contours', img_contours)
+	cv.imshow('contours', img_contours)
 	# cv.waitKey(0)
 
 	# get biggest contour
@@ -130,7 +131,7 @@ def convert_to_flat(img):
 	images = np.hstack([img_white_left, img_gray, img_blur, img_canny,	img_contours, img_biggest_contour, img_warp_colored])
 	images = cv.resize(images, (img_width * 7 // 3, img_height // 3))
 
-	cv.imshow('flaten process', images)
+	# cv.imshow('flaten process', images)
 
 	# return result
 	return img_warp_colored
@@ -267,7 +268,7 @@ def guess_alphabet(dots, img = None):
 			cv.circle(img,(int(dot[1]), int(dot[0])), 1, (0, 0, 255), -1)
 		for dot in feature_points:
 			cv.circle(img,(int(dot[1]), int(dot[0])), 5, (0, 255, 0), -1)
-		cv.imshow('guess alphabet', img)
+		# cv.imshow('guess alphabet', img)
 	except:
 		pass
 		
@@ -286,9 +287,7 @@ def guess_alphabet(dots, img = None):
 				if max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j]) > max_ratio_of_std_deviation:
 					max_ratio_of_std_deviation = max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j])
 			except:
-				print(std_deviation)
-				print(i, j, len(feature_points))
-				exit()
+				pass
 
 	if num_of_verticle_lines == 2:
 		return "K"
@@ -308,6 +307,10 @@ def guess_alphabet(dots, img = None):
 if __name__ == '__main__':
 	# read image from file
 	img = cv.imread('pics/held_d.jpg')
+	scale = 1
+	while (not img.shape[0] / scale <= 480) and (not img.shape[1] / scale <= 640):
+		scale += 1
+	img = cv.resize(img, (img.shape[1] // scale, img.shape[0] // scale))
 	#img = cv.imread('pics/k.png')
 
 	cv.imshow('original', img)
