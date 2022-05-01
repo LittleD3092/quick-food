@@ -307,7 +307,7 @@ def guess_alphabet(dots, img = None):
 
 if __name__ == '__main__':
 	# read image from file
-	img = cv.imread('pics/held_k.jpg')
+	img = cv.imread('pics/held_d.jpg')
 	#img = cv.imread('pics/k.png')
 
 	cv.imshow('original', img)
