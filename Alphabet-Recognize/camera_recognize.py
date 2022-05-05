@@ -1,7 +1,7 @@
 import cv2
 
 # capture from camera, 0 means first camera attached
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
 	# read from camera
