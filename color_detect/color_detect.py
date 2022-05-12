@@ -1,4 +1,3 @@
-from re import A
 import cv2
 import numpy as np
 
