@@ -5,7 +5,7 @@ import time
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	cap = cv.VideoCapture(1)
+	cap = cv.VideoCapture(2)
 
 	while True:
 		# read from camera
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 			cny = cv.Canny(gray ,150 ,200)
 
 			# get contour data from canny
-			contours, hier = cv.findContours(cny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
+			contours, hier = cv.findContours(cny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 			
 			# draw contour
 			for cnt in contours:
