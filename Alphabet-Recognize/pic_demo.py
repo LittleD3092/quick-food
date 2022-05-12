@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 from math import sqrt
+import time
 
 #################### SCAN FOR BOARD ##################
 
@@ -63,12 +64,14 @@ def convert_to_flat(img):
 
 
 	# Threshold of blue in HSV space
-	lower_white = np.array([0, 0, 180])
-	upper_white = np.array([359, 128, 255])
+	lower_black = np.array([0, 0, 0])
+	upper_black = np.array([359, 128, 100])
 	
 	# preparing the mask to overlay
 	hsv = cv.cvtColor(img_white_left, cv.COLOR_BGR2HSV)
-	mask = cv.inRange(hsv, lower_white, upper_white)
+	mask = cv.inRange(hsv, lower_black, upper_black)
+	mask = np.where(mask >= 128, 0, 255)
+	mask = mask.astype(np.uint8)
 	cv.imshow("convert_to_flat", mask)
 	 
 	# The black region in the mask has the value of 0,
@@ -170,7 +173,7 @@ def distance_between_dots(dot1, dot2):
 	dot1_y = dot1[1]
 	dot2_x = dot2[0]
 	dot2_y = dot2[1]
-	distance = sqrt( (dot2_x - dot1_x) ** 2 + (dot2_y - dot1_y) ** 2)
+	distance = abs(dot1_x - dot2_x)
 
 	return distance
 
@@ -227,10 +230,25 @@ def std_deviation_of_cluster(dots, cluster_group):
 		std_deviation_list.append(std_deviation)
 	return std_deviation_list
 
+def farest_distance_of_cluster(dots, cluster_group):
+	num_of_groups = max(cluster_group) + 1
+	num_of_dots = np.shape(dots)[0]
+	list_of_distance = []
+	for group in range(num_of_groups):
+		max_x = 0
+		min_x = 2000
+		for dot in range(num_of_dots):
+			if cluster_group[dot] == group:
+				max_x = max(dots[dot][0], max_x)
+				min_x = min(dots[dot][0], min_x)
+		list_of_distance.append(max_x - min_x)
+	return list_of_distance
+
+
 def merge_cluster(dots):
 	# return cluster info
 	# average point for each cluster
-	# standard deviation of cluster
+	# farest distance of cluster
 
 	# asign group to dots, each group is a cluster
 	cluster_group = []
@@ -245,23 +263,26 @@ def merge_cluster(dots):
 				for k in range(np.shape(dots)[0]):
 					if cluster_group[k] == merge_from:
 						cluster_group[k] = merge_to
+					print(i, j, k)
 
 	cluster_group = organize_group(cluster_group)
 
 	# get average point
 	avg_points = avg_of_cluster(dots, cluster_group)
 
-	# get standard deviation
-	std_deviation = std_deviation_of_cluster(dots, cluster_group)
+	# get farest distance of cluster
+	farest_distance = farest_distance_of_cluster(dots, cluster_group)
 
-	return avg_points, std_deviation
+	if farest_distance == 0: farest_distance = 1
+
+	return avg_points, farest_distance
 
 def guess_alphabet(dots, img = None):
 	max_y = get_max_y(dots)
 	min_y = get_min_y(dots)
 
 	dots = filter_max_min_y(dots, max_y, min_y)
-	feature_points, std_deviation = merge_cluster(dots)
+	feature_points, max_distance = merge_cluster(dots.copy())
 
 	try:
 		for dot in dots:
@@ -274,7 +295,7 @@ def guess_alphabet(dots, img = None):
 		
 
 	num_of_verticle_lines = 0
-	max_ratio_of_std_deviation = 0.0
+	max_ratio_of_max_distance = 0.0
 	for i in range(len(feature_points)):
 		for j in range(i + 1, len(feature_points)):
 			point1_y = feature_points[i][0]
@@ -284,16 +305,16 @@ def guess_alphabet(dots, img = None):
 			if abs(point1_x - point2_x) < 20:
 				num_of_verticle_lines += 1
 			try:
-				if max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j]) > max_ratio_of_std_deviation:
-					max_ratio_of_std_deviation = max(std_deviation[i], std_deviation[j]) / min(std_deviation[i], std_deviation[j])
+				if max(max_distance[i], max_distance[j]) / min(max_distance[i], max_distance[j]) > max_ratio_of_max_distance:
+					max_ratio_of_max_distance = max(max_distance[i], max_distance[j]) / min(max_distance[i], max_distance[j])
 			except:
 				pass
 
 	if num_of_verticle_lines == 2:
 		return "K"
-	elif max_ratio_of_std_deviation > 2 and num_of_verticle_lines == 1:
+	elif max_ratio_of_max_distance > 2 and num_of_verticle_lines == 1:
 		return "T"
-	elif max_ratio_of_std_deviation <= 2 and num_of_verticle_lines == 1:
+	elif max_ratio_of_max_distance <= 2 and num_of_verticle_lines == 1:
 		return "D"
 	else:
 		return "?"
@@ -306,7 +327,7 @@ def guess_alphabet(dots, img = None):
 
 if __name__ == '__main__':
 	# read image from file
-	img = cv.imread('pics/held_d.jpg')
+	img = cv.imread('pics/T.png')
 	scale = 1
 	while (not img.shape[0] / scale <= 480) and (not img.shape[1] / scale <= 640):
 		scale += 1
