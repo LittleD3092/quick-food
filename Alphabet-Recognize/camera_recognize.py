@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 import pic_demo
 import time
+import os
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached

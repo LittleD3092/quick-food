@@ -4,6 +4,7 @@ from math import sqrt
 import time
 from PIL import Image
 import pytesseract
+import sys
 
 #################### SCAN FOR BOARD ##################
 
@@ -153,7 +154,11 @@ def guess_alphabet(img):
 	kernel = np.ones((1, 1), np.uint8)
 	img = cv.dilate(img, kernel, iterations=1)
 	img = cv.erode(img, kernel, iterations=1)
-	tessdata_dir_config = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" --psm 10  --oem 3 '
+	tessdata_dir_config = ""
+	if sys.platform.startswith('linux'):
+		tessdata_dir_config = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" --psm 10  --oem 3 '
+	elif sys.platform.startswith('win32'):
+		tessdata_dir_config = '--tessdata-dir "C:\\Program Files\\Tesseract-OCR\\tessdata" --psm 10  --oem 3 '
 	arr = Image.fromarray(img)
 	raw_result = pytesseract.image_to_string(arr, config = tessdata_dir_config)
 	# print(result)
