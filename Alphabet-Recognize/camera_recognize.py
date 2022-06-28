@@ -5,7 +5,7 @@ import time
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	cap = cv.VideoCapture(0)
+	cap = cv.VideoCapture(2)
 
 	while True:
 		# read from camera
@@ -22,4 +22,4 @@ if __name__ == '__main__':
 			print("I can't recognize this alphabet")
 		cv.imshow('img', frame)
 
-		cv.waitKey(1000)
+		cv.waitKey(1)
