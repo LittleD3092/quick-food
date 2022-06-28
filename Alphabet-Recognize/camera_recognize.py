@@ -5,7 +5,7 @@ import time
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	cap = cv.VideoCapture(2)
+	cap = cv.VideoCapture(0)
 
 	while True:
 		# read from camera
@@ -13,33 +13,13 @@ if __name__ == '__main__':
 		#     frame: picture captured
 		ret, frame = cap.read()
 		# copy the frame
-		img2 = frame.copy()
 		img_flat = pic_demo.convert_to_flat(frame.copy())
-		if type(img_flat) != type(1):
-			frame = img_flat
-
-			# full color --> gray
-			gray = cv.cvtColor(frame , cv.COLOR_BGR2GRAY)
-
-			# gray -- 150 ~ 200 --> canny
-			cny = cv.Canny(gray ,150 ,200)
-
-			# get contour data from canny
-			contours, hier = cv.findContours(cny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-			
-			# draw contour
-			for cnt in contours:
-				cv.drawContours(img2, cnt, -1, (255, 0, 0), 4)
-				peri = cv.arcLength(cnt, True)
-				vertices = cv.approxPolyDP(cnt, peri * 0.02, True)
-			
-			mask = np.zeros(cv.cvtColor(frame, cv.COLOR_BGR2GRAY).shape, np.uint8)
-			cv.drawContours(mask, contours, -1, 255, -1)
-			pixelpoints = np.transpose(np.nonzero(mask))
-			# print(mask)
-
-			alphabet = pic_demo.guess_alphabet(pixelpoints)
+		
+		if type(img_flat) != type(int()):
+			alphabet = pic_demo.guess_alphabet(img_flat)
 			print("I think it is \'", alphabet, "\'", sep = '')
+		else:
+			print("I can't recognize this alphabet")
+		cv.imshow('img', frame)
 
-		cv.imshow('img2', img2)
-		cv.waitKey(1)
+		cv.waitKey(1000)

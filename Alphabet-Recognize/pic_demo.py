@@ -2,6 +2,8 @@ import cv2 as cv
 import numpy as np
 from math import sqrt
 import time
+from PIL import Image
+import pytesseract
 
 #################### SCAN FOR BOARD ##################
 
@@ -143,183 +145,23 @@ def convert_to_flat(img):
 
 #################### GET ALPHABET ####################
 
-def get_max_y(dots):
-	max_y = 0
-	for dot in dots:
-		if dot[0] > max_y:
-			max_y = dot[0]
-	return max_y
+def guess_alphabet(img):
+	lastresult = ''
 
-def get_min_y(dots):
-	min_y = 100000
-	for dot in dots:
-		if dot[0] < min_y:
-			min_y = dot[0]
-	return min_y
+	img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-def filter_max_min_y(dots, max_y, min_y):
-	new_dots = np.zeros((1, 2))
-	init = False
-	for dot in dots:
-		if ( dot[0] > (max_y - 5) or dot[0] < (min_y + 5) ) and init:
-			new_dots = np.append(new_dots, np.reshape(dot, (1, 2)), axis = 0)
-		elif dot[0] > (max_y - 5) or dot[0] < (min_y + 5):
-			new_dots[0][0], new_dots[0][1] = dot[0], dot[1]
-			init = True
-	return new_dots
-
-def distance_between_dots(dot1, dot2):
-	dot1_x = dot1[0]
-	dot1_y = dot1[1]
-	dot2_x = dot2[0]
-	dot2_y = dot2[1]
-	distance = abs(dot1_x - dot2_x)
-
-	return distance
-
-def organize_group(group = []):
-	group_size = len(group)
-	max_num = max(group)
-	num_of_groups = 0
-	iterator = 0
-	while iterator <= max_num:
-		if iterator in group:
-			for i in range(group_size):
-				if group[i] == iterator:
-					group[i] = num_of_groups
-			num_of_groups += 1
-		iterator += 1
-	return group
-
-def avg_of_cluster(dots, cluster_group):
-	num_of_groups = max(cluster_group) + 1
-	num_of_dots = np.shape(dots)[0]
-	avg_dots = []
-	for group in range(num_of_groups):
-		group_x_sum = 0
-		group_y_sum = 0
-		group_size = 0
-		for i in range(num_of_dots):
-			if group == cluster_group[i]:
-				group_x_sum += dots[i][0]
-				group_y_sum += dots[i][1]
-				group_size += 1
-		group_x_avg = group_x_sum // group_size
-		group_y_avg = group_y_sum // group_size
-		avg_dots.append([group_x_avg, group_y_avg])
-
-	return avg_dots
-
-def std_deviation_of_cluster(dots, cluster_group):
-	num_of_groups = max(cluster_group) + 1
-	num_of_dots = np.shape(dots)[0]
-	std_deviation_list = []
-	avg_dots = avg_of_cluster(dots, cluster_group)
-	for group in range(num_of_groups):
-		std_deviation = 0
-		group_size = 0
-		for i in range(num_of_dots):
-			if group == cluster_group[i]:
-				dot_x = dots[i][0]
-				dot_y = dots[i][1]
-				dot_avg_x = avg_dots[group][0]
-				dot_avg_y = avg_dots[group][1]
-				std_deviation += (dot_x - dot_avg_x) ** 2 + (dot_y - dot_avg_y) ** 2
-				group_size += 1
-		std_deviation = sqrt(std_deviation / group_size)
-		std_deviation_list.append(std_deviation)
-	return std_deviation_list
-
-def farest_distance_of_cluster(dots, cluster_group):
-	num_of_groups = max(cluster_group) + 1
-	num_of_dots = np.shape(dots)[0]
-	list_of_distance = []
-	for group in range(num_of_groups):
-		max_x = 0
-		min_x = 2000
-		for dot in range(num_of_dots):
-			if cluster_group[dot] == group:
-				max_x = max(dots[dot][0], max_x)
-				min_x = min(dots[dot][0], min_x)
-		list_of_distance.append(max_x - min_x)
-	return list_of_distance
-
-
-def merge_cluster(dots):
-	# return cluster info
-	# average point for each cluster
-	# farest distance of cluster
-
-	# asign group to dots, each group is a cluster
-	cluster_group = []
-	for i in range(np.shape(dots)[0]):
-		cluster_group.append(i)
-
-	for i in range(np.shape(dots)[0]):
-		for j in range(i + 1, np.shape(dots)[0]):
-			if(distance_between_dots(dots[i], dots[j]) < 10):
-				merge_to = cluster_group[i]
-				merge_from = cluster_group[j]
-				for k in range(np.shape(dots)[0]):
-					if cluster_group[k] == merge_from:
-						cluster_group[k] = merge_to
-					print(i, j, k)
-
-	cluster_group = organize_group(cluster_group)
-
-	# get average point
-	avg_points = avg_of_cluster(dots, cluster_group)
-
-	# get farest distance of cluster
-	farest_distance = farest_distance_of_cluster(dots, cluster_group)
-
-	if farest_distance == 0: farest_distance = 1
-
-	return avg_points, farest_distance
-
-def guess_alphabet(dots, img = None):
-	max_y = get_max_y(dots)
-	min_y = get_min_y(dots)
-
-	dots = filter_max_min_y(dots, max_y, min_y)
-	feature_points, max_distance = merge_cluster(dots.copy())
-
-	try:
-		for dot in dots:
-			cv.circle(img,(int(dot[1]), int(dot[0])), 1, (0, 0, 255), -1)
-		for dot in feature_points:
-			cv.circle(img,(int(dot[1]), int(dot[0])), 5, (0, 255, 0), -1)
-		# cv.imshow('guess alphabet', img)
-	except:
-		pass
-		
-
-	num_of_verticle_lines = 0
-	max_ratio_of_max_distance = 0.0
-	for i in range(len(feature_points)):
-		for j in range(i + 1, len(feature_points)):
-			point1_y = feature_points[i][0]
-			point1_x = feature_points[i][1]
-			point2_y = feature_points[j][0]
-			point2_x = feature_points[j][1]
-			if abs(point1_x - point2_x) < 20:
-				num_of_verticle_lines += 1
-			try:
-				if max(max_distance[i], max_distance[j]) / min(max_distance[i], max_distance[j]) > max_ratio_of_max_distance:
-					max_ratio_of_max_distance = max(max_distance[i], max_distance[j]) / min(max_distance[i], max_distance[j])
-			except:
-				pass
-
-	if num_of_verticle_lines == 2:
-		return "K"
-	elif max_ratio_of_max_distance > 2 and num_of_verticle_lines == 1:
-		return "T"
-	elif max_ratio_of_max_distance <= 2 and num_of_verticle_lines == 1:
-		return "D"
-	else:
-		return "?"
-	
-
+	kernel = np.ones((1, 1), np.uint8)
+	img = cv.dilate(img, kernel, iterations=1)
+	img = cv.erode(img, kernel, iterations=1)
+	tessdata_dir_config = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" --psm 10  --oem 3 '
+	arr = Image.fromarray(img)
+	raw_result = pytesseract.image_to_string(arr, config = tessdata_dir_config)
+	# print(result)
+	result = ""
+	for ch in raw_result:
+		if ch.isalpha() and (ch == "T" or ch == 'D' or ch == 'K'):
+			result += ch
+	return result
 
 ######################################################
 
@@ -327,7 +169,7 @@ def guess_alphabet(dots, img = None):
 
 if __name__ == '__main__':
 	# read image from file
-	img = cv.imread('pics/T.png')
+	img = cv.imread('pics/held_k.jpg')
 	scale = 1
 	while (not img.shape[0] / scale <= 480) and (not img.shape[1] / scale <= 640):
 		scale += 1
@@ -338,32 +180,13 @@ if __name__ == '__main__':
 
 	# convert image to flat
 	img_flat = convert_to_flat(img)
-	if type(img_flat) != type(1):
+	if type(img_flat) != type(int()):
 		img = img_flat
 
-	img2 = img.copy()
-	# image --> gray -- 150~200 --> canny
-	img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-	canny = cv.Canny(img, 150, 200)
-
-	# get contour data from canny
-	contours, hier = cv.findContours(canny, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-
-	# draw contour
-	for cnt in contours:
-		cv.drawContours(img2, cnt, -1, (255, 0, 0), 3)
-		peri = cv.arcLength(cnt, True)
-		vertices = cv.approxPolyDP(cnt, peri * 0.02, True)
-		# print(len(vertices))
-
-	mask = np.zeros(img.shape,np.uint8)
-	cv.drawContours(mask,contours,-1,255,-1)
-	pixelpoints = np.transpose(np.nonzero(mask))
-
-	alphabet = guess_alphabet(pixelpoints, img = img2.copy())
+	alphabet = guess_alphabet(img = img.copy())
 	print("I think it is \'", alphabet, "\'", sep = '')
 
-	cv.imshow('result', img2)
+	cv.imshow('result', img)
 	cv.waitKey(0)
 
 ######################################################
