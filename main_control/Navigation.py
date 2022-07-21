@@ -8,7 +8,8 @@ class Navigation:
 	def __init__(self):
 		pass
 
-	# Precondition: Client is up. Given a 3D point and a quaternion as parameter.
+	# Precondition: Client is up. Given a 3D point and a quaternion as parameter or a pose object.
 	# Postcondition: Robot moves to the location and pose determined.
-	def move(self, pointX, pointY, pointZ, qX, qY, qZ, qW):
+	def move(self, pose = None,
+			 	   pointX = None, pointY = None, pointZ = None, qX = None, qY = None, qZ = None, qW = None):
 		pass

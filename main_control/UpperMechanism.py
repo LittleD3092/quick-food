@@ -11,9 +11,9 @@ class UpperMechanism:
 	# Precondition: Client is up. Given an integer 
 	# 				representing the movement. 
 	# 				- 0 for standard position.
-	# 				- 1 for take basketball three times.
+	# 				- 1 for take basketball.
 	# 				- 2 for throw basketball.
-	# 				- 3 for take bowling three times.
+	# 				- 3 for take bowling.
 	#				- 4 for release bowling.
 	def move(self, cmd):
 		pass
