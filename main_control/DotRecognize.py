@@ -1,12 +1,15 @@
 # DotRecognize.py
 # Class implementation for ROS client of server "dot_recognize".
 
+import rospy
+from std_msgs.msg import Empty
+
 class DotRecognize:
 	
 	# Precondition: Nothing.
-	# Postcondition: Client is up and ready to request.
+	# Postcondition: Nothing.
 	def __init__(self):
-		# TODO: Implement function
+		# This is empty intentionally.
 		pass
 
 	# Precondition: Client is up.
@@ -14,5 +17,11 @@ class DotRecognize:
 	# 				 meaning the dot number in the middle 
 	#  				 of the camera.
 	def request(self):
-		# TODO: Implement function.
-		pass
+		rospy.wait_for_service('dot_recognize', 5)
+		try:
+			dot_recognize = rospy.ServiceProxy('dot_recognize', Empty)
+			resp = dot_recognize()
+			return resp.data
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1

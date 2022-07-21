@@ -1,7 +1,5 @@
 # main_control Node
 # !/usr/bin/env python
-import rospy
-from std_msgs.msg import String
 from AlphabetRecognize import AlphabetRecognize
 from ColorDetect import ColorDetect
 from DotRecognize import DotRecognize
