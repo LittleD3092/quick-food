@@ -1,15 +1,17 @@
 # AlphabetRecognize.py
 # Class implementation for ROS client of server "alphabet_recognize".
+import rospy
+from std_msgs.msg import Empty
 
 class AlphabetRecognize:
 	
 	# Precondition: Nothing.
-	# Postcondition: Client is up and ready to request.
+	# Postcondition: Nothing.
 	def __init__(self):
-		# TODO: implement function
+		# This is empty intentionally.
 		pass
 
-	# Precondition: Client is up.
+	# Precondition: Nothing.
 	# Postcondition: Return three integer values.
 	# 				 1. The distance between the alphabet
 	# 					and the middle of the camera.
@@ -21,5 +23,11 @@ class AlphabetRecognize:
 	# 					2 for 'D',
 	# 					3 for 'K'.
 	def request(self):
-		# TODO: implement function
-		pass
+		rospy.wait_for_service('alphabet_recognize', 5)
+		try:
+			alphabet_recognize = rospy.ServiceProxy('alphabet_recognize', Empty)
+			resp = alphabet_recognize()
+			return (resp.data[0], resp.data[1], resp.data[2])
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1
