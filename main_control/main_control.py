@@ -4,24 +4,45 @@ from AlphabetRecognize import AlphabetRecognize
 from ColorDetect import ColorDetect
 from DotRecognize import DotRecognize
 from Navigation import Navigation
-from Pose import Pose
 from UpperMechanism import UpperMechanism
+from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Point
+from geometry_msgs.msg import Quaternion
 
-POSE_B = Pose(870,  170, 0, 0, 0, 0, 0)
-POSE_I = Pose(425,  100, 0, 0, 0, 0, 0)
-POSE_G = Pose(870,  0,   0, 0, 0, 0, 0)
-POSE_J = Pose(1000, 390, 0, 0, 0, 0, 0)
-POSE_H = Pose(1000, 390, 0, 0, 0, 0, 0)
+POSE_B = Pose(position    = Point	  (x = 870, y = 170, z = 0), 
+			  orientation = Quaternion(x = 0, 	y = 0, 	 z = 0, w = 0))
 
-POSE_BASKET = (Pose(870, 0, 0, 0, 0, 0, 0),
-			   Pose(870, 0, 0, 0, 0, 0, 0), 
-			   Pose(870, 0, 0, 0, 0, 0, 0))
-POSE_GOAL = (Pose(1000, 390, 0, 0, 0, 0, 0),
-			 Pose(1000, 390, 0, 0, 0, 0, 0),
-			 Pose(1000, 390, 0, 0, 0, 0, 0),
-			 Pose(1000, 390, 0, 0, 0, 0, 0),
-			 Pose(1000, 390, 0, 0, 0, 0, 0),
-			 Pose(1000, 390, 0, 0, 0, 0, 0))
+POSE_I = Pose(position    = Point	  (x = 425, y = 100, z = 0), 
+			  orientation = Quaternion(x = 0, 	y = 0, 	 z = 0, w = 0))
+
+POSE_G = Pose(position    = Point	  (x = 870, y = 0, z = 0), 
+			  orientation = Quaternion(x = 0,   y = 0, z = 0, w = 0))
+
+POSE_J = Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0))
+
+POSE_H = Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0))
+
+POSE_BASKET = (Pose(position    = Point		(x = 870, y = 0, z = 0), 
+					orientation = Quaternion(x = 0,   y = 0, z = 0, w = 0)),
+			   Pose(position    = Point		(x = 870, y = 0, z = 0), 
+			   		orientation = Quaternion(x = 0,   y = 0, z = 0, w = 0)), 
+			   Pose(position    = Point		(x = 870, y = 0, z = 0), 
+			   		orientation = Quaternion(x = 0,   y = 0, z = 0, w = 0)))
+
+POSE_GOAL = (Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+				  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)),
+			 Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			 	  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)),
+			 Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			 	  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)),
+			 Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			 	  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)),
+			 Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			 	  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)),
+			 Pose(position    = Point	  (x = 1000, y = 390, z = 0), 
+			 	  orientation = Quaternion(x = 0, 	 y = 0,   z = 0, w = 0)))
 
 assert True # turn off this before race
 
