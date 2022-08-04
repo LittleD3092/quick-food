@@ -8,61 +8,124 @@ This is a repository for TDK-2022 competition.
 
 You can find meeting notes here:
 
-[iTron - HackMD](https://hackmd.io/team/iTron-robotics-team?nav=overview)
-
-## Missions
-
-- Alphabet Recognition: use opencv to detect contours
+- [iTron - HackMD](https://hackmd.io/team/iTron-robotics-team?nav=overview)
+- [進度管理 - google drive](https://docs.google.com/document/d/12E3JFJpEgetsssrI30uEMVVPmBOBpHAHNQxU621Bsxs/edit?usp=sharing)
+- [週開會內容 - google drive](https://docs.google.com/document/d/13ywQ8dXawGymXWrEQWETpR7VzdLqom0b-slnPKrO5q8/edit?usp=sharing)
 
 ## Node Graph
 
-```mermaid
-flowchart TD
-
-dot_recognize -- 丟一個數字 --> main_control
-alphabet_recognize -- 丟一個字母 --> main_control
-color_detect -- 丟byte --> main_control
-
-distance_from_camera -. 距離或離中間距離 .-> main_control
-main_control -- 目前狀態 --> distance_from_camera
-
-navigation -.得到目前位置座標.-> main_control
-main_control -- 丟一個geometry --> navigation
-
-navigation -- 丟前進後退等指令 --> motor_control
-motor_control -. 得到速度等資訊 .-> navigation
-```
-
-- 目前狀態為一個字串，代表需要掃描的東西
-  - `"alphabet"`
-  - `"basketball"`
-  - `"bowling"`
-  - `"dot"`
-- 距離或離中間距離代表會回傳以下東西
-  - 一個距離(數字)
-  - 距離代表的意義
-    - 物體不在中間，`"attitude adjustment"`
-    - 物體在中間，`"distance detect"`
+![](pics/Node-Graph.drawio.png)
 
 ## Flowchart
 
 ```mermaid
-flowchart TD
+graph TD
+	%% point reached
+    A(["A點(起點)"])
+    A1(["A點(起點)"])
+    I[/"I點(籃球取球點)"/]
+    I1[/"I點(籃球取球點)"/]
+    G[/"G點(籃球投籃點)"/]
+    G1[/"G點(籃球投籃點)"/]
+    J[/"J點(保齡球取球點)"/]
+    J1[/"J點(保齡球取球點)"/]
+    H[/"H點(保齡球投球點)"/]
+    H1[/"H點(保齡球投球點)"/]
+	
+	%% main ask navigation server to move
+	main2navI["丟 I 點座標到 navigation"]
+	main2navG["丟 G 點座標到 navigation"]
+	main2navJ["丟 J 點座標到 navigation"]
+	main2navH["丟 H 點座標到 navigation"]
+	adjustPos["丟修正geometry到navigation"]
+	adjustPos2["丟修正geometry到navigation"]
+	adjustPos3["丟修正geometry到navigation"]
+	adjustPos4["丟修正geometry到navigation"]
+	
+	%% publish stages
+    mainPubStage1["publish stage 1"]
+	mainPubStage2["publish stage 2"]
+	mainPubStage3["publish stage 3"]
+	mainPubStage4["publish stage 4"]
+	
+	%% read from distance from camera node
+    disFromCam[/"讀取distance_from_camera"/]
+    disFromCam2[/"讀取distance_from_camera"/]
+    disFromCam3[/"讀取distance_from_camera"/]
+    disFromCam4[/"讀取distance_from_camera"/]
+	
+	%% determine whether distance is right or not
+    disCheck{"距離是否正確?"}
+    disCheck2{"距離是否正確?"}
+    disCheck3{"距離是否正確?"}
+    disCheck4{"距離是否正確?"}
+	
+	%% get ball, throw ball movement
+    getBasketball["取籃球(三次) (TODO: 未決定node)"]
+	throwBasketball["投籃球(三次) (TODO: 未決定node)"]
+	getBowling["取保齡球(三次) (TODO: 未決定node)"]
+	throwBowling["丟保齡球(三次) (TODO: 未決定node)"]
 
-id1([A]) --> id2[走到I] --> id3{位置準確嗎} -- yes --> id4[夾三顆籃球]
+	%% --------------------------------------
 
-id3 -- no --> id2
-
-id4 --> id5[走到G] --> id6{位置準確嗎} -- yes --> id7[投籃] --> id8{投完了嗎} -- yes --> id9[走到J]
-id6 -- no --> id5
-id8 --no--> id5
-id9 --> id10{位置準確嗎}
-id10 -- yes --> id11[拿保齡球]
-id10 -- no --> id9
-id11 --> id12[走到H] --> id13{位置準確嗎}
-id13 -- yes --> id14[投保齡球]
-id13 -- no --> id12
-id14 --> id15{投完了嗎}
-id15 --yes--> id16([任務結束])
-id15 --no-->id12
+    A --"stage 1"--> 
+	I --"stage 2"-->
+    G --"stage 3"-->
+    J --"stage 4"-->
+	H
+	
+	%% ---------------------------------------
+	
+    subgraph "main_control node"
+	
+	%% stage 1 起點到取球點並取球
+    A1    			--"進入 stage 1"-->
+    mainPubStage1 	-->
+    main2navI 		-->
+    I1 				-->
+    disFromCam
+	disFromCam 		-->
+	disCheck 		--"Yes" --> 
+	getBasketball
+	disCheck 		--"No" -->
+	adjustPos 		--> 
+	disFromCam
+	
+	%% stage 2 到達投籃點並投籃
+	getBasketball 	-- "進入 stage 2" -->
+	mainPubStage2 	-->
+	main2navG 		-->
+	G1 				-->
+	disFromCam2 	-->
+	disCheck2 		--"Yes"--> 
+	throwBasketball
+	disCheck2 		--"No"-->
+	adjustPos2 		--> 
+	disFromCam2
+	
+	%% stage 3 到達取保齡球點並取保齡球
+	throwBasketball --"進入 stage 3"-->
+	mainPubStage3 	-->
+	main2navJ 		-->
+	J1 				-->
+	disFromCam3 	-->
+	disCheck3		--"Yes"-->
+	getBowling
+	disCheck3 		--"No"-->
+	adjustPos3		-->
+	disFromCam3
+	
+	%% stage 4 到達投保齡球點並丟出保齡球
+	getBowling 		--"進入 stage 4"-->
+	mainPubStage4 	-->
+	main2navH		-->
+	H1				-->
+	disFromCam4		-->
+	disCheck4		--"Yes"-->
+	throwBowling
+	disCheck4		--"No"-->
+	adjustPos4		-->
+	disFromCam4
+	
+    end
 ```
