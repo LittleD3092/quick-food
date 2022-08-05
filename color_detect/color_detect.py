@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-from cv2 import waitKey
-=======
->>>>>>> c6c3f02eba336a6ae7abbedf8a2203d47ac2d986
 import cv2
 import numpy as np
 import rospy
@@ -120,7 +116,7 @@ def calculate_Distance(focalLength_value):
             (image.shape[1] - 300, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
             2.0, (0, 0, 255), 3)          
     cv2.imshow("image", image)
-    waitKey(30)
+    # waitKey(30)
     print(distance_cm,"cm")
     return distance_cm,x_diff
 
