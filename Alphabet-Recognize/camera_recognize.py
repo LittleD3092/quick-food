@@ -21,14 +21,14 @@ def detectpicture():
 		print("I think it is \'", alphabet, "\'", sep='')
 		match alphabet:
 			case T:
-				send_message.data[3]=1
+				send_message.data[2]=1
 			case D:
-				send_message.data[3]=2
+				send_message.data[2]=2
 			case K:
-				send_message.data[3]=3
+				send_message.data[2]=3
 	else:
 		print("I can't recognize this alphabet")
-		send_message.data[3]=0
+		send_message.data[2]=0
 	return send_message
 
 
