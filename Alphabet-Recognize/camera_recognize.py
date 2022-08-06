@@ -9,6 +9,9 @@ def detectpicture():
 # read from camera
 #     ret: whether capture is successful or not
 #     frame: picture captured
+	send_message=Int16MultiArray()
+	send_message.data=[]
+
 	ret, frame = cap.read()
     # copy the frame
 	img_flat = pic_demo.convert_to_flat(frame.copy())
@@ -18,14 +21,15 @@ def detectpicture():
 		print("I think it is \'", alphabet, "\'", sep='')
 		match alphabet:
 			case T:
-				return 1
+				send_message.data[3]=1
 			case D:
-				return 2
+				send_message.data[3]=2
 			case K:
-				return 3
+				send_message.data[3]=3
 	else:
 		print("I can't recognize this alphabet")
-		return 0
+		send_message.data[3]=0
+	return send_message
 
 
 if __name__ == '__main__':
@@ -34,4 +38,3 @@ if __name__ == '__main__':
     rospy.init_node('camera_recognize_services')
     s=rospy.Serivce('alphabet_recognize',Int16MultiArray,detectpicture)
     rospy.spin()
-    cv.waitKey(1)
