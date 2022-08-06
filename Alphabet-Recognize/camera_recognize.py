@@ -10,7 +10,7 @@ def detectpicture():
 #     ret: whether capture is successful or not
 #     frame: picture captured
 	send_message=Int16MultiArray()
-	send_message.data=[]
+	send_message.data=[0,0,0]
 
 	ret, frame = cap.read()
     # copy the frame
