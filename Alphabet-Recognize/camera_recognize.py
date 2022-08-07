@@ -13,6 +13,7 @@ KNOWN_HEIGHT = 15.75
 send_message=Int16MultiArray()
 send_message.data=[0,0,0]
 
+# Read the frame from `cap` and return the message
 def detectpicture():
 # read from camera
 #     ret: whether capture is successful or not
