@@ -10,19 +10,11 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
-<<<<<<< HEAD
-def detectpicture(send_message):
-=======
-send_message=Int16MultiArray()
-send_message.data=[0,0,0]
-
 # Read the frame from `cap` and return the message
-def detectpicture():
->>>>>>> c286f809aaf1e5035c097bd42e42871bd5f357d8
+def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
 #     frame: picture captured
-
 
 	ret, frame = cap.read()
     # copy the frame
