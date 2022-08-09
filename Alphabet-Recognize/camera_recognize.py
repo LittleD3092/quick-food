@@ -10,10 +10,7 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
-send_message=Int16MultiArray()
-send_message.data=[0,0,0]
-
-def detectpicture():
+def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
 #     frame: picture captured
@@ -52,7 +49,7 @@ def find_marker(image):
     rect = cv.minAreaRect(c)      
     return rect
 
-def calculate_Distance(focalLength_value):
+def calculate_Distance(focalLength_value,send_message):
     success,image = cap.read()
     # 获取矩形的中心点坐标，长度，宽度和旋转角度， marke[1][0]代表宽度
     marker = find_marker(image)     
@@ -92,8 +89,10 @@ def calculate_focalDistance(video):
     return focalLength
 
 def main0():
-    detectpicture()
-    calculate_Distance(focalLength)
+    send_message=Int16MultiArray()
+    send_message.data=[0,0,0]
+    send_message = detectpicture(send_message)
+    send_message = calculate_Distance(focalLength,send_message)
 
     return send_message
 
