@@ -10,6 +10,8 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
+# Precondition: send_message is a message type of Int16MultiArray
+# Postcondition: A send_message with the T, D, K data is returned. The send_message is modified from the send_message in the parameter field.
 def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
