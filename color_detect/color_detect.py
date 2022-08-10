@@ -73,13 +73,10 @@ def find_black_object(img):
 				color = 3
 				print(color)
 				return color
-<<<<<<< HEAD
 			else:
 				color = 0
 				return color,"can't find black object"
  
-
-=======
 
 # Precondition: image is a BGR image in numpy array format.
 # Postcondition: return the countour of the rectangle found.
