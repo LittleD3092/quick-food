@@ -1,4 +1,3 @@
-from re import L
 import cv2
 import numpy as np
 import rospy
@@ -31,6 +30,9 @@ def find_orange_object(img):
 				color = 1
 				print(color)
 				return color
+			else:
+				color = 0
+				return color,"can't find orange object"
  
 
 def find_blue_object(img): 
@@ -47,6 +49,10 @@ def find_blue_object(img):
 				color = 2
 				print(color)
 				return color
+			else:
+				color = 0
+				return color,"can't find blue object"
+ 
 
 
 def find_black_object(img):
@@ -63,7 +69,10 @@ def find_black_object(img):
 				color = 3
 				print(color)
 				return color
-
+			else:
+				color = 0
+				return color,"can't find black object"
+ 
 
 def find_marker(image):
 	gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # 将彩色图转化为灰度图
