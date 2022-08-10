@@ -36,6 +36,8 @@ def detectpicture(send_message):
 		send_message.data[2]=0
 	return send_message
 
+# Precondition: image is a numpy array containing a picture with 3 channel.
+# Postcondition: A countour of the detected square is returned.
 def find_marker(image):
 	gray_img = cv.cvtColor(image, cv.COLOR_BGR2GRAY)  # 将彩色图转化为灰度图
 	gray_img = cv.GaussianBlur(gray_img, (5, 5), 0)    # 高斯平滑去噪
