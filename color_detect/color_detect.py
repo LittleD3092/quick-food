@@ -80,7 +80,6 @@ def find_black_object(img):
 
 # Precondition: image is a BGR image in numpy array format.
 # Postcondition: return the countour of the rectangle found.
->>>>>>> fa269580c5c93704b7d60bbb4dbc5a8ee67bfc12
 def find_marker(image):
 	gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # 将彩色图转化为灰度图
 	gray_img = cv2.GaussianBlur(gray_img, (5, 5), 0)    # 高斯平滑去噪
