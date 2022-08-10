@@ -17,6 +17,8 @@ UPPER_BLUE = np.array([124,255,255])
 LOWER_BLACK = np.array([0,0,0])
 UPPER_BLACK = np.array([180,100,80])
 
+# Precondition: image is a BGR image in numpy array format.
+# Postcondition: return the color (which equals 1) if the orange color is found, otherwise return 0.
 def find_orange_object(img):
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 	mask_orange = cv2.inRange(image,LOWER_ORANGE,UPPER_ORANGE) #過濾顏色
@@ -32,7 +34,8 @@ def find_orange_object(img):
 				print(color)
 				return color
  
-
+# Precondition: image is a BGR image in numpy array format.
+# Postcondition: return the color (which equals 2) if the blue color is found, otherwise return 0.
 def find_blue_object(img): 
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 	mask_blue = cv2.inRange(image,LOWER_BLUE,UPPER_BLUE) 
@@ -48,7 +51,8 @@ def find_blue_object(img):
 				print(color)
 				return color
 
-
+# Precondition: image is a BGR image in numpy array format.
+# Postcondition: return the color (which equals 3) if the black color is found, otherwise return 0.
 def find_black_object(img):
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 	mask_black = cv2.inRange(image,LOWER_BLACK,UPPER_BLACK) 
@@ -64,7 +68,8 @@ def find_black_object(img):
 				print(color)
 				return color
 
-
+# Precondition: image is a BGR image in numpy array format.
+# Postcondition: return the countour of the rectangle found.
 def find_marker(image):
 	gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # 将彩色图转化为灰度图
 	gray_img = cv2.GaussianBlur(gray_img, (5, 5), 0)    # 高斯平滑去噪
@@ -81,10 +86,16 @@ def find_marker(image):
 
 
 # 定义距离函数
+# Precondition: knownWidth is the width of the object in the image.
+#               focalLength is the focal length of the camera.
+#               perWidth is the width of the object in the real world.
+# Postcondition: return the depth of the object in the image.
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	return (knownWidth * focalLength) / perWidth
 
 # 计算摄像头的焦距（内参）
+# Precondition: video is the video stream from the camera.
+# Postcondition: return the focal length of the camera.
 def calculate_focalDistance(video):    
 	success,image = video.read()
 	marker = find_marker(image)       
@@ -95,6 +106,9 @@ def calculate_focalDistance(video):
 
 
 # 计算摄像头到物体的距离
+# Precondition: focalLength_value is the focalLength in type float.
+# Postcondition: return the depth of the object and the horizontal distance 
+#                from the object to the middle of the screen.
 def calculate_Distance(focalLength_value):
 	success,image = video.read()
 	# 获取矩形的中心点坐标，长度，宽度和旋转角度， marke[1][0]代表宽度
@@ -120,7 +134,10 @@ def calculate_Distance(focalLength_value):
 	print(distance_cm,"cm")
 	return distance_cm,x_diff
 
-
+# Precondition: req is the request from the client. This function is called 
+#               only when the client requests the server to do something.
+#               This function acts as a callback function.
+# Postcondition: Return the message to the client. The message is in Int16MultiArray format.
 def main0(req):
 	success,image = video.read()
 	color = 0
