@@ -10,11 +10,6 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
-<<<<<<< HEAD
-
-=======
-# Read the frame from `cap` and return the message
->>>>>>> 23591dd87692b6c335de08d9bc5ccf70e8027525
 def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
