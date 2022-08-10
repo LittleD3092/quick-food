@@ -10,11 +10,7 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
-<<<<<<< HEAD
 
-=======
->>>>>>> ea1f0f29d3106a64f6c8eb8ae87f478fb26d0ba3
-# Read the frame from `cap` and return the message
 def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
@@ -96,6 +92,7 @@ def main0():
 	send_message=Int16MultiArray()
 	send_message.data=[0,0,0]
 	send_message = detectpicture(send_message)
+	focalLength = calculate_focalDistance(cap)
 	send_message = calculate_Distance(focalLength,send_message)
 
 	return send_message
@@ -104,7 +101,6 @@ def main0():
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
 	cap = cv.VideoCapture(2)
-	focalLength = calculate_focalDistance(cap)
 	rospy.init_node('camera_recognize_services')
 	s=rospy.Serivce('alphabet_recognize',Int16MultiArray,main0)
 	rospy.spin()

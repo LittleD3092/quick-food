@@ -1,3 +1,4 @@
+from re import L
 import cv2
 import numpy as np
 import rospy
@@ -7,19 +8,18 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
+LOWER_ORANGE = np.array([10,60,46])
+UPPER_ORANGE = np.array([15,255,255])
 
-lower_orange = np.array([10,60,46])
-upper_orange = np.array([15,255,255])
+LOWER_BLUE = np.array([100,90,20])
+UPPER_BLUE = np.array([124,255,255])
 
-lower_black = np.array([0,0,0])
-upper_black = np.array([180,100,80])
-
-lower_blue = np.array([100,90,20])
-upper_blue = np.array([124,255,255])
+LOWER_BLACK = np.array([0,0,0])
+UPPER_BLACK = np.array([180,100,80])
 
 def find_orange_object(img):
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-	mask_orange = cv2.inRange(image,lower_orange,upper_orange) #過濾顏色
+	mask_orange = cv2.inRange(image,LOWER_ORANGE,UPPER_ORANGE) #過濾顏色
 	orange = cv2.bitwise_and(img,img,mask=mask_orange) #設定藍色遮罩
 
 	contours, hierarchy = cv2.findContours(mask_orange, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
@@ -28,14 +28,14 @@ def find_orange_object(img):
 			if cv2.contourArea(contour) > 20000 :
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,255),3)
-				color   = 1
+				color = 1
 				print(color)
 				return color
  
 
 def find_blue_object(img): 
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-	mask_blue = cv2.inRange(image,lower_blue,upper_blue) 
+	mask_blue = cv2.inRange(image,LOWER_BLUE,UPPER_BLUE) 
 	blue = cv2.bitwise_and(img,img,mask=mask_blue) 
 
 	contours, hierarchy = cv2.findContours(mask_blue, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
@@ -51,7 +51,7 @@ def find_blue_object(img):
 
 def find_black_object(img):
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
-	mask_black = cv2.inRange(image,lower_black,upper_black) 
+	mask_black = cv2.inRange(image,LOWER_BLACK,UPPER_BLACK) 
 	black = cv2.bitwise_and(img,img,mask=mask_black) 
 
 	contours, hierarchy = cv2.findContours(mask_black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
@@ -121,17 +121,15 @@ def calculate_Distance(focalLength_value):
 	return distance_cm,x_diff
 
 
-def color_detect_server():
-	rospy.init_node = (color_detect_server)
-	s = rospy.service("color_detect",Int16MutiArray,main0)
-	rospy.spin()
-
 def main0(req):
 	success,image = video.read()
+	color = 0
 	color = find_blue_object(image)
 	color = find_orange_object(image)
 	color = find_black_object(image)
-#   cv2.imshow("webcam",image)
+	if color == 0 :
+		return "color not found" 
+	focalLength = calculate_focalDistance(video)  	#測試用 之後要寫死
 	distance,x_diff = calculate_Distance(focalLength)
 	message = Int16MutiArray(data =[color,distance,x_diff],layout = MultiArrayLayout(
 							 dim = [MultiArrayDimension(label = "data",size =3,stride =1)],data_offset = 0))
@@ -140,6 +138,7 @@ def main0(req):
 
 if __name__ == "__main__":
 	video = cv2.VideoCapture("/dev/video4") 
-	focalLength = calculate_focalDistance(video)
-	while True:
-		color_detect_server()
+
+	rospy.init_node = ("color_detect_server")
+	s = rospy.service("color_detect",Int16MutiArray,main0)
+	rospy.spin()
