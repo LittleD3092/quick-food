@@ -1,0 +1,8 @@
+prefix=/home/littled3092/quick-food/install
+
+Name: main_control
+Description: Description of main_control
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: rospy std_srvs message_runtime
