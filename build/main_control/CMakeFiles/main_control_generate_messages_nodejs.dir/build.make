@@ -59,7 +59,7 @@ main_control/CMakeFiles/main_control_generate_messages_nodejs: /home/littled3092
 /home/littled3092/quick-food/devel/share/gennodejs/ros/main_control/srv/main2nav.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 /home/littled3092/quick-food/devel/share/gennodejs/ros/main_control/srv/main2nav.js: /home/littled3092/quick-food/src/main_control/srv/main2nav.srv
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Javascript code from main_control/main2nav.srv"
-	cd /home/littled3092/quick-food/build/main_control && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -p main_control -o /home/littled3092/quick-food/devel/share/gennodejs/ros/main_control/srv
+	cd /home/littled3092/quick-food/build/main_control && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p main_control -o /home/littled3092/quick-food/devel/share/gennodejs/ros/main_control/srv
 
 main_control_generate_messages_nodejs: main_control/CMakeFiles/main_control_generate_messages_nodejs
 main_control_generate_messages_nodejs: /home/littled3092/quick-food/devel/share/gennodejs/ros/main_control/srv/main2nav.js

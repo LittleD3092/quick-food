@@ -337,56 +337,69 @@ main_control_generate_messages_nodejs/fast:
 .PHONY : main_control_generate_messages_nodejs/fast
 
 #=============================================================================
-# Target rules for targets named std_srvs_generate_messages_eus
+# Target rules for targets named std_msgs_generate_messages_cpp
 
 # Build rule for target.
-std_srvs_generate_messages_eus: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_srvs_generate_messages_eus
-.PHONY : std_srvs_generate_messages_eus
+std_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_cpp
+.PHONY : std_msgs_generate_messages_cpp
 
 # fast build rule for target.
-std_srvs_generate_messages_eus/fast:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build
-.PHONY : std_srvs_generate_messages_eus/fast
+std_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
 
 #=============================================================================
-# Target rules for targets named std_srvs_generate_messages_lisp
+# Target rules for targets named std_msgs_generate_messages_lisp
 
 # Build rule for target.
-std_srvs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_srvs_generate_messages_lisp
-.PHONY : std_srvs_generate_messages_lisp
+std_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
 
 # fast build rule for target.
-std_srvs_generate_messages_lisp/fast:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build
-.PHONY : std_srvs_generate_messages_lisp/fast
+std_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
 
 #=============================================================================
-# Target rules for targets named std_srvs_generate_messages_nodejs
+# Target rules for targets named std_msgs_generate_messages_nodejs
 
 # Build rule for target.
-std_srvs_generate_messages_nodejs: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_srvs_generate_messages_nodejs
-.PHONY : std_srvs_generate_messages_nodejs
+std_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_nodejs
+.PHONY : std_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-std_srvs_generate_messages_nodejs/fast:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build
-.PHONY : std_srvs_generate_messages_nodejs/fast
+std_msgs_generate_messages_nodejs/fast:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+.PHONY : std_msgs_generate_messages_nodejs/fast
 
 #=============================================================================
-# Target rules for targets named std_srvs_generate_messages_py
+# Target rules for targets named std_msgs_generate_messages_py
 
 # Build rule for target.
-std_srvs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_srvs_generate_messages_py
-.PHONY : std_srvs_generate_messages_py
+std_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_py
+.PHONY : std_msgs_generate_messages_py
 
 # fast build rule for target.
-std_srvs_generate_messages_py/fast:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build
-.PHONY : std_srvs_generate_messages_py/fast
+std_msgs_generate_messages_py/fast:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build
+.PHONY : std_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named main_control_geneus
+
+# Build rule for target.
+main_control_geneus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main_control_geneus
+.PHONY : main_control_geneus
+
+# fast build rule for target.
+main_control_geneus/fast:
+	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
+.PHONY : main_control_geneus/fast
 
 #=============================================================================
 # Target rules for targets named _main_control_generate_messages_check_deps_main2nav
@@ -428,6 +441,19 @@ main_control_gencpp/fast:
 .PHONY : main_control_gencpp/fast
 
 #=============================================================================
+# Target rules for targets named std_msgs_generate_messages_eus
+
+# Build rule for target.
+std_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_eus
+.PHONY : std_msgs_generate_messages_eus
+
+# fast build rule for target.
+std_msgs_generate_messages_eus/fast:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build
+.PHONY : std_msgs_generate_messages_eus/fast
+
+#=============================================================================
 # Target rules for targets named main_control_genlisp
 
 # Build rule for target.
@@ -441,19 +467,6 @@ main_control_genlisp/fast:
 .PHONY : main_control_genlisp/fast
 
 #=============================================================================
-# Target rules for targets named std_srvs_generate_messages_cpp
-
-# Build rule for target.
-std_srvs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_srvs_generate_messages_cpp
-.PHONY : std_srvs_generate_messages_cpp
-
-# fast build rule for target.
-std_srvs_generate_messages_cpp/fast:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build
-.PHONY : std_srvs_generate_messages_cpp/fast
-
-#=============================================================================
 # Target rules for targets named main_control_generate_messages_cpp
 
 # Build rule for target.
@@ -465,19 +478,6 @@ main_control_generate_messages_cpp: cmake_check_build_system
 main_control_generate_messages_cpp/fast:
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build
 .PHONY : main_control_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named main_control_geneus
-
-# Build rule for target.
-main_control_geneus: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 main_control_geneus
-.PHONY : main_control_geneus
-
-# fast build rule for target.
-main_control_geneus/fast:
-	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
-.PHONY : main_control_geneus/fast
 
 #=============================================================================
 # Target rules for targets named main_control_generate_messages_eus
@@ -531,17 +531,17 @@ help:
 	@echo "... main_control_genpy"
 	@echo "... main_control_gennodejs"
 	@echo "... main_control_generate_messages_nodejs"
-	@echo "... std_srvs_generate_messages_eus"
-	@echo "... std_srvs_generate_messages_lisp"
-	@echo "... std_srvs_generate_messages_nodejs"
-	@echo "... std_srvs_generate_messages_py"
+	@echo "... std_msgs_generate_messages_cpp"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... std_msgs_generate_messages_nodejs"
+	@echo "... std_msgs_generate_messages_py"
+	@echo "... main_control_geneus"
 	@echo "... _main_control_generate_messages_check_deps_main2nav"
 	@echo "... main_control_generate_messages"
 	@echo "... main_control_gencpp"
+	@echo "... std_msgs_generate_messages_eus"
 	@echo "... main_control_genlisp"
-	@echo "... std_srvs_generate_messages_cpp"
 	@echo "... main_control_generate_messages_cpp"
-	@echo "... main_control_geneus"
 	@echo "... main_control_generate_messages_eus"
 	@echo "... main_control_generate_messages_lisp"
 .PHONY : help

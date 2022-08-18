@@ -150,17 +150,17 @@ main_control/clean: main_control/CMakeFiles/main_control_generate_messages_py.di
 main_control/clean: main_control/CMakeFiles/main_control_genpy.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_gennodejs.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/clean
-main_control/clean: main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/clean
-main_control/clean: main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/clean
-main_control/clean: main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/clean
-main_control/clean: main_control/CMakeFiles/std_srvs_generate_messages_py.dir/clean
+main_control/clean: main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean
+main_control/clean: main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+main_control/clean: main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
+main_control/clean: main_control/CMakeFiles/std_msgs_generate_messages_py.dir/clean
+main_control/clean: main_control/CMakeFiles/main_control_geneus.dir/clean
 main_control/clean: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_generate_messages.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_gencpp.dir/clean
+main_control/clean: main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_genlisp.dir/clean
-main_control/clean: main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_generate_messages_cpp.dir/clean
-main_control/clean: main_control/CMakeFiles/main_control_geneus.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_generate_messages_eus.dir/clean
 main_control/clean: main_control/CMakeFiles/main_control_generate_messages_lisp.dir/clean
 
@@ -414,7 +414,7 @@ gtest/googletest/CMakeFiles/gtest.dir/clean:
 # Target rules for target main_control/CMakeFiles/main_control_generate_messages_py.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/main_control_generate_messages_py.dir/all: main_control/CMakeFiles/std_srvs_generate_messages_py.dir/all
+main_control/CMakeFiles/main_control_generate_messages_py.dir/all: main_control/CMakeFiles/std_msgs_generate_messages_py.dir/all
 main_control/CMakeFiles/main_control_generate_messages_py.dir/all: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/all
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_py.dir/build.make main_control/CMakeFiles/main_control_generate_messages_py.dir/depend
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_py.dir/build.make main_control/CMakeFiles/main_control_generate_messages_py.dir/build
@@ -496,7 +496,7 @@ main_control/CMakeFiles/main_control_gennodejs.dir/clean:
 # Target rules for target main_control/CMakeFiles/main_control_generate_messages_nodejs.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/all: main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/all
+main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/all: main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
 main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/all: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/all
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/depend
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/build
@@ -521,112 +521,139 @@ main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/clean:
 .PHONY : main_control/CMakeFiles/main_control_generate_messages_nodejs.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/std_srvs_generate_messages_eus.dir
+# Target rules for target main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/all:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_srvs_generate_messages_eus"
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/all
+main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/all:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_cpp"
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
-main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule: cmake_check_build_system
+main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_eus: main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
+std_msgs_generate_messages_cpp: main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : std_srvs_generate_messages_eus
+.PHONY : std_msgs_generate_messages_cpp
 
 # clean rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/clean
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/clean
+main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir
+# Target rules for target main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/all:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_srvs_generate_messages_lisp"
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/all
+main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_lisp"
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
-main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule: cmake_check_build_system
+main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_lisp: main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+std_msgs_generate_messages_lisp: main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 
-.PHONY : std_srvs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
 
 # clean rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/clean
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/clean
+main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir
+# Target rules for target main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/all:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_srvs_generate_messages_nodejs"
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/all
+main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_nodejs"
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
-main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_nodejs: main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+std_msgs_generate_messages_nodejs: main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : std_srvs_generate_messages_nodejs
+.PHONY : std_msgs_generate_messages_nodejs
 
 # clean rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/clean
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/clean
+main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/std_srvs_generate_messages_py.dir
+# Target rules for target main_control/CMakeFiles/std_msgs_generate_messages_py.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_py.dir/all:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_py.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_srvs_generate_messages_py"
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_py.dir/all
+main_control/CMakeFiles/std_msgs_generate_messages_py.dir/all:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_py.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_py"
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
-main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule: cmake_check_build_system
+main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_py.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_py.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_py: main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+std_msgs_generate_messages_py: main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 
-.PHONY : std_srvs_generate_messages_py
+.PHONY : std_msgs_generate_messages_py
 
 # clean rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_py.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_py.dir/clean
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_py.dir/clean
+main_control/CMakeFiles/std_msgs_generate_messages_py.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_py.dir/clean
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target main_control/CMakeFiles/main_control_geneus.dir
+
+# All Build rule for target.
+main_control/CMakeFiles/main_control_geneus.dir/all: main_control/CMakeFiles/main_control_generate_messages_eus.dir/all
+	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target main_control_geneus"
+.PHONY : main_control/CMakeFiles/main_control_geneus.dir/all
+
+# Build rule for subdir invocation for target.
+main_control/CMakeFiles/main_control_geneus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_geneus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
+.PHONY : main_control/CMakeFiles/main_control_geneus.dir/rule
+
+# Convenience name for target.
+main_control_geneus: main_control/CMakeFiles/main_control_geneus.dir/rule
+
+.PHONY : main_control_geneus
+
+# clean rule for target.
+main_control/CMakeFiles/main_control_geneus.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/clean
+.PHONY : main_control/CMakeFiles/main_control_geneus.dir/clean
 
 #=============================================================================
 # Target rules for target main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir
@@ -714,6 +741,33 @@ main_control/CMakeFiles/main_control_gencpp.dir/clean:
 .PHONY : main_control/CMakeFiles/main_control_gencpp.dir/clean
 
 #=============================================================================
+# Target rules for target main_control/CMakeFiles/std_msgs_generate_messages_eus.dir
+
+# All Build rule for target.
+main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/all:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/depend
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_msgs_generate_messages_eus"
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/all
+
+# Build rule for subdir invocation for target.
+main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
+	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_eus: main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+.PHONY : std_msgs_generate_messages_eus
+
+# clean rule for target.
+main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/clean:
+	$(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/clean
+
+#=============================================================================
 # Target rules for target main_control/CMakeFiles/main_control_genlisp.dir
 
 # All Build rule for target.
@@ -741,38 +795,11 @@ main_control/CMakeFiles/main_control_genlisp.dir/clean:
 .PHONY : main_control/CMakeFiles/main_control_genlisp.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir
-
-# All Build rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/all:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target std_srvs_generate_messages_cpp"
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/all
-
-# Build rule for subdir invocation for target.
-main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_cpp: main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-.PHONY : std_srvs_generate_messages_cpp
-
-# clean rule for target.
-main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/clean
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/clean
-
-#=============================================================================
 # Target rules for target main_control/CMakeFiles/main_control_generate_messages_cpp.dir
 
 # All Build rule for target.
+main_control/CMakeFiles/main_control_generate_messages_cpp.dir/all: main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/all
 main_control/CMakeFiles/main_control_generate_messages_cpp.dir/all: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/all
-main_control/CMakeFiles/main_control_generate_messages_cpp.dir/all: main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/all
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_cpp.dir/depend
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num=9 "Built target main_control_generate_messages_cpp"
@@ -796,38 +823,11 @@ main_control/CMakeFiles/main_control_generate_messages_cpp.dir/clean:
 .PHONY : main_control/CMakeFiles/main_control_generate_messages_cpp.dir/clean
 
 #=============================================================================
-# Target rules for target main_control/CMakeFiles/main_control_geneus.dir
-
-# All Build rule for target.
-main_control/CMakeFiles/main_control_geneus.dir/all: main_control/CMakeFiles/main_control_generate_messages_eus.dir/all
-	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/depend
-	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num= "Built target main_control_geneus"
-.PHONY : main_control/CMakeFiles/main_control_geneus.dir/all
-
-# Build rule for subdir invocation for target.
-main_control/CMakeFiles/main_control_geneus.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_geneus.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/littled3092/quick-food/build/CMakeFiles 0
-.PHONY : main_control/CMakeFiles/main_control_geneus.dir/rule
-
-# Convenience name for target.
-main_control_geneus: main_control/CMakeFiles/main_control_geneus.dir/rule
-
-.PHONY : main_control_geneus
-
-# clean rule for target.
-main_control/CMakeFiles/main_control_geneus.dir/clean:
-	$(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/clean
-.PHONY : main_control/CMakeFiles/main_control_geneus.dir/clean
-
-#=============================================================================
 # Target rules for target main_control/CMakeFiles/main_control_generate_messages_eus.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/main_control_generate_messages_eus.dir/all: main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/all
 main_control/CMakeFiles/main_control_generate_messages_eus.dir/all: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/all
+main_control/CMakeFiles/main_control_generate_messages_eus.dir/all: main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/all
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_eus.dir/build.make main_control/CMakeFiles/main_control_generate_messages_eus.dir/depend
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_eus.dir/build.make main_control/CMakeFiles/main_control_generate_messages_eus.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num=10,11 "Built target main_control_generate_messages_eus"
@@ -854,7 +854,7 @@ main_control/CMakeFiles/main_control_generate_messages_eus.dir/clean:
 # Target rules for target main_control/CMakeFiles/main_control_generate_messages_lisp.dir
 
 # All Build rule for target.
-main_control/CMakeFiles/main_control_generate_messages_lisp.dir/all: main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/all
+main_control/CMakeFiles/main_control_generate_messages_lisp.dir/all: main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/all
 main_control/CMakeFiles/main_control_generate_messages_lisp.dir/all: main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/all
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_lisp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_lisp.dir/depend
 	$(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_lisp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_lisp.dir/build

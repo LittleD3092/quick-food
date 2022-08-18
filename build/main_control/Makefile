@@ -56,6 +56,17 @@ CMAKE_BINARY_DIR = /home/littled3092/quick-food/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -77,17 +88,6 @@ list_install_components:
 list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -228,64 +228,79 @@ main_control_generate_messages_nodejs/fast:
 .PHONY : main_control_generate_messages_nodejs/fast
 
 # Convenience name for target.
-main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
+main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_eus: main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/rule
+std_msgs_generate_messages_cpp: main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule
 
-.PHONY : std_srvs_generate_messages_eus
+.PHONY : std_msgs_generate_messages_cpp
 
 # fast build rule for target.
-std_srvs_generate_messages_eus/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_eus.dir/build
-.PHONY : std_srvs_generate_messages_eus/fast
+std_msgs_generate_messages_cpp/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
 
 # Convenience name for target.
-main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_lisp: main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/rule
+std_msgs_generate_messages_lisp: main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/rule
 
-.PHONY : std_srvs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
 
 # fast build rule for target.
-std_srvs_generate_messages_lisp/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_lisp.dir/build
-.PHONY : std_srvs_generate_messages_lisp/fast
+std_msgs_generate_messages_lisp/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
 
 # Convenience name for target.
-main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_nodejs: main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/rule
+std_msgs_generate_messages_nodejs: main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/rule
 
-.PHONY : std_srvs_generate_messages_nodejs
+.PHONY : std_msgs_generate_messages_nodejs
 
 # fast build rule for target.
-std_srvs_generate_messages_nodejs/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_nodejs.dir/build
-.PHONY : std_srvs_generate_messages_nodejs/fast
+std_msgs_generate_messages_nodejs/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+.PHONY : std_msgs_generate_messages_nodejs/fast
 
 # Convenience name for target.
-main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 
 # Convenience name for target.
-std_srvs_generate_messages_py: main_control/CMakeFiles/std_srvs_generate_messages_py.dir/rule
+std_msgs_generate_messages_py: main_control/CMakeFiles/std_msgs_generate_messages_py.dir/rule
 
-.PHONY : std_srvs_generate_messages_py
+.PHONY : std_msgs_generate_messages_py
 
 # fast build rule for target.
-std_srvs_generate_messages_py/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_py.dir/build
-.PHONY : std_srvs_generate_messages_py/fast
+std_msgs_generate_messages_py/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_py.dir/build
+.PHONY : std_msgs_generate_messages_py/fast
+
+# Convenience name for target.
+main_control/CMakeFiles/main_control_geneus.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_geneus.dir/rule
+.PHONY : main_control/CMakeFiles/main_control_geneus.dir/rule
+
+# Convenience name for target.
+main_control_geneus: main_control/CMakeFiles/main_control_geneus.dir/rule
+
+.PHONY : main_control_geneus
+
+# fast build rule for target.
+main_control_geneus/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
+.PHONY : main_control_geneus/fast
 
 # Convenience name for target.
 main_control/CMakeFiles/_main_control_generate_messages_check_deps_main2nav.dir/rule:
@@ -333,6 +348,21 @@ main_control_gencpp/fast:
 .PHONY : main_control_gencpp/fast
 
 # Convenience name for target.
+main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+.PHONY : main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+std_msgs_generate_messages_eus: main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/rule
+
+.PHONY : std_msgs_generate_messages_eus
+
+# fast build rule for target.
+std_msgs_generate_messages_eus/fast:
+	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build.make main_control/CMakeFiles/std_msgs_generate_messages_eus.dir/build
+.PHONY : std_msgs_generate_messages_eus/fast
+
+# Convenience name for target.
 main_control/CMakeFiles/main_control_genlisp.dir/rule:
 	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_genlisp.dir/rule
 .PHONY : main_control/CMakeFiles/main_control_genlisp.dir/rule
@@ -348,21 +378,6 @@ main_control_genlisp/fast:
 .PHONY : main_control_genlisp/fast
 
 # Convenience name for target.
-main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-.PHONY : main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-std_srvs_generate_messages_cpp: main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/rule
-
-.PHONY : std_srvs_generate_messages_cpp
-
-# fast build rule for target.
-std_srvs_generate_messages_cpp/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build.make main_control/CMakeFiles/std_srvs_generate_messages_cpp.dir/build
-.PHONY : std_srvs_generate_messages_cpp/fast
-
-# Convenience name for target.
 main_control/CMakeFiles/main_control_generate_messages_cpp.dir/rule:
 	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_generate_messages_cpp.dir/rule
 .PHONY : main_control/CMakeFiles/main_control_generate_messages_cpp.dir/rule
@@ -376,21 +391,6 @@ main_control_generate_messages_cpp: main_control/CMakeFiles/main_control_generat
 main_control_generate_messages_cpp/fast:
 	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build.make main_control/CMakeFiles/main_control_generate_messages_cpp.dir/build
 .PHONY : main_control_generate_messages_cpp/fast
-
-# Convenience name for target.
-main_control/CMakeFiles/main_control_geneus.dir/rule:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f CMakeFiles/Makefile2 main_control/CMakeFiles/main_control_geneus.dir/rule
-.PHONY : main_control/CMakeFiles/main_control_geneus.dir/rule
-
-# Convenience name for target.
-main_control_geneus: main_control/CMakeFiles/main_control_geneus.dir/rule
-
-.PHONY : main_control_geneus
-
-# fast build rule for target.
-main_control_geneus/fast:
-	cd /home/littled3092/quick-food/build && $(MAKE) -f main_control/CMakeFiles/main_control_geneus.dir/build.make main_control/CMakeFiles/main_control_geneus.dir/build
-.PHONY : main_control_geneus/fast
 
 # Convenience name for target.
 main_control/CMakeFiles/main_control_generate_messages_eus.dir/rule:
@@ -428,27 +428,27 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... list_install_components"
 	@echo "... test"
 	@echo "... main_control_generate_messages_py"
 	@echo "... main_control_genpy"
 	@echo "... main_control_gennodejs"
 	@echo "... main_control_generate_messages_nodejs"
-	@echo "... std_srvs_generate_messages_eus"
-	@echo "... std_srvs_generate_messages_lisp"
-	@echo "... std_srvs_generate_messages_nodejs"
-	@echo "... std_srvs_generate_messages_py"
+	@echo "... install/strip"
+	@echo "... std_msgs_generate_messages_cpp"
+	@echo "... list_install_components"
+	@echo "... std_msgs_generate_messages_lisp"
+	@echo "... std_msgs_generate_messages_nodejs"
+	@echo "... std_msgs_generate_messages_py"
+	@echo "... main_control_geneus"
 	@echo "... _main_control_generate_messages_check_deps_main2nav"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... main_control_generate_messages"
 	@echo "... main_control_gencpp"
 	@echo "... install"
+	@echo "... std_msgs_generate_messages_eus"
 	@echo "... main_control_genlisp"
-	@echo "... std_srvs_generate_messages_cpp"
 	@echo "... main_control_generate_messages_cpp"
-	@echo "... main_control_geneus"
 	@echo "... install/local"
 	@echo "... main_control_generate_messages_eus"
 	@echo "... main_control_generate_messages_lisp"

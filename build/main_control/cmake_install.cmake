@@ -88,3 +88,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/main_control" TYPE FILE FILES "/home/littled3092/quick-food/src/main_control/package.xml")
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/main_control" TYPE PROGRAM FILES "/home/littled3092/quick-food/build/main_control/catkin_generated/installspace/main.py")
+endif()
+

@@ -60,7 +60,7 @@ main_control/CMakeFiles/main_control_generate_messages_py: /home/littled3092/qui
 /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv/_main2nav.py: /opt/ros/noetic/lib/genpy/gensrv_py.py
 /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv/_main2nav.py: /home/littled3092/quick-food/src/main_control/srv/main2nav.srv
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python code from SRV main_control/main2nav"
-	cd /home/littled3092/quick-food/build/main_control && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/gensrv_py.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -p main_control -o /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv
+	cd /home/littled3092/quick-food/build/main_control && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/gensrv_py.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p main_control -o /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv
 
 /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv/__init__.py: /home/littled3092/quick-food/devel/lib/python3/dist-packages/main_control/srv/_main2nav.py

@@ -61,7 +61,7 @@ main_control/CMakeFiles/main_control_generate_messages_cpp: /home/littled3092/qu
 /home/littled3092/quick-food/devel/include/main_control/main2nav.h: /opt/ros/noetic/share/gencpp/msg.h.template
 /home/littled3092/quick-food/devel/include/main_control/main2nav.h: /opt/ros/noetic/share/gencpp/srv.h.template
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/littled3092/quick-food/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from main_control/main2nav.srv"
-	cd /home/littled3092/quick-food/src/main_control && /home/littled3092/quick-food/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -p main_control -o /home/littled3092/quick-food/devel/include/main_control -e /opt/ros/noetic/share/gencpp/cmake/..
+	cd /home/littled3092/quick-food/src/main_control && /home/littled3092/quick-food/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/littled3092/quick-food/src/main_control/srv/main2nav.srv -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p main_control -o /home/littled3092/quick-food/devel/include/main_control -e /opt/ros/noetic/share/gencpp/cmake/..
 
 main_control_generate_messages_cpp: main_control/CMakeFiles/main_control_generate_messages_cpp
 main_control_generate_messages_cpp: /home/littled3092/quick-food/devel/include/main_control/main2nav.h
