@@ -24,17 +24,17 @@ def detectpicture(send_message):
 	if type(img_flat) != type(int()):
 		alphabet = pic_demo.guess_alphabet(img_flat)
 		print("I think it is \'", alphabet, "\'", sep='')
-		match alphabet:
-			case "T":
-				send_message.data[2]=1
-			case "D":
-				send_message.data[2]=2
-			case "K":
-				send_message.data[2]=3
+		send_message.data[2]=foo(alphabet)
 	else:
 		print("I can't recognize this alphabet")
 		send_message.data[2]=0
 	return send_message
+
+def foo(var):
+	return {
+	'T': 1,
+	'D': 2,
+	'K': 3}.get(var,0)
 
 # Precondition: image is a numpy array containing a picture with 3 channel.
 # Postcondition: A countour of the detected square is returned.
