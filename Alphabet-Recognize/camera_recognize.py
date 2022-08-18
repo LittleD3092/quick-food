@@ -25,11 +25,11 @@ def detectpicture(send_message):
 		alphabet = pic_demo.guess_alphabet(img_flat)
 		print("I think it is \'", alphabet, "\'", sep='')
 		match alphabet:
-			case T:
+			case "T":
 				send_message.data[2]=1
-			case D:
+			case "D":
 				send_message.data[2]=2
-			case K:
+			case "K":
 				send_message.data[2]=3
 	else:
 		print("I can't recognize this alphabet")
