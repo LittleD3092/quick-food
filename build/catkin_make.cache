@@ -1,2 +1,0 @@
-main_control
--DCATKIN_DEVEL_PREFIX=/home/littled3092/quick-food/devel -DCMAKE_INSTALL_PREFIX=/home/littled3092/quick-food/install -G Unix Makefiles
