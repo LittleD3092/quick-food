@@ -10,8 +10,6 @@ KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
 KNOWN_HEIGHT = 15.75
 
-# Precondition: send_message is a message type of Int16MultiArray
-# Postcondition: A send_message with the T, D, K data is returned. The send_message is modified from the send_message in the parameter field.
 def detectpicture(send_message):
 # read from camera
 #     ret: whether capture is successful or not
@@ -29,6 +27,7 @@ def detectpicture(send_message):
 		print("I can't recognize this alphabet")
 		send_message.data[2]=0
 	return send_message
+
 
 def foo(var):
 	return {
@@ -52,10 +51,6 @@ def find_marker(image):
 	rect = cv.minAreaRect(c)      
 	return rect
 
-# Precondition: focalLength_value is a float of the camera focal length. 
-#               send_message is a message type of Int16MultiArray.
-# Postcondition: A send_message with the horizontal distance and depth of the board is returned. 
-#                The send_message is modified from the send_message in the parameter field.
 def calculate_Distance(focalLength_value,send_message):
 	success,image = cap.read()
 	# 获取矩形的中心点坐标，长度，宽度和旋转角度， marke[1][0]代表宽度
@@ -82,16 +77,11 @@ def calculate_Distance(focalLength_value,send_message):
 #    print(distance_cm,"cm")
 	return send_message
 
-# Precondition: knownWidth is a float of the width of the board in the picture.
-#               focalLength is a float of the focal length of the camera.
-#               perWidth is a float of the width of the board in the picture.
-# Postcondition: Return the distance of the board from the camera.
+
 def distance_to_camera(knownWidth, focalLength, perWidth):
 	return (knownWidth * focalLength) / perWidth
 
 # 计算摄像头的焦距（内参）
-# Precondition: video is a video capture object.
-# Postcondition: Return focalLength, which is the focal length of the camera.
 def calculate_focalDistance(video):    
 	success,image = video.read()
 	marker = find_marker(image)       
@@ -100,10 +90,6 @@ def calculate_focalDistance(video):
 	print('焦距 = ', focalLength)        
 	return focalLength
 
-# Precondition: main0 is a function that calls iff the program is pinged by a client. 
-#               This is the callback function.
-# Postcondition: Return the message that contains T, D, K data, the depth of the board, 
-#                and the horizontal distance of the board.
 def main0():
 	send_message=Int16MultiArray()
 	send_message.data=[0,0,0]

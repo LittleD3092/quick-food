@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import rospy
-from std_msgs.msg import Int16MutiArray,MultiArrayLayout,MultiArrayDimension
+from color_detect_srvs.srv import colorSrv,colorSrvResponse
 
 KNOWN_DISTANCE = 59.05
 KNOWN_WIDTH = 15.75
@@ -158,8 +158,7 @@ def main0(req):
 		return "color not found" 
 	focalLength = calculate_focalDistance(video)  	#測試用 之後要寫死
 	distance,x_diff = calculate_Distance(focalLength)
-	message = Int16MutiArray(data =[color,distance,x_diff],layout = MultiArrayLayout(
-							 dim = [MultiArrayDimension(label = "data",size =3,stride =1)],data_offset = 0))
+	message = colorSrvResponse(color_srv = color, distance_srv = distance,x_diff_srv = x_diff)
 	
 	return message
 
@@ -167,5 +166,5 @@ if __name__ == "__main__":
 	video = cv2.VideoCapture("/dev/video4") 
 
 	rospy.init_node = ("color_detect_server")
-	s = rospy.service("color_detect",Int16MutiArray,main0)
+	s = rospy.service("color_detect",colorSrv,main0)
 	rospy.spin()
