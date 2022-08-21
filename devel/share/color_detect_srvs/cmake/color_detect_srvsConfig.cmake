@@ -67,14 +67,14 @@ set(color_detect_srvs_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(color_detect_srvs_SOURCE_PREFIX /home/zongyou/Documents/quick-food/src/color_detect_srvs)
-  set(color_detect_srvs_DEVEL_PREFIX /home/zongyou/Documents/quick-food/devel)
+  set(color_detect_srvs_SOURCE_PREFIX /home/littled3092/quick-food/src/color_detect_srvs)
+  set(color_detect_srvs_DEVEL_PREFIX /home/littled3092/quick-food/devel)
   set(color_detect_srvs_INSTALL_PREFIX "")
   set(color_detect_srvs_PREFIX ${color_detect_srvs_DEVEL_PREFIX})
 else()
   set(color_detect_srvs_SOURCE_PREFIX "")
   set(color_detect_srvs_DEVEL_PREFIX "")
-  set(color_detect_srvs_INSTALL_PREFIX /home/zongyou/Documents/quick-food/install)
+  set(color_detect_srvs_INSTALL_PREFIX /home/littled3092/quick-food/install)
   set(color_detect_srvs_PREFIX ${color_detect_srvs_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(color_detect_srvs_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/zongyou/Documents/quick-food/devel/include;/home/zongyou/Documents/quick-food/src/color_detect_srvs/include " STREQUAL " ")
+if(NOT "/home/littled3092/quick-food/devel/include;/home/littled3092/quick-food/src/color_detect_srvs/include " STREQUAL " ")
   set(color_detect_srvs_INCLUDE_DIRS "")
-  set(_include_dirs "/home/zongyou/Documents/quick-food/devel/include;/home/zongyou/Documents/quick-food/src/color_detect_srvs/include")
+  set(_include_dirs "/home/littled3092/quick-food/devel/include;/home/littled3092/quick-food/src/color_detect_srvs/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/zongyou/Documents/quick-food/devel/include;/home/zongyou/Documents
         message(FATAL_ERROR "Project 'color_detect_srvs' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'color_detect_srvs' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/zongyou/Documents/quick-food/src/color_detect_srvs/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'color_detect_srvs' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/littled3092/quick-food/src/color_detect_srvs/${idir}'.  ${_report}")
     endif()
     _list_append_unique(color_detect_srvs_INCLUDE_DIRS ${include})
   endforeach()
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/zongyou/Documents/quick-food/devel/lib;/home/zongyou/Documents/quick-food/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/littled3092/quick-food/devel/lib;/home/littled3092/quick-food/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -185,7 +185,7 @@ foreach(t ${color_detect_srvs_EXPORTED_TARGETS})
   endif()
 endforeach()
 
-set(depends "rospy;std_msgs;message_runtime")
+set(depends "rospy;std_msgs;std_srvs;message_runtime")
 foreach(depend ${depends})
   string(REPLACE " " ";" depend_list ${depend})
   # the package name of the dependency must be kept in a unique variable so that it is not overwritten in recursive calls

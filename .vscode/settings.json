@@ -2,5 +2,9 @@
     "python.autoComplete.extraPaths": [
         "/home/littled3092/quick-food/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/littled3092/quick-food/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
     ]
 }
