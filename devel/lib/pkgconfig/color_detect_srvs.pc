@@ -1,0 +1,8 @@
+prefix=/home/zongyou/Documents/quick-food/devel
+
+Name: color_detect_srvs
+Description: Description of color_detect_srvs
+Version: 0.0.0
+Cflags: -I/home/zongyou/Documents/quick-food/devel/include -I/home/zongyou/Documents/quick-food/src/color_detect_srvs/include
+Libs: -L${prefix}/lib 
+Requires: rospy std_msgs message_runtime
