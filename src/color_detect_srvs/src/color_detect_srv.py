@@ -53,7 +53,6 @@ def find_blue_object(img):
 				return color
 			else:
 				color = 0
-				print(color)
 				return color
  
 
@@ -75,7 +74,6 @@ def find_black_object(img):
 				return color
 			else:
 				color = 0
-				print(color)
 				return color
  
 
