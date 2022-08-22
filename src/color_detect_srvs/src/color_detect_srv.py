@@ -110,7 +110,7 @@ def calculate_focalDistance(video):
 	success,image = video.read()
 	marker = find_marker(image)       
 	print("图片中A4纸的宽度：f%", marker[1][0])
-	focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH  
+	focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 	print('焦距 = ', focalLength)        
 	return focalLength
 
@@ -158,13 +158,12 @@ def main0(req):
 		return "color not found" 
 	focalLength = calculate_focalDistance(video)  	#測試用 之後要寫死
 	distance,x_diff = calculate_Distance(focalLength)
-	message = colorSrvResponse(color_srv = color, distance_srv = distance,x_diff_srv = x_diff)
+	message = colorSrvResponse(color_srv = color, distance_srv = int(distance), x_diff_srv = int(x_diff))
 	
 	return message
 
 if __name__ == "__main__":
-	video = cv2.VideoCapture("/dev/video4") 
-
+	video = cv2.VideoCapture(2)
 	rospy.init_node("color_detect_server")
 	s = rospy.Service("color_detect",colorSrv,main0)
 	rospy.spin()
