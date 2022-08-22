@@ -165,6 +165,6 @@ def main0(req):
 if __name__ == "__main__":
 	video = cv2.VideoCapture("/dev/video4") 
 
-	rospy.init_node = ("color_detect_server")
-	s = rospy.service("color_detect",colorSrv,main0)
+	rospy.init_node("color_detect_server")
+	s = rospy.Service("color_detect",colorSrv,main0)
 	rospy.spin()
