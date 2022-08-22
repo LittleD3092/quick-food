@@ -58,7 +58,7 @@ class ColorDetect:
 		rospy.wait_for_service('color_detect', 5)
 		try:
 			color_detect = rospy.ServiceProxy('color_detect', colorSrv)
-			resp = color_detect(num)
+			resp = color_detect(main2navRequest(num))
 			return (resp.color_srv, resp.distance_srv, resp.x_diff_srv)
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
 
 	# test ballNode
 	print("Ball node test:")
-	print(ballNode.request())
+	print(ballNode.request(0))
 
 	######################################################################################
 	## main loop: This is the main loop that will be running on the race.
