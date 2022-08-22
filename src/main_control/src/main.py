@@ -58,7 +58,7 @@ class ColorDetect:
 		rospy.wait_for_service('color_detect', 5)
 		try:
 			color_detect = rospy.ServiceProxy('color_detect', colorSrv)
-			resp = color_detect(main2navRequest(num))
+			resp = color_detect(colorSrvRequest(position_srv = num))
 			return (resp.color_srv, resp.distance_srv, resp.x_diff_srv)
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
@@ -133,13 +133,13 @@ class UpperMechanism:
 			return -1
 
 if __name__ == '__main__':
-	# init all nodes
-	dotNode = DotRecognize()
-	alphabetNode = AlphabetRecognize()
+	# # init all nodes
+	# dotNode = DotRecognize()
+	# alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
-	baseNode = Navigation()
-	upperNode = UpperMechanism()
-	upperNode.move(0)
+	# baseNode = Navigation()
+	# upperNode = UpperMechanism()
+	# upperNode.move(0)
 
 	# test ballNode
 	print("Ball node test:")

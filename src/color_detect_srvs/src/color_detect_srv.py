@@ -1,3 +1,4 @@
+from multiprocessing.connection import wait
 import cv2
 import numpy as np
 import rospy
@@ -34,15 +35,13 @@ def find_orange_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find orange object"
+				return color
  
 # Precondition: image is a BGR image in numpy array format.
 # Postcondition: return the color (which equals 2) if the blue color is found, otherwise return 0.
 def find_blue_object(img): 
 	image  = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 	mask_blue = cv2.inRange(image,LOWER_BLUE,UPPER_BLUE) 
-	blue = cv2.bitwise_and(img,img,mask=mask_blue) 
-
 	contours, hierarchy = cv2.findContours(mask_blue, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) > 20 :
 		for contour in contours:
@@ -54,7 +53,8 @@ def find_blue_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find blue object"
+				print(color)
+				return color
  
 
 # Precondition: image is a BGR image in numpy array format.
@@ -75,7 +75,8 @@ def find_black_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find black object"
+				print(color)
+				return color
  
 
 # Precondition: image is a BGR image in numpy array format.
@@ -110,7 +111,7 @@ def calculate_focalDistance(video):
 	success,image = video.read()
 	marker = find_marker(image)       
 	print("图片中A4纸的宽度：f%", marker[1][0])
-	focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH  
+	focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 	print('焦距 = ', focalLength)        
 	return focalLength
 
@@ -120,29 +121,33 @@ def calculate_focalDistance(video):
 # Postcondition: return the depth of the object and the horizontal distance 
 #                from the object to the middle of the screen.
 def calculate_Distance(focalLength_value):
-	success,image = video.read()
-	# 获取矩形的中心点坐标，长度，宽度和旋转角度， marke[1][0]代表宽度
-	marker = find_marker(image)     
-	distance_cm = distance_to_camera(KNOWN_WIDTH, focalLength_value, marker[1][0])
-	box = cv2.boxPoints(marker)
-	# print("Box = ", box)
-	
-	center_x = (box[0][0]+box[1][0]+box[2][0]+box[3][0])/4
-	center_y = (box[0][1]+box[1][1]+box[2][1]+box[3][1])/4
-	print("x_diff:",center_x-320)
-	x_diff = center_x-320
-	
-	box = np.int0(box)
-	# print("Box = ", box)
-	cv2.circle(image, (int(center_x),int(center_y)), 3, (1, 227, 254), -1)
-	cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
-	cv2.putText(image, "%.2fcm" % (distance_cm),
-			(image.shape[1] - 300, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
-			2.0, (0, 0, 255), 3)          
-	cv2.imshow("image", image)
-	# waitKey(30)
-	print(distance_cm,"cm")
-	return distance_cm,x_diff
+	try:
+		success,image = video.read()
+		# 获取矩形的中心点坐标，长度，宽度和旋转角度， marke[1][0]代表宽度
+		marker = find_marker(image)     
+		distance_cm = distance_to_camera(KNOWN_WIDTH, focalLength_value, marker[1][0])
+		box = cv2.boxPoints(marker)
+		# print("Box = ", box)
+		
+		center_x = (box[0][0]+box[1][0]+box[2][0]+box[3][0])/4
+		center_y = (box[0][1]+box[1][1]+box[2][1]+box[3][1])/4
+		print("x_diff:",center_x-320)
+		x_diff = center_x-320
+		
+		box = np.int0(box)
+		# print("Box = ", box)
+		cv2.circle(image, (int(center_x),int(center_y)), 3, (1, 227, 254), -1)
+		cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
+		cv2.putText(image, "%.2fcm" % (distance_cm),
+				(image.shape[1] - 300, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
+				2.0, (0, 0, 255), 3)          
+		cv2.imshow("image", image)
+		# waitKey(30)
+		print(distance_cm,"cm")
+		return distance_cm, x_diff
+	except:
+		print("error")
+		return 0, 0
 
 # Precondition: req is the request from the client. This function is called 
 #               only when the client requests the server to do something.
@@ -154,17 +159,16 @@ def main0(req):
 	color = find_blue_object(image)
 	color = find_orange_object(image)
 	color = find_black_object(image)
-	if color == 0 :
-		return "color not found" 
+	# if color == 0 :
+	# 	return colorSrvResponse(color_srv = 0, distance_srv = 0, x_diff_srv = 0)
 	focalLength = calculate_focalDistance(video)  	#測試用 之後要寫死
 	distance,x_diff = calculate_Distance(focalLength)
-	message = colorSrvResponse(color_srv = color, distance_srv = distance,x_diff_srv = x_diff)
-	
+	message = colorSrvResponse(color_srv = int(color), distance_srv = int(distance), x_diff_srv = int(x_diff))
+	cv2.imshow("image", image)
 	return message
 
 if __name__ == "__main__":
-	video = cv2.VideoCapture("/dev/video4") 
-
+	video = cv2.VideoCapture(2)
 	rospy.init_node("color_detect_server")
 	s = rospy.Service("color_detect",colorSrv,main0)
 	rospy.spin()
