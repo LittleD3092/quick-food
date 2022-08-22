@@ -4,6 +4,7 @@
 import rospy
 from std_msgs.msg import Empty, Int16
 from main_control.srv import main2nav, main2navRequest, main2navResponse
+from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 
 assert True # turn off this before race
 
@@ -53,12 +54,12 @@ class ColorDetect:
 	#					1 for orange.
 	#					2 for blue.
 	# 					3 for black.
-	def request(self):
+	def request(self, num = 0):
 		rospy.wait_for_service('color_detect', 5)
 		try:
-			color_detect = rospy.ServiceProxy('color_detect', Empty)
-			resp = color_detect()
-			return (resp.data[0], resp.data[1], resp.data[2])
+			color_detect = rospy.ServiceProxy('color_detect', colorSrv)
+			resp = color_detect(num)
+			return (resp.color_srv, resp.distance_srv, resp.x_diff_srv)
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -140,6 +141,9 @@ if __name__ == '__main__':
 	upperNode = UpperMechanism()
 	upperNode.move(0)
 
+	# test ballNode
+	print("Ball node test:")
+	print(ballNode.request())
 
 	######################################################################################
 	## main loop: This is the main loop that will be running on the race.
