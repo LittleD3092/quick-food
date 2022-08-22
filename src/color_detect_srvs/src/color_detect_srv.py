@@ -34,7 +34,7 @@ def find_orange_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find orange object"
+				return color
  
 # Precondition: image is a BGR image in numpy array format.
 # Postcondition: return the color (which equals 2) if the blue color is found, otherwise return 0.
@@ -54,7 +54,7 @@ def find_blue_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find blue object"
+				return color
  
 
 # Precondition: image is a BGR image in numpy array format.
@@ -75,7 +75,7 @@ def find_black_object(img):
 				return color
 			else:
 				color = 0
-				return color,"can't find black object"
+				return color
  
 
 # Precondition: image is a BGR image in numpy array format.

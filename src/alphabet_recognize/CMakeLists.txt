@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(Alphabet_recognize)
+project(alphabet_recognize)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,15 +8,11 @@ project(Alphabet_recognize)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  # PIL
-  # cv2
-  # math
-  # numpy
-  pic_demo
-  pytesseract
+  roscpp
   rospy
-  std_msgs.msg
-  sys
+  std_msgs
+  std_srvs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -26,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-catkin_python_setup()
+# catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -62,7 +58,7 @@ catkin_python_setup()
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  main_to_alphabet.srv
+  alphabetSrv.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -75,7 +71,7 @@ add_service_files(
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  std_msgs  # Or other packages containing msgs
+  std_msgs
 )
 
 ################################################
@@ -108,10 +104,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES Alphabet_recognize
-  CATKIN_DEPENDS PIL cv2 math numpy pic_demo pytesseract rospy std_msgs.msg sys
-  DEPENDS system_lib
+ INCLUDE_DIRS include
+#  LIBRARIES Alphabet_Recognize
+ CATKIN_DEPENDS roscpp rospy std_msgs std_srvs message_runtime
+#  DEPENDS system_lib
 )
 
 ###########
@@ -127,7 +123,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/Alphabet_recognize.cpp
+#   src/${PROJECT_NAME}/Alphabet_Recognize.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -138,7 +134,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/Alphabet_recognize_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/Alphabet_Recognize_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -203,7 +199,7 @@ catkin_install_python(PROGRAMS
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_Alphabet_recognize.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_Alphabet_Recognize.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
