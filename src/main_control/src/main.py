@@ -5,6 +5,7 @@ import rospy
 from std_msgs.msg import Empty, Int16
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
+from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 
 assert True # turn off this before race
 
@@ -27,12 +28,12 @@ class AlphabetRecognize:
 	#					1 for 'T',
 	# 					2 for 'D',
 	# 					3 for 'K'.
-	def request(self):
+	def request(self, num = 0):
 		rospy.wait_for_service('alphabet_recognize', 5)
 		try:
-			alphabet_recognize = rospy.ServiceProxy('alphabet_recognize', Empty)
-			resp = alphabet_recognize()
-			return (resp.data[0], resp.data[1], resp.data[2])
+			alphabet_recognize = rospy.ServiceProxy('alphabet_recognize', alphabetSrv)
+			resp = alphabet_recognize(alphabetSrvRequest(position_req = num))
+			return (resp.x_diff_srv, resp.distance_srv, resp.alphabet_srv)
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -133,17 +134,26 @@ class UpperMechanism:
 			return -1
 
 if __name__ == '__main__':
-	# init all nodes
-	dotNode = DotRecognize()
+	# # init all nodes, uncomment the node you needed
+	# dotNode = DotRecognize()
 	alphabetNode = AlphabetRecognize()
-	ballNode = ColorDetect()
-	baseNode = Navigation()
-	upperNode = UpperMechanism()
-	upperNode.move(0)
+	# ballNode = ColorDetect()
+	# baseNode = Navigation()
+	# upperNode = UpperMechanism()
+	# upperNode.move(0)
 
-	# test ballNode
-	print("Ball node test:")
-	print(ballNode.request())
+	# # test ballNode
+	# print("Ball node test:")
+	# print(ballNode.request())
+
+	# test alphabet node
+	print("Alphabet node test:")
+
+	while True:
+		req = alphabetNode.request()
+		if req != (0, 0, 0):
+			print(req)
+			break
 
 	######################################################################################
 	## main loop: This is the main loop that will be running on the race.
