@@ -207,7 +207,8 @@ def detectpicture(send_message):
 #     frame: picture captured
 	# print("function detectpicture called.")
 	ret, frame = cap.read()
-	# print("function detectpicture: picture read successfully.")
+	if ret == False:
+		print("camera capture failed. please check your camera.")
 	# copy the frame
 	img_flat = convert_to_flat(frame.copy())
 	# print("function detectpicture: converted to flat.")
@@ -315,6 +316,13 @@ def main0(req):
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
 	cap = cv2.VideoCapture("/dev/video4")
+	
+	# try camera on the first try
+	success, _ = cap.read()
+	if not success:
+		print("Can't find camera, try another one. The program will exit.")
+		sys.exit(1)
+
 	rospy.init_node('camera_recognize_services')
 	s=rospy.Service('alphabet_recognize',alphabetSrv,main0)
 	rospy.spin()
