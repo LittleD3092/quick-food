@@ -315,12 +315,15 @@ def main0(req):
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	cap = cv2.VideoCapture("/dev/video4")
+	captureSource = "/dev/video4"
+	cap = cv2.VideoCapture(captureSource)
 	
 	# try camera on the first try
 	success, _ = cap.read()
 	if not success:
-		print("Can't find camera, try another one. The program will exit.")
+		print("Can't find camera, try another one. The current capture source is:", captureSource)
+		print("The program will exit in 3 seconds.")
+		time.sleep(3)
 		sys.exit(1)
 
 	rospy.init_node('camera_recognize_services')
