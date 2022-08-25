@@ -27,7 +27,7 @@ def find_orange_object(img):
 	contours, hierarchy = cv2.findContours(mask_orange, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) > 20 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 20000 :
+			if cv2.contourArea(contour) > 50 :
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,255),3)
 				color = 1
@@ -45,7 +45,7 @@ def find_blue_object(img):
 	contours, hierarchy = cv2.findContours(mask_blue, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) > 20 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 20000 :
+			if cv2.contourArea(contour) > 50 :
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(150,160,0),3)
 				color = 2
@@ -66,7 +66,7 @@ def find_black_object(img):
 	contours, hierarchy = cv2.findContours(mask_black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) > 20 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 20000 :
+			if cv2.contourArea(contour) > 2000:
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,0),3) 
 				color = 3
@@ -108,7 +108,6 @@ def distance_to_camera(knownWidth, focalLength, perWidth):
 def calculate_focalDistance(video):    
 	success,image = video.read()
 	marker = find_marker(image)       
-	print("图片中A4纸的宽度：f%", marker[1][0])
 	focalLength = (marker[1][0] * KNOWN_DISTANCE) / KNOWN_WIDTH
 	print('焦距 = ', focalLength)        
 	return focalLength
@@ -139,7 +138,6 @@ def calculate_Distance(focalLength_value):
 		cv2.putText(image, "%.2fcm" % (distance_cm),
 				(image.shape[1] - 300, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
 				2.0, (0, 0, 255), 3)          
-		cv2.imshow("image", image)
 		# waitKey(30)
 		print(distance_cm,"cm")
 		return distance_cm, x_diff
@@ -153,20 +151,20 @@ def calculate_Distance(focalLength_value):
 # Postcondition: Return the message to the client. The message is in Int16MultiArray format.
 def main0(req):
 	success,image = video.read()
-	color = 0
+	if success == 0 :
+		print("can not read image")
 	color = find_blue_object(image)
 	color = find_orange_object(image)
 	color = find_black_object(image)
-	# if color == 0 :
-	# 	return colorSrvResponse(color_srv = 0, distance_srv = 0, x_diff_srv = 0)
+	if color == 0 :
+		return colorSrvResponse(color_srv = 0, distance_srv = 0, x_diff_srv = 0)
 	focalLength = calculate_focalDistance(video)  	#測試用 之後要寫死
 	distance,x_diff = calculate_Distance(focalLength)
 	message = colorSrvResponse(color_srv = int(color), distance_srv = int(distance), x_diff_srv = int(x_diff))
-	cv2.imshow("image", image)
 	return message
 
 if __name__ == "__main__":
-	video = cv2.VideoCapture(2)
+	video = cv2.VideoCapture("/dev/video4")
 	rospy.init_node("color_detect_server")
 	s = rospy.Service("color_detect",colorSrv,main0)
 	rospy.spin()
