@@ -135,7 +135,7 @@ def numbercallback(self,data):
 
 if __name__ == '__main__':
     bridge=CvBridge()
-    cap =cv2.VideoCapture(2)
+    cap =cv2.VideoCapture(0)
     bridge=CvBridge()
     ret, frame=cap.read()
     webcam = bridge.cv2_to_imgmsg(frame,"bgr8")
