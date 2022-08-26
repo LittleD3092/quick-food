@@ -9,34 +9,34 @@ from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvR
 
 assert True # turn off this before race
 
-# class AlphabetRecognize:
+class AlphabetRecognize:
 	
-# 	# Precondition: Nothing.
-# 	# Postcondition: Nothing.
-# 	def __init__(self):
-# 		# This is empty intentionally.
-# 		pass
+	# Precondition: Nothing.
+	# Postcondition: Nothing.
+	def __init__(self):
+		# This is empty intentionally.
+		pass
 
-# 	# Precondition: Nothing.
-# 	# Postcondition: Return three integer values.
-# 	# 				 1. The distance between the alphabet
-# 	# 					and the middle of the camera.
-# 	# 					In pixels.
-# 	# 				 2. The depth of the alphabet. 
-# 	# 					In centimeters.
-# 	# 				 3. The alphabet.
-# 	#					1 for 'T',
-# 	# 					2 for 'D',
-# 	# 					3 for 'K'.
-# 	def request(self, num = 0):
-# 		rospy.wait_for_service('alphabet_recognize', 5)
-# 		try:
-# 			alphabet_recognize = rospy.ServiceProxy('alphabet_recognize', alphabetSrv)
-# 			resp = alphabet_recognize(alphabetSrvRequest(position_req = num))
-# 			return (resp.x_diff_srv, resp.distance_srv, resp.alphabet_srv)
-# 		except rospy.ServiceException as e:
-# 			print("Service call failed: %s" %e)
-# 			return -1
+	# Precondition: Nothing.
+	# Postcondition: Return three integer values.
+	# 				 1. The distance between the alphabet
+	# 					and the middle of the camera.
+	# 					In pixels.
+	# 				 2. The depth of the alphabet. 
+	# 					In centimeters.
+	# 				 3. The alphabet.
+	#					1 for 'T',
+	# 					2 for 'D',
+	# 					3 for 'K'.
+	def request(self, num = 0):
+		rospy.wait_for_service('alphabet_recognize', 5)
+		try:
+			alphabet_recognize = rospy.ServiceProxy('alphabet_recognize', alphabetSrv)
+			resp = alphabet_recognize(alphabetSrvRequest(position_req = num))
+			return (resp.x_diff_srv, resp.distance_srv, resp.alphabet_srv)
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1
 
 class ColorDetect:
 
