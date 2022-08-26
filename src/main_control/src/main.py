@@ -136,7 +136,8 @@ class UpperMechanism:
 if __name__ == '__main__':
 	# # init all nodes, uncomment the node you needed
 	# dotNode = DotRecognize()
-	alphabetNode = AlphabetRecognize()
+	# alphabetNode = AlphabetRecognize()
+	colortNode = ColorDetect()
 	# ballNode = ColorDetect()
 	# baseNode = Navigation()
 	# upperNode = UpperMechanism()
@@ -147,14 +148,19 @@ if __name__ == '__main__':
 	# print(ballNode.request())
 
 	# test alphabet node
-	print("Alphabet node test:")
+	# print("Alphabet node test:")
+
+	# while True:
+	# 	req = alphabetNode.request()
+	# 	if req != (0, 0, 0):
+	# 		print(req)
+	# 		break
 
 	while True:
-		req = alphabetNode.request()
+		req = colortNode.request()
 		if req != (0, 0, 0):
 			print(req)
 			break
-
 	######################################################################################
 	## main loop: This is the main loop that will be running on the race.
 	
