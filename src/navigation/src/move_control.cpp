@@ -1,27 +1,36 @@
 /*
-v1:
 	linear unit = centimeter
 	velicity unit = m/s
 	rotation unit = degrees
 
-	subscribe geometry_msgs pose from /slam_out_pose(hector-slam) as a basis for robot's attitude.
-	lidar model : velodyne vlp-16 (motor speed = 1200rpm)
+        initial head direction = 180 degree 
 
+        subscribe geometry_msgs pose from /slam_out_pose(hector-slam) as a basis for robot's attitude.
+	lidar model : velodyne vlp-16 (motor speed = 1200rpm)
 	to client:
 		subscribe geometry_msgs pose from main_control. 
 		if the move is completed send done to client & watting for the next command from main_control.
 		
 	to controller:
-		[1][2][3]:
+		[1][2][3][4]:
 
 		[1]direction
 			0 = rotation mode & 1 = X-direction & 2 = Y-direction
-
 		[2]velocity
 			velocity( + or - )     0 : stop      1 : minimum velocity   2 : medium velocity   3 : maximum velocity
 		
 		[3]rotation
 			0 = do nothing & 1 = cw  & 2 = ccw
+
+        [4]head_direction
+            imform controller of the current nose orientation
+            0, 90, 180, 270, 
+
+v1: 
+        complete basic operating functions.
+
+v2:
+        fixed a stray issue caused by machine rotation.
 
 */
 
@@ -32,6 +41,7 @@ v1:
 #include<vector>
 
 #include<geometry_msgs/PoseStamped.h>
+#include <sensor_msgs/LaserScan.h>
 #include<std_msgs/Int16MultiArray.h>
 #include"nav/Service_msg.h"
 #include"nav/main2nav.h"
@@ -65,10 +75,10 @@ bool done_flag = false;
 //else
 float quat_z = 0;
 float eular_z = 0;
-std::vector<int16_t> controller_msg{5, 5, 5};
+std::vector<int16_t> controller_msg{5, 5, 5,180};
 
 void MySigintHandler(int sig);
-void SLAM_POSE_Callback(const geometry_msgs::PoseStamped::ConstPtr&msg );
+void SLAM_POSE_Callback(const geometry_msgs::PoseStamped::ConstPtr &msg);
 bool Srv_Callback(nav::main2nav::Request &req, nav::main2nav::Response &res);
 
 float qua2eular(float); //only for z-axis rotation
@@ -79,34 +89,30 @@ void move_plan_r(int ,int, int);
 void final_check(int, int, int);
 void set_vel(int);
 
+sensor_msgs::LaserScan scan_msg;
+
 int main(int argc, char** argv){
 
 	ros::init(argc, argv,"qua2eular");
 	ros::NodeHandle n;
 
-	ros::Subscriber sub = n.subscribe("/slam_out_pose", 10, SLAM_POSE_Callback);
-	ros::Publisher pub = n.advertise<std_msgs::Int16MultiArray>("/controller_command", 100);
+	ros::Subscriber sub = n.subscribe("/slam_out_pose", 100, SLAM_POSE_Callback);
 	ros::ServiceClient client = n.serviceClient<nav::Service_msg>("controller_command",100);
 	ros::ServiceServer service = n.advertiseService("main2nav",Srv_Callback);
 
 	nav::Service_msg srv_command;
-
-	std_msgs::Int16MultiArray command;
 
 	signal(SIGINT, MySigintHandler);
 	while(ros::ok()){
 
 		while(done_flag == false){
 			while(state_flag == false){
-				//cnt++;
-				// std::cout << "cnt is "<< cnt <<std::endl;
-				// controller_msg[3] = cnt;
 				move_plan_x(target[0], target[1], target[2]);
-				command.data = controller_msg;
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
+                srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
 						ROS_INFO("connect success");
@@ -114,19 +120,18 @@ int main(int argc, char** argv){
 						ROS_INFO("connect fail");
 				}
 
-				//pub.publish(command);
-				//usleep(200000);
 				ros::spinOnce();
+
 			}
 			state_flag = false;
 
 			while(state_flag == false){
 				move_plan_y(target[0], target[1], target[2]);
-				command.data = controller_msg;
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
+                srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
 						ROS_INFO("connect success");
@@ -134,8 +139,6 @@ int main(int argc, char** argv){
 						ROS_INFO("connect fail");
 				}
 
-				//pub.publish(command);
-				//usleep(200000);
 				ros::spinOnce();
 
 			}
@@ -143,7 +146,6 @@ int main(int argc, char** argv){
 
 			while(state_flag == false){
 				move_plan_r(target[0], target[1], target[2]);
-				command.data = controller_msg;
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
@@ -155,8 +157,6 @@ int main(int argc, char** argv){
 						ROS_INFO("connect fail");
 				}
 
-				//pub.publish(command);
-				//usleep(200000);
 				ros::spinOnce();
 
 			}
@@ -167,9 +167,9 @@ int main(int argc, char** argv){
 		}
 			
 		ros::spinOnce();
+
 	}
 
-	
 	return 0;
 }   
 
@@ -219,17 +219,21 @@ float qua2eular(float quat_z){
 void check_attitude(){
 	int pose_error = 0;
 
-	if(robot_now_pose >= 135 && robot_now_pose < 225){  //180
+	if(robot_now_pose >= 135 && robot_now_pose < 225){  
 		pose_error = robot_now_pose - 180;
+                controller_msg[3] = 180;
 
-	}else if(robot_now_pose >= 225 && robot_now_pose < 315 ){  //270
+	}else if(robot_now_pose >= 225 && robot_now_pose < 315 ){ 
 		pose_error = robot_now_pose - 270;
+                controller_msg[3] = 270;
 
-	}else if(robot_now_pose >= 45 && robot_now_pose < 135 ){        // 90
+	}else if(robot_now_pose >= 45 && robot_now_pose < 135 ){ 
 		pose_error = robot_now_pose - 90;
+                controller_msg[3] = 90;
 
 	}else{
-		pose_error = robot_now_pose - 0;                      //0
+		pose_error = robot_now_pose - 0; 
+                controller_msg[3] = 0;
 	}
 
 	if(pose_error > 0){
@@ -268,7 +272,6 @@ void move_plan_x(int set_point_x, int set_point_y, int set_pose){
 		//done
 		state_flag = true;
 		controller_msg[1] = set_vel_stop;
-			
 
 	}else{                                                                                                                                        //not reached
 		if(dis_to_setpoint > 0 ){
@@ -404,6 +407,7 @@ void set_vel(int distance_to_target){
 		controller_msg[1] = set_vel_stop;
 			
 	}
+
 }
 
 // This function is for shutting down the node.
@@ -416,5 +420,5 @@ void MySigintHandler(int sig){
 
 }
 
-
 //----v1----2022/8/10----tingweiou----nycu dme
+//----v2----2022/8/20----tingweiou----nycu dme
