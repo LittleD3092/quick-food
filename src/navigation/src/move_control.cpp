@@ -53,8 +53,8 @@ __int16_t target[3] = {0, 0, 180};
 int point_error = 3;
 int rotate_error = 2;
 
-int distence_to_target_max = 50;
-int distence_to_target_min = 30;
+int distence_to_target_max = 180;
+int distence_to_target_min = 50;
 
 int set_vel_max = 3;
 int set_vel_med = 2;
@@ -75,7 +75,7 @@ bool done_flag = false;
 //else
 float quat_z = 0;
 float eular_z = 0;
-std::vector<int16_t> controller_msg{5, 5, 5,180};
+int controller_msg{0, 0, 0,180};
 
 void MySigintHandler(int sig);
 void SLAM_POSE_Callback(const geometry_msgs::PoseStamped::ConstPtr &msg);
@@ -112,12 +112,12 @@ int main(int argc, char** argv){
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
-                srv_command.request.head_direction = controller_msg[3];
+                		srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
-						ROS_INFO("connect success");
+					ROS_INFO("connect success");
 				}else{
-						ROS_INFO("connect fail");
+					ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce();
@@ -131,12 +131,12 @@ int main(int argc, char** argv){
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
-                srv_command.request.head_direction = controller_msg[3];
+                		srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
-						ROS_INFO("connect success");
+					ROS_INFO("connect success");
 				}else{
-						ROS_INFO("connect fail");
+					ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce();
@@ -152,9 +152,9 @@ int main(int argc, char** argv){
 				srv_command.request.rotation = controller_msg[2];
 
 				if(client.call(srv_command)){
-						ROS_INFO("connect success");
+					ROS_INFO("connect success");
 				}else{
-						ROS_INFO("connect fail");
+					ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce();
@@ -237,18 +237,15 @@ void check_attitude(){
 	}
 
 	if(pose_error > 0){
-		//turn left
-		std::cout << " turn_ccw "<<std::endl;
+		//std::cout << " turn_ccw "<<std::endl;
 		controller_msg[2] = 2;
 
 	}else if(pose_error < 0){
-		//turn right
-		std::cout << " turn_cw"<<std::endl;
+		//std::cout << " turn_cw"<<std::endl;
 		controller_msg[2] = 1;
 
 	}else{
-		//do nothing
-		std::cout<<" go straight"<<std::endl;
+		//std::cout<<" go straight"<<std::endl;
 		controller_msg[2] = 0;
 
 	}
@@ -275,12 +272,12 @@ void move_plan_x(int set_point_x, int set_point_y, int set_pose){
 
 	}else{                                                                                                                                        //not reached
 		if(dis_to_setpoint > 0 ){
-			std::cout << " move forward               ";
+			//std::cout << " move forward               ";
 			check_attitude();
 			set_vel(dis_to_setpoint);
 
 		}else{
-			std::cout << " move backward           ";
+			//std::cout << " move backward           ";
 			check_attitude();
 			set_vel(dis_to_setpoint);
 
@@ -298,23 +295,24 @@ void move_plan_y(int set_point_x, int set_point_y, int set_pose){
 	int error_low_y =set_point_y - point_error;
 	int error_high_y = set_point_y + point_error; 
 	int dis_to_setpoint = set_point_y - robot_now_point_y;
+	
 	controller_msg [0] = 2;
 
 	robot_now_pose = qua2eular(quat_z);
 
-	if (robot_now_point_y > error_low_y && robot_now_point_y < error_high_y){        //reached
+	if (robot_now_point_y > error_low_y && robot_now_point_y < error_high_y){       
 		//done
 		state_flag = true;
 		controller_msg[1] = set_vel_stop;
 
-	}else{                                                                           //not reached
+	}else{                                                                          
 		if(dis_to_setpoint > 0 ){
-			std::cout << " move right                ";
+			//std::cout << " move right                ";
 			check_attitude();
 			set_vel(dis_to_setpoint);
 
 		}else{
-			std::cout << " move left                    ";
+			//std::cout << " move left                    ";
 			check_attitude();
 			set_vel(dis_to_setpoint);
 
@@ -334,7 +332,19 @@ void move_plan_r(int set_point_x, int set_point_y, int set_pose){
 
 	robot_now_pose = qua2eular(quat_z);
 
-	int deg_to_set_pose = robot_now_pose - set_pose;
+	//v3----solve the rotation bug
+	int error_low = robot_now_pose - set_pose;
+	int error_high = robot_now_pose - (set_pose+360);
+
+	int deg_to_set_pose;
+
+	if(std::abs(error_low) < std::abs(error_high)){
+		deg_to_set_pose = error_low;
+	}
+	else{
+		deg_to_set_pose = error_high;
+	}
+	
 	controller_msg [0] = 0;
 
 	if(deg_to_set_pose > error_low_r && deg_to_set_pose < error_high_r){
@@ -422,3 +432,4 @@ void MySigintHandler(int sig){
 
 //----v1----2022/8/10----tingweiou----nycu dme
 //----v2----2022/8/20----tingweiou----nycu dme
+//----v3----2022/09/12----tingweiouo----nycu dme
