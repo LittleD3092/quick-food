@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.6
+
 from multiprocessing.connection import wait
 import cv2
 import numpy as np

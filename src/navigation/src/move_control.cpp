@@ -75,7 +75,7 @@ bool done_flag = false;
 //else
 float quat_z = 0;
 float eular_z = 0;
-int controller_msg{0, 0, 0,180};
+int controller_msg[4] = {0, 0, 0,180};
 
 void MySigintHandler(int sig);
 void SLAM_POSE_Callback(const geometry_msgs::PoseStamped::ConstPtr &msg);

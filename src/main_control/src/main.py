@@ -1,5 +1,5 @@
 # main_control Node
-# !/usr/bin/env python
+# !/usr/bin/env python3.6
 
 import rospy
 from std_msgs.msg import Empty, Int16
