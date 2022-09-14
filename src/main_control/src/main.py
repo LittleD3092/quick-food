@@ -6,6 +6,7 @@ from std_msgs.msg import Empty, Int16
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
+from upper_control import action, actionRequest, actionResponse
 
 assert True # turn off this before race
 
@@ -126,9 +127,9 @@ class UpperMechanism:
 	def move(self, cmd):
 		rospy.wait_for_service('upper_mechanism', 5)
 		try:
-			upper_mechanism = rospy.ServiceProxy('upper_mechanism', Int16)
-			resp = upper_mechanism(cmd)
-			return resp.data
+			upper_mechanism = rospy.ServiceProxy('upper_mechanism', action)
+			resp = upper_mechanism(actionRequest(request = cmd))
+			return resp.response
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
