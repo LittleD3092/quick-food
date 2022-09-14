@@ -60,7 +60,7 @@ class ColorDetect:
 		try:
 			color_detect = rospy.ServiceProxy('color_detect', colorSrv)
 			resp = color_detect(colorSrvRequest(position_srv = num))
-			return (resp.color_srv, resp.distance_srv, resp.x_diff_srv)
+			return resp.color_srv
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
 	while True:
 		req = colortNode.request()
-		if req != (0, 0, 0):
+		if req != 0:
 			print(req)
 			break
 	######################################################################################

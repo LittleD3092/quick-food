@@ -3,5 +3,3 @@ int16  position_srv
 ---
 
 int16 color_srv
-int16 distance_srv
-int16 x_diff_srv
