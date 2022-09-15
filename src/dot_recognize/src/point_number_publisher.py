@@ -1,10 +1,10 @@
-#!/usr/bin/env python
-from __future__ import print_function
+#!/usr/bin/env python3.6
+from __future__ import print_function0
 #from subprocess import call
 import cv2
 import rospy
 from cv_bridge import CvBridge,CvBridgeError
-from std_msgs.msg import Int16
+from dot_recognize.srv import dotSrv,dotSrvResponse
 import numpy as np
 
 
@@ -117,9 +117,6 @@ def find_circle(cv_image,rec_contour):
             dst=cv2.warpPerspective(cv_image.copy(),M,(390,290))
             cv2.imshow('result',dst)
     return (get_result(dst))
-        
-
-
     
 def numbercallback(self,data):
     try:
@@ -132,13 +129,13 @@ def numbercallback(self,data):
     except CvBridgeError as e:
         print(e)
 
-
-if __name__ == '__main__':
-    bridge=CvBridge()
-    cap =cv2.VideoCapture(2)
+def main0(req):
     bridge=CvBridge()
     ret, frame=cap.read()
     webcam = bridge.cv2_to_imgmsg(frame,"bgr8")
-    rospy.init_node('point_number_pub')
-    s=rospy.Service('dot_recognize',Int16,numbercallback)
-    rospy.spin()
+
+if __name__ == '__main__':
+	cap =cv2.VideoCapture("/dev/video0")
+	rospy.init_node('point_number_server')
+	s = rospy.Service('dot_recognize',dotSrv,main0)
+	rospy.spin()
