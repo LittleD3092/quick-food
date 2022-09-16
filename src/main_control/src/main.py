@@ -7,6 +7,7 @@ from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control import action, actionRequest, actionResponse
+from dot_recognize import dotSrv, dotSrvRequest, dotSrvResponse
 
 assert True # turn off this before race
 
@@ -81,8 +82,8 @@ class DotRecognize:
 	def request(self):
 		rospy.wait_for_service('dot_recognize', 5)
 		try:
-			dot_recognize = rospy.ServiceProxy('dot_recognize', Empty)
-			resp = dot_recognize()
+			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
+			resp = dot_recognize(dotSrvRequest())
 			return resp.data
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
