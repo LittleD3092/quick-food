@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.6
+
 import cv2
 import numpy as np
 import time
@@ -315,7 +317,7 @@ def main0(req):
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	captureSource = "/dev/video4"
+	captureSource = "/dev/video2"
 	cap = cv2.VideoCapture(captureSource)
 	
 	# try camera on the first try

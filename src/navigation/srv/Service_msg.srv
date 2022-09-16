@@ -1,5 +1,6 @@
 int16 direction
 int16 velocity
 int16 rotation
+int16 head_direction
 ---
 bool receive_data

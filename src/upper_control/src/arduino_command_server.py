@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.6
 # this program get the msg sended from client ,which we manually input ,and then send it to arduino
 
 import rospy

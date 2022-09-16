@@ -217,4 +217,5 @@ include_directories(
 # catkin_add_nosetests(test)
 
 add_executable(move src/move_control.cpp)
+add_dependencies(move ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(move ${catkin_LIBRARIES})

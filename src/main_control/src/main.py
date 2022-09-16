@@ -1,11 +1,12 @@
 # main_control Node
-# !/usr/bin/env python
+# !/usr/bin/env python3.6
 
 import rospy
 from std_msgs.msg import Empty, Int16, Bool
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
+from upper_control import action, actionRequest, actionResponse
 
 assert True # turn off this before race
 
@@ -60,7 +61,7 @@ class ColorDetect:
 		try:
 			color_detect = rospy.ServiceProxy('color_detect', colorSrv)
 			resp = color_detect(colorSrvRequest(position_srv = num))
-			return (resp.color_srv, resp.distance_srv, resp.x_diff_srv)
+			return resp.color_srv
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -126,13 +127,13 @@ class UpperMechanism:
 	def move(self, cmd):
 		rospy.wait_for_service('upper_mechanism', 5)
 		try:
-			upper_mechanism = rospy.ServiceProxy('upper_mechanism', Int16)
-			resp = upper_mechanism(cmd)
+			upper_mechanism = rospy.ServiceProxy('upper_mechanism', action)
+			resp = upper_mechanism(actionRequest(request = cmd))
 			if cmd == 1 or cmd == 3:
 				StatusPublisher().publish(True)
 			elif cmd == 2 or cmd == 4:
 				StatusPublisher().publish(False)
-			return resp.data
+			return resp.response
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -179,7 +180,7 @@ if __name__ == '__main__':
 
 	while True:
 		req = colortNode.request()
-		if req != (0, 0, 0):
+		if req != 0:
 			print(req)
 			break
 	######################################################################################
