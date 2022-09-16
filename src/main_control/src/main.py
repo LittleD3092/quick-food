@@ -140,7 +140,7 @@ class UpperMechanism:
 class StatusPublisher:
 	
 	# Precondition: Nothing.
-	# Postcondition: Nothing.
+	# Postcondition: The publisher is up. The topic is main_status.
 	def __init__(self):
 		self.pub = rospy.Publisher('main_status', Bool, queue_size = 100)
 		rospy.init_node("main_control", anonymous = True)
