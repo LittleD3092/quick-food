@@ -2,7 +2,7 @@
 # !/usr/bin/env python
 
 import rospy
-from std_msgs.msg import Empty, Int16
+from std_msgs.msg import Empty, Int16, Bool
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
@@ -128,10 +128,31 @@ class UpperMechanism:
 		try:
 			upper_mechanism = rospy.ServiceProxy('upper_mechanism', Int16)
 			resp = upper_mechanism(cmd)
+			if cmd == 1 or cmd == 3:
+				StatusPublisher().publish(True)
+			elif cmd == 2 or cmd == 4:
+				StatusPublisher().publish(False)
 			return resp.data
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
+
+class StatusPublisher:
+	
+	# Precondition: Nothing.
+	# Postcondition: Nothing.
+	def __init__(self):
+		self.pub = rospy.Publisher('main_status', Bool, queue_size = 100)
+		rospy.init_node("main_control", anonymous = True)
+
+	# Precondition: Given a parameter status that indicates the current status.
+	#               Now is a boolean value that is either true or false.
+	#               True for the ball is in the upper mechanism.
+	#               False for the ball is not in the upper mechanism.
+	# Postcondition: Publish the status code.
+	def publish(self, status):
+		assert type(status) == bool
+		self.pub.publish(Bool(data = status))
 
 if __name__ == '__main__':
 	# # init all nodes, uncomment the node you needed
