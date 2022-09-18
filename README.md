@@ -129,3 +129,24 @@ graph TD
 	
     end
 ```
+
+## Navigation
+
+```
+roslaunch motor_communicate base.launch
+```
+
+## How to connect
+
+1. same wifi
+
+find the local network information
+```bash
+ifconfig
+```
+
+find local devices
+
+```bash
+fping -r 1 -agq [your ip lower bound] [your ip upper bound]
+```

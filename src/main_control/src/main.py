@@ -6,8 +6,8 @@ from std_msgs.msg import Empty, Int16, Bool
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
-from upper_control import action, actionRequest, actionResponse
-from dot_recognize import dotSrv, dotSrvRequest, dotSrvResponse
+from upper_control.srv import action, actionRequest, actionResponse
+# from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
 
 assert True # turn off this before race
 
@@ -67,27 +67,27 @@ class ColorDetect:
 			print("Service call failed: %s" %e)
 			return -1
 
-class DotRecognize:
+# class DotRecognize:
 	
-	# Precondition: Nothing.
-	# Postcondition: Nothing.
-	def __init__(self):
-		# This is empty intentionally.
-		pass
+# 	# Precondition: Nothing.
+# 	# Postcondition: Nothing.
+# 	def __init__(self):
+# 		# This is empty intentionally.
+# 		pass
 
-	# Precondition: Client is up.
-	# Postcondition: Return an integer value,
-	# 				 meaning the dot number in the middle 
-	#  				 of the camera.
-	def request(self):
-		rospy.wait_for_service('dot_recognize', 5)
-		try:
-			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
-			resp = dot_recognize(dotSrvRequest())
-			return resp.data
-		except rospy.ServiceException as e:
-			print("Service call failed: %s" %e)
-			return -1
+# 	# Precondition: Client is up.
+# 	# Postcondition: Return an integer value,
+# 	# 				 meaning the dot number in the middle 
+# 	#  				 of the camera.
+# 	def request(self):
+# 		rospy.wait_for_service('dot_recognize', 5)
+# 		try:
+# 			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
+# 			resp = dot_recognize(dotSrvRequest())
+# 			return resp.data
+# 		except rospy.ServiceException as e:
+# 			print("Service call failed: %s" %e)
+# 			return -1
 
 class Navigation:
 	
@@ -100,12 +100,14 @@ class Navigation:
 	# Precondition: Given a 3D point and a quaternion as parameter or a pose object.
 	# Postcondition: Robot moves to the location and pose determined.
 	def move(self, req):
-		rospy.wait_for_service('navigation', 5)
+		rospy.wait_for_service('/navigation', 5)
 		assert type(req) == main2navRequest
 		try:
-			navigation = rospy.ServiceProxy('navigation', main2nav)
+			navigation = rospy.ServiceProxy('/navigation', main2nav)
+			print(navigation)
 			resp = navigation(req)
-			return resp
+			print(resp.done_flag)
+			return resp.done_flag
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -159,12 +161,13 @@ class StatusPublisher:
 if __name__ == '__main__':
 	# # init all nodes, uncomment the node you needed
 	# dotNode = DotRecognize()
-	# alphabetNode = AlphabetRecognize()
-	colortNode = ColorDetect()
+	alphabetNode = AlphabetRecognize()
+	# colortNode = ColorDetect()
 	# ballNode = ColorDetect()
 	# baseNode = Navigation()
 	# upperNode = UpperMechanism()
 	# upperNode.move(0)
+	nav = Navigation()
 
 	# # test ballNode
 	# print("Ball node test:")
@@ -179,11 +182,29 @@ if __name__ == '__main__':
 	# 		print(req)
 	# 		break
 
-	while True:
-		req = colortNode.request()
-		if req != 0:
-			print(req)
+	# while True:
+	# 	req = colortNode.request()
+	# 	if req != 0:
+	# 		print(req)
+	# 		break
+
+	# test navigation
+	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):
+	# 	print("not done")
+
+	# print("done")
+
+	depth = 0
+	while True:	
+		_, depth, _ = alphabetNode.request()
+		if depth != 0:
 			break
+
+	while(not(nav.move(main2navRequest(main_x = depth - 200 , main_y = 0, rotation = 180)))):
+		print("not done")
+	print("done")
+
+
 	######################################################################################
 	## main loop: This is the main loop that will be running on the race.
 	

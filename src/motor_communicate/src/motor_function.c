@@ -45,7 +45,7 @@ const uint8_t CRCLowTable[256] = {
 int serialPort;
 
 void serialInit(){
-    serialPort = open("/dev/ttyUSB0", O_RDWR);
+    serialPort = open("/dev/controller_usb", O_RDWR);
 
     if(serialPort < 0){
         printf("error %i from open : %s \n", errno, strerror(errno));

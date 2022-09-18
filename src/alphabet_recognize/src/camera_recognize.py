@@ -317,7 +317,7 @@ def main0(req):
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	captureSource = "/dev/video2"
+	captureSource = "/dev/video0"
 	cap = cv2.VideoCapture(captureSource)
 	
 	# try camera on the first try
