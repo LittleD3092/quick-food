@@ -162,7 +162,6 @@ if __name__ == '__main__':
 	# # init all nodes, uncomment the node you needed
 	# dotNode = DotRecognize()
 	alphabetNode = AlphabetRecognize()
-	# colortNode = ColorDetect()
 	# ballNode = ColorDetect()
 	# baseNode = Navigation()
 	# upperNode = UpperMechanism()
@@ -198,10 +197,15 @@ if __name__ == '__main__':
 	while True:	
 		_, depth, _ = alphabetNode.request()
 		if depth != 0:
+			print("found depth")
 			break
+	
+	while(not(nav.move(main2navRequest(main_x = 0 , main_y = 0, rotation = 90)))):
+		print("turning...")
 
-	while(not(nav.move(main2navRequest(main_x = depth - 200 , main_y = 0, rotation = 180)))):
-		print("not done")
+	while(not(nav.move(main2navRequest(main_x = -depth + 200 , main_y = 0, rotation = 90)))):
+		print("forwarding...")
+		
 	print("done")
 
 
