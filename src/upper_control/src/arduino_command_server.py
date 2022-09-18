@@ -29,7 +29,7 @@ def callback(request):
         print('Arduino :invalid command')
         request.request = -1
         
-    # 回傳response 給 client
+    # send the request to the client 
     return actionResponse(request.request) 
 
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     try:
         while True:
 
-            # client 丟了一個 request 進來 , 呼叫callback
+            # if client sends a request  , call callback function
             rospy.Service("action",action,callback) 
             rospy.spin()
 
