@@ -5,14 +5,14 @@ from std_msgs.msg import Int8
 from upper_control.srv import action,actionResponse
 
 def client(msg):
-    msg_to_server = rospy.ServiceProxy("action",action) 
+    msg_to_server = rospy.ServiceProxy("upper_mechanism",action) 
     response = msg_to_server(msg)
     print("Arudino :" , response.response)
     rate.sleep()
 
 if __name__ == '__main__':
     rospy.init_node('upper_mechanism_client_test')
-    rospy.wait_for_service("action")
+    rospy.wait_for_service("upper_mechanism")
     rate = rospy.Rate(1000) # 1000Hz
     while not rospy.is_shutdown():
         try:
