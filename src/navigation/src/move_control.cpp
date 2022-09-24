@@ -47,7 +47,8 @@ v2:
 #include"nav/main2nav.h"
 
 //demo
-__int16_t target[3] = {0, 0, 180};
+int target[3] = {0, 0, 180};
+int last_target[3] = {0, 0, 180};
 
 //error
 int point_error = 3;
@@ -70,7 +71,8 @@ int temp_pose = 0;
 
 //flag
 bool state_flag = false;
-bool done_flag = false;
+bool done_flag = true;
+
 
 //else
 float quat_z = 0;
@@ -89,16 +91,17 @@ void move_plan_r(int ,int, int);
 void final_check(int, int, int);
 void set_vel(int);
 
-sensor_msgs::LaserScan scan_msg;
-
 int main(int argc, char** argv){
 
 	ros::init(argc, argv,"qua2eular");
 	ros::NodeHandle n;
 
 	ros::Subscriber sub = n.subscribe("/slam_out_pose", 100, SLAM_POSE_Callback);
-	ros::ServiceClient client = n.serviceClient<nav::Service_msg>("controller_command",100);
-	ros::ServiceServer service = n.advertiseService("main2nav",Srv_Callback);
+
+	ros::service::waitForService("/controller_command");
+	ros::ServiceClient client = n.serviceClient<nav::Service_msg>("/controller_command",100);
+	
+	ros::ServiceServer service = n.advertiseService("/navigation",Srv_Callback);
 
 	nav::Service_msg srv_command;
 
@@ -112,10 +115,10 @@ int main(int argc, char** argv){
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
-                		srv_command.request.head_direction = controller_msg[3];
+                srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
-					ROS_INFO("connect success");
+					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
 					ROS_INFO("connect fail");
 				}
@@ -134,7 +137,7 @@ int main(int argc, char** argv){
                 		srv_command.request.head_direction = controller_msg[3];
 
 				if(client.call(srv_command)){
-					ROS_INFO("connect success");
+					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
 					ROS_INFO("connect fail");
 				}
@@ -152,7 +155,7 @@ int main(int argc, char** argv){
 				srv_command.request.rotation = controller_msg[2];
 
 				if(client.call(srv_command)){
-					ROS_INFO("connect success");
+					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
 					ROS_INFO("connect fail");
 				}
@@ -163,9 +166,8 @@ int main(int argc, char** argv){
 			state_flag = false;
 
 			final_check(target[0], target[1], target[2]);
-
 		}
-			
+
 		ros::spinOnce();
 
 	}
@@ -194,14 +196,23 @@ bool Srv_Callback(nav::main2nav::Request& req, nav::main2nav::Response& res){
 	target[1] = req.main_y;
 	target[2] = req.rotation;
 
-	if(done_flag == true){
-		return true;
+	for(int i = 0; i < 3; i++){
+		if(last_target[i] != target[i]){
+			done_flag = false;
+		}
+	}
 
+	if(done_flag){
+		res.done_flag = true;
 	}else{
-		return false;
+		res.done_flag = false;
 
+		for(int i = 0; i < 3; i++){
+			last_target[i] = target[i];
+		}
 	}
 		
+	return true;
 }
 
 // This function calculate the pose from the quaternion quat_z.
@@ -377,10 +388,10 @@ void final_check(int set_point_x, int set_point_y, int set_pose){
 
 	if(robot_now_point_x > error_low_x && robot_now_point_x < error_high_x && robot_now_point_y > error_low_y && robot_now_point_y < error_high_y){
 		done_flag = true;
-	}else{
-		done_flag = false;
+		std::cout << "reach point" << std::endl;
 	}
-		
+
+	return;		
 }
 
 // This function is to set the velocity of the robot.

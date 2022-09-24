@@ -1,0 +1,10 @@
+<launch>
+
+    <rosparam command = "load" file = "$(find motor_communicate)/param/pid_value.yaml" />
+    <node name = "motor_control" pkg = "motor_communicate" type = "motor_communicate" />
+
+    <node name = "motor_log" pkg = "motor_log" type = "motor_log" />
+
+    <node name = "motor_tune" pkg = "motor_tune" type = "motor_tune" output = "screen" />
+
+</launch>

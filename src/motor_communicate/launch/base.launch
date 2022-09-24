@@ -1,0 +1,12 @@
+<launch>
+
+    <include file = "$(find velodyne_pointcloud)/launch/VLP16_points.launch" /> 
+    <include file = "$(find hector_slam_launch)/launch/tutorial.launch" /> 
+
+    <rosparam command = "load" file = "$(find motor_communicate)/param/pid_value.yaml" />
+    <node name = "motor_control" pkg = "motor_communicate" type = "motor_communicate" />
+
+    <node name = "navgation" pkg = "nav" type = "move" output = "screen"/>  
+   
+
+</launch>

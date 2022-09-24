@@ -6,10 +6,14 @@ from std_msgs.msg import Empty, Int16, Bool
 from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
-from upper_control import action, actionRequest, actionResponse
-from dot_recognize import dotSrv, dotSrvRequest, dotSrvResponse
+from upper_control.srv import action, actionRequest, actionResponse
+# from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
 
 assert True # turn off this before race
+INVERT_Y = False # depend on the field, this need to be changed.
+				 # For field A, set this to True.
+				 # For field B, set this to False.
+
 
 class AlphabetRecognize:
 	
@@ -67,27 +71,27 @@ class ColorDetect:
 			print("Service call failed: %s" %e)
 			return -1
 
-class DotRecognize:
+# class DotRecognize:
 	
-	# Precondition: Nothing.
-	# Postcondition: Nothing.
-	def __init__(self):
-		# This is empty intentionally.
-		pass
+# 	# Precondition: Nothing.
+# 	# Postcondition: Nothing.
+# 	def __init__(self):
+# 		# This is empty intentionally.
+# 		pass
 
-	# Precondition: Client is up.
-	# Postcondition: Return an integer value,
-	# 				 meaning the dot number in the middle 
-	#  				 of the camera.
-	def request(self):
-		rospy.wait_for_service('dot_recognize', 5)
-		try:
-			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
-			resp = dot_recognize(dotSrvRequest())
-			return resp.data
-		except rospy.ServiceException as e:
-			print("Service call failed: %s" %e)
-			return -1
+# 	# Precondition: Client is up.
+# 	# Postcondition: Return an integer value,
+# 	# 				 meaning the dot number in the middle 
+# 	#  				 of the camera.
+# 	def request(self):
+# 		rospy.wait_for_service('dot_recognize', 5)
+# 		try:
+# 			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
+# 			resp = dot_recognize(dotSrvRequest())
+# 			return resp.data
+# 		except rospy.ServiceException as e:
+# 			print("Service call failed: %s" %e)
+# 			return -1
 
 class Navigation:
 	
@@ -99,13 +103,19 @@ class Navigation:
 
 	# Precondition: Given a 3D point and a quaternion as parameter or a pose object.
 	# Postcondition: Robot moves to the location and pose determined.
-	def move(self, req):
-		rospy.wait_for_service('navigation', 5)
+	def move(self, req = (0, 0, 180)):
+		assert type(req) == tuple
+		assert len(req) == 3
+		req = main2navRequest(main_x = req[0], main_y = req[1], rotation = req[2])
+		rospy.wait_for_service('/navigation', 5)
 		assert type(req) == main2navRequest
 		try:
-			navigation = rospy.ServiceProxy('navigation', main2nav)
-			resp = navigation(req)
-			return resp
+			done_flag = False
+			while not done_flag:
+				navigation = rospy.ServiceProxy('/navigation', main2nav)
+				resp = navigation(req)
+				done_flag = resp.done_flag
+			return True
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -156,13 +166,12 @@ class StatusPublisher:
 		assert type(status) == bool
 		self.pub.publish(Bool(data = status))
 
-if __name__ == '__main__':
+if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# # init all nodes, uncomment the node you needed
 	# dotNode = DotRecognize()
 	# alphabetNode = AlphabetRecognize()
-	colortNode = ColorDetect()
 	# ballNode = ColorDetect()
-	# baseNode = Navigation()
+	baseNode = Navigation()
 	# upperNode = UpperMechanism()
 	# upperNode.move(0)
 
@@ -179,62 +188,106 @@ if __name__ == '__main__':
 	# 		print(req)
 	# 		break
 
-	while True:
-		req = colortNode.request()
-		if req != 0:
-			print(req)
-			break
-	######################################################################################
-	## main loop: This is the main loop that will be running on the race.
-	
-	# # go to I
-	# baseNode.move(POSE_I)
+	# while True:
+	# 	req = colortNode.request()
+	# 	if req != 0:
+	# 		print(req)
+	# 		break
 
-	# # take basketball three times
+	# test navigation
+	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):
+	# 	print("not done")
+
+	# print("done")
+
+	######################################################################################
+	# main loop: This is the main loop that will be running on the race.
+	
+	# go to I
+	print("moving forward...")
+	baseNode.move((425, 0, 180))
+	print("moving sideways to basketball...")
+	baseNode.move((425, 90, 180))
+	baseNode.move((425, 100, 180))
+
+	# take basketball three times
 	# basketballStack = [] # record the stack of basketballs on the robot
-	# basketballOptions = ("T", "D", "K") # the options of basketballs
+	# basketballOptions = ("", "T", "D", "K") # the options of basketballs
 	# for i in range(3):
-	# 	basketballStack.append(basketballOptions[ballNode.request() - 1])
-	# 	upperNode.move(1)
+		# ballColor = 0
+		# print("scanning ball...")
+		# while ballColor == 0:
+		# 	ballColor = ballNode.request()
+		# print("ball scanned.")
+		# basketballStack.append(basketballOptions[ballColor])
+		# upperNode.move(1)
 	# assert basketballStack.count("T") == 1, "There should be one T in the stack."
 	# assert basketballStack.count("D") == 1, "There should be one D in the stack."
 	# assert basketballStack.count("K") == 1, "There should be one K in the stack."
 	# assert len(basketballStack) == 3, "There should be three basketballs in the stack."
+	# print("basketballStack =", basketballStack)
 
-	# # go to G
-	# baseNode.move(POSE_G)
+	# go to G
+	# print("moving sideways to intersection...")
+	baseNode.move((425, 0, 180))
+	print("moving forward...")
+	baseNode.move((900, 0, 180))
+	print("turning...")
+	baseNode.move((900, 0, 270))
+	baseNode.move((935, 0, 270))
+	
 
 	# # throw the basketballs to three baskets marked T, D, K
-	# for i in range(3):
-	# 	baseNode.move(POSE_BASKET[i])
-	# 	chr = AlphabetRecognize.request()
+	POSE_BASKET = ((935, -50,  270), 
+				   (935, -120, 270), 
+				   (935, -190, 270))
+	# # scan for board
+	for i in range(3):
+		baseNode.move(POSE_BASKET[i])
+	# 	chr = ""
+	# 	while True:
+	# 		chr = AlphabetRecognize.request()
+	# 		if chr in ("T", "D", "K"):
+	# 			break
 	# 	assert type(chr) == str, "The character should be a string."
 	# 	assert chr[0] in ('T', 'D', 'K'), "The character should be T, D, or K."
 	# 	basketballStack[basketballStack.index(chr)] = i
-
+	# # remove the stack
 	# for i in range(-1, -4, -1):
 	# 	baseNode.move(POSE_BASKET[ basketballStack[i] ])
 	# 	upperNode.move(2)
 
 
-	# # go to B (checkpoint)
-	# baseNode.move(POSE_B)
+	# # go to the front of B (checkpoint)
+	baseNode.move((935, 170, 270))
+	baseNode.move((935, 170, 90))
 
 	# # go to J
-	# baseNode.move(POSE_J)
+	baseNode.move((935, 390, 90))
+	baseNode.move((1020, 390, 90))
 
 	# # take bowling three times
 	# for i in range(3):
 	# 	upperNode.move(3)
 
 	# # go to H
-	# baseNode.move(POSE_H)
+	baseNode.move((935, 390, 90))
 
 	# # release bowling to three goals marked in dot numbers
+	# POSE_GOAL = ((935, 289, 90),
+	# 			 (935, 331, 90),
+	# 			 (935, 373, 90),
+	# 			 (935, 415, 90),
+	# 			 (935, 457, 90), 
+	# 			 (935, 499, 90))
 	# dic = {}
 	# for i in range(6):
 	# 	baseNode.move(POSE_GOAL[i])
-	# 	num = DotRecognize.request()
+	# 	num = 0
+	# 	while True:
+	# 		num = DotRecognize.request()
+	# 		if num != 0:
+	# 			break
 	# 	if num in range(1, 4):
 	# 		dic[num] = POSE_GOAL[i]
 
@@ -242,5 +295,5 @@ if __name__ == '__main__':
 	# 	baseNode.move(dic[i])
 	# 	upperNode.move(4)
 
-	# End of main loop
+	# # End of main loop
 	##############################################################
