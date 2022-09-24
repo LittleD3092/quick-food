@@ -7,7 +7,7 @@ from main_control.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
-# from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
+from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
 
 assert True # turn off this before race
 INVERT_Y = False # depend on the field, this need to be changed.
@@ -71,27 +71,27 @@ class ColorDetect:
 			print("Service call failed: %s" %e)
 			return -1
 
-# class DotRecognize:
+class DotRecognize:
 	
-# 	# Precondition: Nothing.
-# 	# Postcondition: Nothing.
-# 	def __init__(self):
-# 		# This is empty intentionally.
-# 		pass
+	# Precondition: Nothing.
+	# Postcondition: Nothing.
+	def __init__(self):
+		# This is empty intentionally.
+		pass
 
-# 	# Precondition: Client is up.
-# 	# Postcondition: Return an integer value,
-# 	# 				 meaning the dot number in the middle 
-# 	#  				 of the camera.
-# 	def request(self):
-# 		rospy.wait_for_service('dot_recognize', 5)
-# 		try:
-# 			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
-# 			resp = dot_recognize(dotSrvRequest())
-# 			return resp.data
-# 		except rospy.ServiceException as e:
-# 			print("Service call failed: %s" %e)
-# 			return -1
+	# Precondition: Client is up.
+	# Postcondition: Return an integer value,
+	# 				 meaning the dot number in the middle 
+	#  				 of the camera.
+	def request(self):
+		rospy.wait_for_service('dot_recognize', 5)
+		try:
+			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
+			resp = dot_recognize(dotSrvRequest(position = 0))
+			return resp.dot_number
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1
 
 class Navigation:
 	
@@ -168,10 +168,10 @@ class StatusPublisher:
 
 if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# # init all nodes, uncomment the node you needed
-	# dotNode = DotRecognize()
+	dotNode = DotRecognize()
 	# alphabetNode = AlphabetRecognize()
 	# ballNode = ColorDetect()
-	baseNode = Navigation()
+	# baseNode = Navigation()
 	# upperNode = UpperMechanism()
 	# upperNode.move(0)
 
@@ -194,6 +194,14 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# 		print(req)
 	# 		break
 
+	# test dot node
+	print("Dot node test:")
+	while True:
+		req = dotNode.request()
+		if req != 0:
+			print(req)
+			break
+
 	# test navigation
 	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):
 	# 	print("not done")
@@ -204,11 +212,11 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# main loop: This is the main loop that will be running on the race.
 	
 	# go to I
-	print("moving forward...")
-	baseNode.move((425, 0, 180))
-	print("moving sideways to basketball...")
-	baseNode.move((425, 90, 180))
-	baseNode.move((425, 100, 180))
+	# print("moving forward...")
+	# baseNode.move((425, 0, 180))
+	# print("moving sideways to basketball...")
+	# baseNode.move((425, 90, 180))
+	# baseNode.move((425, 100, 180))
 
 	# take basketball three times
 	# basketballStack = [] # record the stack of basketballs on the robot
@@ -229,21 +237,21 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 
 	# go to G
 	# print("moving sideways to intersection...")
-	baseNode.move((425, 0, 180))
-	print("moving forward...")
-	baseNode.move((900, 0, 180))
-	print("turning...")
-	baseNode.move((900, 0, 270))
-	baseNode.move((935, 0, 270))
+	# baseNode.move((425, 0, 180))
+	# print("moving forward...")
+	# baseNode.move((900, 0, 180))
+	# print("turning...")
+	# baseNode.move((900, 0, 270))
+	# baseNode.move((935, 0, 270))
 	
 
 	# # throw the basketballs to three baskets marked T, D, K
-	POSE_BASKET = ((935, -50,  270), 
-				   (935, -120, 270), 
-				   (935, -190, 270))
+	# POSE_BASKET = ((935, -50,  270), 
+	# 			   (935, -120, 270), 
+	# 			   (935, -190, 270))
 	# # scan for board
-	for i in range(3):
-		baseNode.move(POSE_BASKET[i])
+	# for i in range(3):
+	# 	baseNode.move(POSE_BASKET[i])
 	# 	chr = ""
 	# 	while True:
 	# 		chr = AlphabetRecognize.request()
@@ -259,19 +267,19 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 
 
 	# # go to the front of B (checkpoint)
-	baseNode.move((935, 170, 270))
-	baseNode.move((935, 170, 90))
+	# baseNode.move((935, 170, 270))
+	# baseNode.move((935, 170, 90))
 
 	# # go to J
-	baseNode.move((935, 390, 90))
-	baseNode.move((1020, 390, 90))
+	# baseNode.move((935, 390, 90))
+	# baseNode.move((1020, 390, 90))
 
 	# # take bowling three times
 	# for i in range(3):
 	# 	upperNode.move(3)
 
 	# # go to H
-	baseNode.move((935, 390, 90))
+	# baseNode.move((935, 390, 90))
 
 	# # release bowling to three goals marked in dot numbers
 	# POSE_GOAL = ((935, 289, 90),
