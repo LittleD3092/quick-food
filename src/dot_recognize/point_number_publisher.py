@@ -134,11 +134,10 @@ def numbercallback(self,data):
 
 
 if __name__ == '__main__':
-    bridge=CvBridge()
+    # bridge=CvBridge()
     cap =cv2.VideoCapture(2)
-    bridge=CvBridge()
     ret, frame=cap.read()
-    webcam = bridge.cv2_to_imgmsg(frame,"bgr8")
+    # webcam = bridge.cv2_to_imgmsg(frame,"bgr8")
     rospy.init_node('point_number_pub')
     s=rospy.Service('dot_recognize',Int16,numbercallback)
     rospy.spin()
