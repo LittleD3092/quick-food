@@ -168,9 +168,9 @@ class StatusPublisher:
 
 if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# # init all nodes, uncomment the node you needed
-	dotNode = DotRecognize()
+	# dotNode = DotRecognize()
 	# alphabetNode = AlphabetRecognize()
-	# ballNode = ColorDetect()
+	ballNode = ColorDetect()
 	# baseNode = Navigation()
 	# upperNode = UpperMechanism()
 	# upperNode.move(0)
@@ -188,19 +188,19 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# 		print(req)
 	# 		break
 
-	# while True:
-	# 	req = colortNode.request()
-	# 	if req != 0:
-	# 		print(req)
-	# 		break
-
-	# test dot node
-	print("Dot node test:")
 	while True:
-		req = dotNode.request()
+		req = ballNode.request()
 		if req != 0:
 			print(req)
 			break
+
+	# test dot node
+	# print("Dot node test:")
+	# while True:
+	# 	req = dotNode.request()
+	# 	if req != 0:
+	# 		print(req)
+	# 		break
 
 	# test navigation
 	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):

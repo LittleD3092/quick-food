@@ -144,7 +144,7 @@ def numbercallback(data = dotSrvRequest(position = 0)):
 
 
 if __name__ == '__main__':
-	cap =cv2.VideoCapture("/dev/video2")
+	cap =cv2.VideoCapture("/dev/video0")
 	rospy.init_node('point_number_server')
 	s = rospy.Service('dot_recognize',dotSrv,numbercallback)
 	rospy.spin()

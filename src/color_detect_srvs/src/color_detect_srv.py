@@ -150,6 +150,7 @@ def find_black_object(img):
 def main0(req):
 	# print("function main0 called with param req =", req)
 	success,image = video.read()
+	# image = cv2.imread('pics/orange-ball.jpg')
 	if success == 0 :
 		print("can not read image")
 	color = 0
@@ -175,7 +176,7 @@ def main0(req):
 	return message
 
 if __name__ == "__main__":
-	video = cv2.VideoCapture("/dev/video0")
+	video = cv2.VideoCapture("/dev/video2")
 	rospy.init_node("color_detect_server")
 	s = rospy.Service("color_detect",colorSrv,main0)
 	rospy.spin()
