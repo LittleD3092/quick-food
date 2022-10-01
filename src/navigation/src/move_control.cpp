@@ -72,6 +72,7 @@ int temp_pose = 0;
 //flag
 bool state_flag = false;
 bool done_flag = true;
+bool check_pose = false;
 
 
 //else
@@ -164,8 +165,11 @@ int main(int argc, char** argv){
 
 			}
 			state_flag = false;
+			
+			if(check_pose == true){
+				final_check(target[0], target[1], target[2]);
+			}
 
-			final_check(target[0], target[1], target[2]);
 		}
 
 		ros::spinOnce();
@@ -195,6 +199,7 @@ bool Srv_Callback(nav::main2nav::Request& req, nav::main2nav::Response& res){
 	target[0] = req.main_x;
 	target[1] = req.main_y;
 	target[2] = req.rotation;
+	check_pose = req.check_pose;
 
 	for(int i = 0; i < 3; i++){
 		if(last_target[i] != target[i]){
@@ -444,3 +449,5 @@ void MySigintHandler(int sig){
 //----v1----2022/8/10----tingweiou----nycu dme
 //----v2----2022/8/20----tingweiou----nycu dme
 //----v3----2022/09/12----tingweiouo----nycu dme
+//----v4----2022/09/20----yanchilin----nycu dme
+//----v5----2022/10/1----tingweiouo----nycu dme
