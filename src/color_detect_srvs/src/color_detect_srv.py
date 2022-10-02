@@ -10,14 +10,14 @@ from color_detect_srvs.srv import colorSrv,colorSrvResponse
 # KNOWN_WIDTH = 15.75
 # KNOWN_HEIGHT = 15.75
 
-LOWER_ORANGE = np.array([10,60,46])
-UPPER_ORANGE = np.array([15,255,255])
+LOWER_ORANGE = np.array([0,60,46])
+UPPER_ORANGE = np.array([10,255,255])
 
-LOWER_BLUE = np.array([100,180,20])
+LOWER_BLUE = np.array([110,180,20])
 UPPER_BLUE = np.array([124,255,255])
 
-LOWER_BLACK = np.array([0,0,0])
-UPPER_BLACK = np.array([180,100,40])
+LOWER_BLACK = np.array([0,0,50])
+UPPER_BLACK = np.array([180,43,220])
 
 # Precondition: image is a BGR image in numpy array format.
 # Postcondition: return the color (which equals 1) if the orange color is found, otherwise return 0.
@@ -29,7 +29,7 @@ def find_orange_object(img):
 	contours, hierarchy = cv2.findContours(mask_orange, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) != 0 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 1000 :
+			if cv2.contourArea(contour) > 2000 :
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,255),3)
 				color = 1
@@ -46,7 +46,7 @@ def find_blue_object(img):
 	contours, hierarchy = cv2.findContours(mask_blue, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) != 0 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 1000 :
+			if cv2.contourArea(contour) > 2000 :
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(150,160,0),3)
 				color = 2
@@ -66,7 +66,7 @@ def find_black_object(img):
 	contours, hierarchy = cv2.findContours(mask_black, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE) #畫出物體邊框
 	if len(contours) != 0 :
 		for contour in contours:
-			if cv2.contourArea(contour) > 1000:
+			if cv2.contourArea(contour) > 80000:
 				x,y,w,h = cv2.boundingRect(contour)
 				cv2.rectangle(img, (x,y),(x+w,y+h),(0,0,0),3) 
 				color = 3
@@ -150,19 +150,21 @@ def find_black_object(img):
 def main0(req):
 	# print("function main0 called with param req =", req)
 	success,image = video.read()
-	# image = cv2.imread('pics/orange-ball.jpg')
+	image = cv2.imread('pics/b1.jpg')
 	if success == 0 :
 		print("can not read image")
 	color = 0
 	
+	if find_black_object(image) > 0:
+		color = 3
+
 	if find_blue_object(image) > 0:
 		color = 2
 	
 	if find_orange_object(image) > 0:
 		color = 1
 	
-	if find_black_object(image) > 0:
-		color = 3
+
 
 	if color == 0 :
 		# print("flag color == 0")
