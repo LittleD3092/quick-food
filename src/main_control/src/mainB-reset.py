@@ -8,6 +8,7 @@ from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
 from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
+from main_control.msg import main_status
 
 assert True # turn off this before race
 INVERT_Y = False # depend on the field, this need to be changed.
@@ -156,6 +157,7 @@ class StatusPublisher:
 	def __init__(self):
 		self.pub = rospy.Publisher('main_status', Bool, queue_size = 100)
 		rospy.init_node("main_control", anonymous = True)
+		self.pub.publish(main_status(has_ball = False))
 
 	# Precondition: Given a parameter status that indicates the current status.
 	#               Now is a boolean value that is either true or false.
@@ -163,17 +165,21 @@ class StatusPublisher:
 	#               False for the ball is not in the upper mechanism.
 	# Postcondition: Publish the status code.
 	def publish(self, status):
-		assert type(status) == bool
-		self.pub.publish(Bool(data = status))
+		if type(status) == bool:
+			status = main_status(has_ball = status)
+		else:
+			assert type(status) == main_status()
+		self.pub.publish(status)
 
 if __name__ == '__main__' and INVERT_Y == False: # main for B field.
-	# # init all nodes, uncomment the node you needed
-	# dotNode = DotRecognize()
-	# alphabetNode = AlphabetRecognize()
+	# init all nodes, uncomment the node you needed
+	dotNode = DotRecognize()
+	alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
-	# baseNode = Navigation()
-	# upperNode = UpperMechanism()
-	# upperNode.move(0)
+	baseNode = Navigation()
+	upperNode = UpperMechanism()
+	upperNode.move(0)
+	statusPub = StatusPublisher()
 
 	# # test ballNode
 	# print("Ball node test:")
@@ -188,11 +194,11 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# 		print(req)
 	# 		break
 
-	while True:
-		req = ballNode.request()
-		if req != 0:
-			print(req)
-			break
+	# while True:
+	# 	req = ballNode.request()
+	# 	if req != 0:
+	# 		print(req)
+	# 		break
 
 	# test dot node
 	# print("Dot node test:")
@@ -212,96 +218,98 @@ if __name__ == '__main__' and INVERT_Y == False: # main for B field.
 	# main loop: This is the main loop that will be running on the race.
 	
 	# go to I
-	# print("moving forward...")
-	# baseNode.move((425, 0, 180))
-	# print("moving sideways to basketball...")
-	# baseNode.move((425, 90, 180))
-	# baseNode.move((425, 100, 180))
+	print("moving forward...")
+	baseNode.move((425, 0, 180))
+	print("moving sideways to basketball...")
+	baseNode.move((425, 90, 180))
+	baseNode.move((425, 100, 180))
 
 	# take basketball three times
-	# basketballStack = [] # record the stack of basketballs on the robot
-	# basketballOptions = ("", "T", "D", "K") # the options of basketballs
-	# for i in range(3):
-		# ballColor = 0
-		# print("scanning ball...")
-		# while ballColor == 0:
-		# 	ballColor = ballNode.request()
-		# print("ball scanned.")
-		# basketballStack.append(basketballOptions[ballColor])
-		# upperNode.move(1)
-	# assert basketballStack.count("T") == 1, "There should be one T in the stack."
-	# assert basketballStack.count("D") == 1, "There should be one D in the stack."
-	# assert basketballStack.count("K") == 1, "There should be one K in the stack."
-	# assert len(basketballStack) == 3, "There should be three basketballs in the stack."
-	# print("basketballStack =", basketballStack)
+	basketballStack = [] # record the stack of basketballs on the robot
+	basketballOptions = ("", "T", "D", "K") # the options of basketballs
+	for i in range(3):
+		ballColor = 0
+		print("scanning ball...")
+		while ballColor == 0:
+			ballColor = ballNode.request()
+		print("ball scanned.")
+		basketballStack.append(basketballOptions[ballColor])
+		upperNode.move(1)
+	assert basketballStack.count("T") == 1, "There should be one T in the stack."
+	assert basketballStack.count("D") == 1, "There should be one D in the stack."
+	assert basketballStack.count("K") == 1, "There should be one K in the stack."
+	assert len(basketballStack) == 3, "There should be three basketballs in the stack."
+	print("basketballStack =", basketballStack)
 
 	# go to G
-	# print("moving sideways to intersection...")
-	# baseNode.move((425, 0, 180))
-	# print("moving forward...")
-	# baseNode.move((900, 0, 180))
-	# print("turning...")
-	# baseNode.move((900, 0, 270))
-	# baseNode.move((935, 0, 270))
+	print("moving sideways to intersection...")
+	baseNode.move((425, 0, 180))
+	print("moving forward...")
+	baseNode.move((900, 0, 180))
+	print("turning...")
+	baseNode.move((900, 0, 270))
+	baseNode.move((935, 0, 270))
 	
 
-	# # throw the basketballs to three baskets marked T, D, K
-	# POSE_BASKET = ((935, -50,  270), 
-	# 			   (935, -120, 270), 
-	# 			   (935, -190, 270))
-	# # scan for board
-	# for i in range(3):
-	# 	baseNode.move(POSE_BASKET[i])
-	# 	chr = ""
-	# 	while True:
-	# 		chr = AlphabetRecognize.request()
-	# 		if chr in ("T", "D", "K"):
-	# 			break
-	# 	assert type(chr) == str, "The character should be a string."
-	# 	assert chr[0] in ('T', 'D', 'K'), "The character should be T, D, or K."
-	# 	basketballStack[basketballStack.index(chr)] = i
-	# # remove the stack
-	# for i in range(-1, -4, -1):
-	# 	baseNode.move(POSE_BASKET[ basketballStack[i] ])
-	# 	upperNode.move(2)
+	# throw the basketballs to three baskets marked T, D, K
+	POSE_BASKET = ((935, -50,  270), 
+				   (935, -120, 270), 
+				   (935, -190, 270))
+	# scan for board
+	for i in range(3):
+		baseNode.move(POSE_BASKET[i])
+		chr = ""
+		while True:
+			chr = AlphabetRecognize.request()
+			if chr in ("T", "D", "K"):
+				break
+		assert type(chr) == str, "The character should be a string."
+		assert chr[0] in ('T', 'D', 'K'), "The character should be T, D, or K."
+		basketballStack[basketballStack.index(chr)] = i
+	# remove the stack
+	for i in range(-1, -4, -1):
+		baseNode.move(POSE_BASKET[ basketballStack[i] ])
+		upperNode.move(2)
 
 
-	# # go to the front of B (checkpoint)
-	# baseNode.move((935, 170, 270))
-	# baseNode.move((935, 170, 90))
+	# go to the front of B (checkpoint)
+	baseNode.move((935, 170, 270))
+	baseNode.move((935, 170, 90))
 
-	# # go to J
-	# baseNode.move((935, 390, 90))
-	# baseNode.move((1020, 390, 90))
+	# go to J
+	baseNode.move((935, 390, 90))
+	baseNode.move((1020, 390, 90))
 
-	# # take bowling three times
-	# for i in range(3):
-	# 	upperNode.move(3)
+	# take bowling three times
+	for i in range(3):
+		upperNode.move(3)
 
-	# # go to H
-	# baseNode.move((935, 390, 90))
+	statusPub.publish(True)
 
-	# # release bowling to three goals marked in dot numbers
-	# POSE_GOAL = ((935, 289, 90),
-	# 			 (935, 331, 90),
-	# 			 (935, 373, 90),
-	# 			 (935, 415, 90),
-	# 			 (935, 457, 90), 
-	# 			 (935, 499, 90))
-	# dic = {}
-	# for i in range(6):
-	# 	baseNode.move(POSE_GOAL[i])
-	# 	num = 0
-	# 	while True:
-	# 		num = DotRecognize.request()
-	# 		if num != 0:
-	# 			break
-	# 	if num in range(1, 4):
-	# 		dic[num] = POSE_GOAL[i]
+	# go to H
+	baseNode.move((935, 390, 90))
 
-	# for i in range(3, 0, -1):
-	# 	baseNode.move(dic[i])
-	# 	upperNode.move(4)
+	# release bowling to three goals marked in dot numbers
+	POSE_GOAL = ((935, 289, 90),
+				 (935, 331, 90),
+				 (935, 373, 90),
+				 (935, 415, 90),
+				 (935, 457, 90), 
+				 (935, 499, 90))
+	dic = {}
+	for i in range(6):
+		baseNode.move(POSE_GOAL[i])
+		num = 0
+		while True:
+			num = DotRecognize.request()
+			if num != 0:
+				break
+		if num in range(1, 4):
+			dic[num] = POSE_GOAL[i]
+
+	for i in range(3, 0, -1):
+		baseNode.move(dic[i])
+		upperNode.move(4)
 
 	# # End of main loop
 	##############################################################
