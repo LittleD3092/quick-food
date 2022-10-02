@@ -1,7 +1,0 @@
-int16 main_x
-int16 main_y
-int16 rotation
-
----
-
-bool done_flag

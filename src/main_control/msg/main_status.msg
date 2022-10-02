@@ -1,0 +1,1 @@
+bool has_ball

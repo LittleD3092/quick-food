@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(motor_communicate)
+project(dot_recognize)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,8 +9,9 @@ project(motor_communicate)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  rospy
   std_msgs
-  nav
+  std_srvs
   message_generation
 )
 
@@ -48,15 +49,16 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  motor_info.msg
-)
+# add_message_files(
+#   FILES
+#   Message1.msg
+#   Message2.msg
+# )
 
 ## Generate services in the 'srv' folder
 add_service_files(
   FILES
-  bowling.srv
+  dotSrv.srv
 )
 
 ## Generate actions in the 'action' folder
@@ -103,10 +105,10 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES motor_communicate
-#  CATKIN_DEPENDS roscpp std_msgs
+#  LIBRARIES dot_recognize
+#  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs
 #  DEPENDS system_lib
-  CATKIN_DEPENDS message_runtime
+CATKIN_DEPENDS rospy std_msgs std_srvs message_runtime
 )
 
 ###########
@@ -116,13 +118,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include
+# include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/motor_communicate.cpp
+#   src/${PROJECT_NAME}/dot_recognize.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -133,7 +135,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/motor_communicate_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/dot_recognize_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -159,10 +161,10 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# catkin_install_python(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+catkin_install_python(PROGRAMS
+  src/point_number_publisher.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
@@ -197,21 +199,10 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_motor_communicate.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_dot_recognize.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-set(lib_dir 
-  ${PROJECT_SOURCE_DIR}/include/motor_communicate/motor_function.h
-  ${PROJECT_SOURCE_DIR}/include/motor_communicate/communicate_function.h
-  ${PROJECT_SOURCE_DIR}/src/motor_function.c
-  ${PROJECT_SOURCE_DIR}/src/communicate_function.cpp
-)
-add_library(motor_communicate_library ${lib_dir})
-
-add_executable(motor_communicate src/motor_communicate.cpp)
-target_link_libraries(motor_communicate motor_communicate_library ${catkin_LIBRARIES})

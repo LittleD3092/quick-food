@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <nav/Service_msg.h>
+#include <motor_communicate/bowling.h>
 #include <motor_communicate/communicate_function.h>
 #include <iostream>
 #include <ctime>
@@ -8,9 +9,11 @@
 
 // log_none log_main log_callback
 
-#define log_main
+#define log_none
 
 namespace robot{
+
+ros::NodeHandle robotNh;
 
 //struct declare
 
@@ -26,6 +29,7 @@ struct nav_Command_Struct{
 
 //ros callback function
 bool navCallback(nav::Service_msg::Request &request, nav::Service_msg::Response &response);
+bool bowlingCallback(motor_communicate::bowling::Request &request, motor_communicate::bowling::Response &response);
 
 //robot function
 void stop();
@@ -33,7 +37,7 @@ void freeStop();
 void robotMove_Xaxis(int speed, int rotation);
 void robotMove_Yaxis(int speed, int rotation);
 void robotRotation(int speed, int rotation);
-void getparam(ros::NodeHandle robotNh);
+void getparam();
 
 
 //data setting
@@ -110,7 +114,7 @@ int main(int argc, char **argv){
     //ros node init
     ros::init(argc, argv, "motor_communicate");
     ros::NodeHandle rosNh;
-    robot::getparam(rosNh);
+    robot::robotNh = rosNh;
 
     //init serial port
     serialInit();
@@ -147,7 +151,8 @@ int main(int argc, char **argv){
     robot::wheelRR.settingYPID(robot::wheel_4_y_pid_load, robot::wheel_4_y_pid_unload);
     robot::wheelRR.settingRotationPID(robot::wheel_4_rotation_pid_load, robot::wheel_4_rotation_pid_unload);
 
-    ros::ServiceServer motor_service = rosNh.advertiseService("/controller_command", robot::navCallback);
+    ros::ServiceServer bowling_service = rosNh.advertiseService("bowling_load", robot::bowlingCallback);
+    ros::ServiceServer motor_service = rosNh.advertiseService("controller_command", robot::navCallback);
 
 #ifdef log_main
     log_publisher = rosNh.advertise<motor_communicate::motor_info>("/motor_log", 1000);
@@ -257,6 +262,13 @@ bool robot::navCallback(nav::Service_msg::Request &request, nav::Service_msg::Re
     log_publisher.publish(publish_data);
     std::cout << "publish once " << std::endl;
 #endif
+
+    return true;
+}
+
+bool robot::bowlingCallback(motor_communicate::bowling::Request &request, motor_communicate::bowling::Response &response){
+    robot::is_load = request.load;
+    response.done = true;
 
     return true;
 }
@@ -431,7 +443,7 @@ void robot::robotRotation(int speed, int rotation){
     return;
 }
 
-void robot::getparam(ros::NodeHandle robotNh){
+void robot::getparam(){
 
     robotNh.getParam("load/x/wheel1/p", robot::wheel_1_x_pid_load[0]);
     robotNh.getParam("load/x/wheel1/i", robot::wheel_1_x_pid_load[1]);
@@ -480,7 +492,6 @@ void robot::getparam(ros::NodeHandle robotNh){
     robotNh.getParam("load/rotation/wheel4/p", robot::wheel_4_rotation_pid_load[0]);
     robotNh.getParam("load/rotation/wheel4/i", robot::wheel_4_rotation_pid_load[1]);
     robotNh.getParam("load/rotation/wheel4/d", robot::wheel_4_rotation_pid_load[2]);
-
 
 //--------------------------------------------------------------------------------------------
 
@@ -532,8 +543,6 @@ void robot::getparam(ros::NodeHandle robotNh){
     robotNh.getParam("unload/rotation/wheel4/i", robot::wheel_4_rotation_pid_unload[1]);
     robotNh.getParam("unload/rotation/wheel4/d", robot::wheel_4_rotation_pid_unload[2]);
     
-    
-
     return;
 }
 
