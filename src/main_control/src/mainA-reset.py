@@ -212,68 +212,13 @@ if __name__ == '__main__': # main for B field.
 
 	######################################################################################
 	# main loop: This is the main loop that will be running on the race.
-	
-	# go to I
-	print("moving forward...")
-	baseNode.move((393, 0, 180))
-	print("moving sideways...")
-	baseNode.move((393, 40, 180))
-	print("moving sideways to basketball...")
-	baseNode.move((393, 90, 180, True))
-
-	# take basketball three times
-	basketballQueue = [] # record the queue of basketballs on the robot
-	basketballOptions = ("", "T", "D", "K") # the options of basketballs
-	for i in range(3):
-		ballColor = 0
-		print("scanning ball...")
-		while ballColor == 0:
-			ballColor = ballNode.request()
-		print("ball scanned.")
-		basketballQueue.append(basketballOptions[ballColor])
-		upperNode.move(1)
-	assert basketballQueue.count("T") == 1, "There should be one T in the stack."
-	assert basketballQueue.count("D") == 1, "There should be one D in the stack."
-	assert basketballQueue.count("K") == 1, "There should be one K in the stack."
-	assert len(basketballQueue) == 3, "There should be three basketballs in the stack."
-	print("basketballStack =", basketballQueue)
-
-	# go to G
-	print("moving sideways to intersection...")
-	baseNode.move((392.5, 40, 180))
-	print("moving forward...")
-	baseNode.move((900, 40, 180))
-	print("turning...")
-	baseNode.move((900, 40, 270))
-	print("moving to basketball...")
-	baseNode.move((900, -138, 270))
-	
-
-	# throw the basketballs to three baskets marked T, D, K
-	POSE_BASKET = ((900, -208, 270, True), 
-				   (900, -138, 270, True), 
-				   (900, -68, 270, True))
-	# scan for board
-	chrs = alphabetNode.request()
-	print(chrs)
-	assert type(chrs) == list, "The characters should be a list."
-	for i in range(0, 3):
-		basketballQueue[basketballQueue.index(chrs[i])] = i
-	# remove the queue
-	for i in range(0, 3):
-		print("throwing to basket", chrs[i], "at", POSE_BASKET[ basketballQueue[i] ], "...")
-		baseNode.move(POSE_BASKET[ basketballQueue[i] ])
-		upperNode.move(2)
-
 
 	# go to the front of B (checkpoint)
 	print("moving to checkpoint...")
-	baseNode.move((900, 138, 270))
-	baseNode.move((900, 138, 180))
-	baseNode.move((1000, 138, 180))
-	baseNode.move((1000, 138, 90))
+	baseNode.move((150, 3, 180))
+	baseNode.move((150, 3, 90))
 	print("moving to bowling...")
-	baseNode.move((1000, 373, 90, True))
+	baseNode.move((150, 238, 90, True))
 
 	# go to J
 
@@ -286,15 +231,15 @@ if __name__ == '__main__': # main for B field.
 	statusPub.publish(True)
 
 	# go to H
-	baseNode.move((930, 373, 90))
+	baseNode.move((80, 238, 90))
 
 	# release bowling to three goals marked in dot numbers
-	POSE_GOAL = ((935, 289, 90, True),
-				 (935, 331, 90, True),
-				 (935, 373, 90, True),
-				 (935, 415, 90, True),
-				 (935, 457, 90, True), 
-				 (935, 499, 90, True))
+	POSE_GOAL = ((85, 154, 90, True),
+				 (85, 196, 90, True),
+				 (85, 238, 90, True),
+				 (85, 280, 90, True),
+				 (85, 322, 90, True), 
+				 (85, 364, 90, True))
 	dic = {}
 	nums = dotNode.request()
 	for i in range(6):

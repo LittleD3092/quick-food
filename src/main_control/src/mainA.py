@@ -215,11 +215,8 @@ if __name__ == '__main__': # main for B field.
 	
 	# go to I
 	print("moving forward...")
-	baseNode.move((393, 0, 180))
-	print("moving sideways...")
-	baseNode.move((393, 40, 180))
+	baseNode.move((-393, 90, 180, True))
 	print("moving sideways to basketball...")
-	baseNode.move((393, 90, 180, True))
 
 	# take basketball three times
 	basketballQueue = [] # record the queue of basketballs on the robot
@@ -240,19 +237,15 @@ if __name__ == '__main__': # main for B field.
 
 	# go to G
 	print("moving sideways to intersection...")
-	baseNode.move((392.5, 40, 180))
-	print("moving forward...")
-	baseNode.move((900, 40, 180))
-	print("turning...")
-	baseNode.move((900, 40, 270))
-	print("moving to basketball...")
-	baseNode.move((900, -138, 270))
+	baseNode.move((-393, 40, 180))
+	print("moving to basket...")
+	baseNode.move((-900, -138, 90))
 	
 
 	# throw the basketballs to three baskets marked T, D, K
-	POSE_BASKET = ((900, -208, 270, True), 
-				   (900, -138, 270, True), 
-				   (900, -68, 270, True))
+	POSE_BASKET = ((-900, -208, 90, True), 
+				   (-900, -138, 90, True), 
+				   (-900, -68,  90, True))
 	# scan for board
 	chrs = alphabetNode.request()
 	print(chrs)
@@ -268,12 +261,10 @@ if __name__ == '__main__': # main for B field.
 
 	# go to the front of B (checkpoint)
 	print("moving to checkpoint...")
-	baseNode.move((900, 138, 270))
-	baseNode.move((900, 138, 180))
-	baseNode.move((1000, 138, 180))
-	baseNode.move((1000, 138, 90))
+	baseNode.move((-900,  138,  90))
+	baseNode.move((-900,  138, 270))
 	print("moving to bowling...")
-	baseNode.move((1000, 373, 90, True))
+	baseNode.move((-1000, 373, 270, True))
 
 	# go to J
 
@@ -286,15 +277,15 @@ if __name__ == '__main__': # main for B field.
 	statusPub.publish(True)
 
 	# go to H
-	baseNode.move((930, 373, 90))
+	baseNode.move((-930, 373, 270))
 
 	# release bowling to three goals marked in dot numbers
-	POSE_GOAL = ((935, 289, 90, True),
-				 (935, 331, 90, True),
-				 (935, 373, 90, True),
-				 (935, 415, 90, True),
-				 (935, 457, 90, True), 
-				 (935, 499, 90, True))
+	POSE_GOAL = ((-935, 289, 270, True),
+				 (-935, 331, 270, True),
+				 (-935, 373, 270, True),
+				 (-935, 415, 270, True),
+				 (-935, 457, 270, True), 
+				 (-935, 499, 270, True))
 	dic = {}
 	nums = dotNode.request()
 	for i in range(6):

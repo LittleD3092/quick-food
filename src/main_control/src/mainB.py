@@ -240,7 +240,7 @@ if __name__ == '__main__': # main for B field.
 
 	# go to G
 	print("moving sideways to intersection...")
-	baseNode.move((392.5, 40, 180))
+	baseNode.move((393, 40, 180))
 	print("moving forward...")
 	baseNode.move((900, 40, 180))
 	print("turning...")
