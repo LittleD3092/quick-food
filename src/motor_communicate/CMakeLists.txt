@@ -54,11 +54,10 @@ add_message_files(
 )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  bowling.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -215,5 +214,4 @@ set(lib_dir
 add_library(motor_communicate_library ${lib_dir})
 
 add_executable(motor_communicate src/motor_communicate.cpp)
-add_dependencies(motor_communicate ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(motor_communicate motor_communicate_library ${catkin_LIBRARIES})
