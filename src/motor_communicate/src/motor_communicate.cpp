@@ -13,8 +13,6 @@
 
 namespace robot{
 
-ros::NodeHandle robotNh;
-
 //struct declare
 
 //ros command struct
@@ -37,7 +35,7 @@ void freeStop();
 void robotMove_Xaxis(int speed, int rotation);
 void robotMove_Yaxis(int speed, int rotation);
 void robotRotation(int speed, int rotation);
-void getparam();
+void getparam(ros::NodeHandle robotNh);
 
 
 //data setting
@@ -114,7 +112,7 @@ int main(int argc, char **argv){
     //ros node init
     ros::init(argc, argv, "motor_communicate");
     ros::NodeHandle rosNh;
-    robot::robotNh = rosNh;
+    robot::getparam(rosNh);
 
     //init serial port
     serialInit();
@@ -443,7 +441,7 @@ void robot::robotRotation(int speed, int rotation){
     return;
 }
 
-void robot::getparam(){
+void robot::getparam(ros::NodeHandle robotNh){
 
     robotNh.getParam("load/x/wheel1/p", robot::wheel_1_x_pid_load[0]);
     robotNh.getParam("load/x/wheel1/i", robot::wheel_1_x_pid_load[1]);
