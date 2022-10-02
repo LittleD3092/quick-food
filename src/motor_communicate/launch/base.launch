@@ -6,7 +6,7 @@
     <rosparam command = "load" file = "$(find motor_communicate)/param/ee_b1.yaml" />
     <node name = "motor_control" pkg = "motor_communicate" type = "motor_communicate" />
 
-    <node name = "navgation" pkg = "nav" type = "move" output = "screen"/>  
+    <node name = "navigation" pkg = "nav" type = "move" output = "screen"/>  
    
 
 </launch>

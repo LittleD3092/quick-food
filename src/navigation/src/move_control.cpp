@@ -103,6 +103,7 @@ int main(int argc, char** argv){
 	ros::ServiceClient client = n.serviceClient<nav::Service_msg>("/controller_command",100);
 	
 	ros::ServiceServer service = n.advertiseService("/navigation",Srv_Callback);
+	std::cout << "navigation service is ready" << std::endl;
 
 	nav::Service_msg srv_command;
 
@@ -168,6 +169,8 @@ int main(int argc, char** argv){
 			
 			if(check_pose == true){
 				final_check(target[0], target[1], target[2]);
+			}else{
+				done_flag = true;
 			}
 
 		}
@@ -216,7 +219,7 @@ bool Srv_Callback(nav::main2nav::Request& req, nav::main2nav::Response& res){
 			last_target[i] = target[i];
 		}
 	}
-		
+	std::cout << "function Srv_Callback has return value true.\n";
 	return true;
 }
 
