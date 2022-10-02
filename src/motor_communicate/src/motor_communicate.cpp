@@ -39,11 +39,11 @@ void getparam(ros::NodeHandle robotNh);
 //data setting
 bool is_load = false;
 
-int motor_Rpm_X_Data[4] = {0, 300, 1000, 1500};
-int motor_Rpm_X_Bias[4] = {0, 30, 100, 150};
+int motor_Rpm_X_Data[4] = {0, 300, 1000, 4000};
+int motor_Rpm_X_Bias[4] = {0, 30, 100, 120};
 
-int motor_Rpm_Y_Data[4] = {0, 400, 1000, 2000};
-int motor_Rpm_Y_Bias[4] = {0, 90, 300, 600};
+int motor_Rpm_Y_Data[4] = {0, 400, 1000, 3000};
+int motor_Rpm_Y_Bias[4] = {0, 90, 300, 150};
 
 int motor_Rpm_Rotation = 300;
 
