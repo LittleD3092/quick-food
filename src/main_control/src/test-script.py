@@ -9,6 +9,7 @@ from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvR
 from upper_control.srv import action, actionRequest, actionResponse
 from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
 from main_control.msg import main_status
+from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
 assert True # turn off this before race
 
@@ -138,9 +139,9 @@ class UpperMechanism:
 			upper_mechanism = rospy.ServiceProxy('upper_mechanism', action)
 			resp = upper_mechanism(actionRequest(request = cmd))
 			if cmd == 3:
-				StatusPublisher().publish(True)
+				StatusPublisher().request(True)
 			elif cmd == 4:
-				StatusPublisher().publish(False)
+				StatusPublisher().request(False)
 			return resp.response
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
@@ -149,28 +150,30 @@ class UpperMechanism:
 class StatusPublisher:
 	
 	# Precondition: Nothing.
-	# Postcondition: The publisher is up. The topic is main_status.
+	# Postcondition: The object StatusPublisher is created.
 	def __init__(self):
-		self.pub = rospy.Publisher('main_status', Bool, queue_size = 100)
-		rospy.init_node("main_control", anonymous = True)
-		self.pub.publish(main_status(has_ball = False))
+		pass
 
 	# Precondition: Given a parameter status that indicates the current status.
 	#               Now is a boolean value that is either true or false.
 	#               True for the ball is in the upper mechanism.
 	#               False for the ball is not in the upper mechanism.
-	# Postcondition: Publish the status code.
-	def publish(self, status):
-		if type(status) == bool:
-			status = main_status(has_ball = status)
-		else:
-			assert type(status) == main_status()
-		self.pub.publish(status)
+	# Postcondition: Ping the server bowling_load to update the status.
+	def request(self, status):
+		rospy.wait_for_service('bowling_load', 5)
+		try:
+			bowling_load = rospy.ServiceProxy('bowling_load', bowling)
+			resp = bowling_load(bowlingRequest(load = status))
+			return resp.done
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1
+		
 
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
-	dotNode = DotRecognize()
-	alphabetNode = AlphabetRecognize()
+	# dotNode = DotRecognize()
+	# alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
 	baseNode = Navigation()
 	upperNode = UpperMechanism()

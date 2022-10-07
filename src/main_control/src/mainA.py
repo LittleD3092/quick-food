@@ -137,9 +137,9 @@ class UpperMechanism:
 		try:
 			upper_mechanism = rospy.ServiceProxy('upper_mechanism', action)
 			resp = upper_mechanism(actionRequest(request = cmd))
-			if cmd == 1 or cmd == 3:
+			if cmd == 3:
 				StatusPublisher().publish(True)
-			elif cmd == 2 or cmd == 4:
+			elif cmd == 4:
 				StatusPublisher().publish(False)
 			return resp.response
 		except rospy.ServiceException as e:
