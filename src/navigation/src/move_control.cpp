@@ -54,8 +54,8 @@ int last_target[3] = {0, 0, 180};
 int point_error = 3;
 int rotate_error = 2;
 
-int distence_to_target_max = 180;
-int distence_to_target_min = 50;
+int distence_to_target_max = 250;
+int distence_to_target_min = 80;
 
 int set_vel_max = 3;
 int set_vel_med = 2;
@@ -113,11 +113,14 @@ int main(int argc, char** argv){
 		while(done_flag == false){
 			while(state_flag == false){
 				move_plan_x(target[0], target[1], target[2]);
+				std::cout << "move_plan_x finished." << std::endl;
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
                 srv_command.request.head_direction = controller_msg[3];
+
+				//std::cout<<"x command = "<<controller_msg[0]<<" "<<controller_msg[1]<<" "<<controller_msg[2]<<" "<<controller_msg[3]<<std::endl;
 
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
@@ -125,7 +128,7 @@ int main(int argc, char** argv){
 					ROS_INFO("connect fail");
 				}
 
-				ros::spinOnce();
+				ros::spinOnce(); 
 
 			}
 			state_flag = false;
@@ -136,7 +139,9 @@ int main(int argc, char** argv){
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
-                		srv_command.request.head_direction = controller_msg[3];
+                srv_command.request.head_direction = controller_msg[3];
+
+				//std::cout<<"y command = "<<controller_msg[0]<<" "<<controller_msg[1]<<" "<<controller_msg[2]<<" "<<controller_msg[3]<<std::endl;
 
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
@@ -149,12 +154,20 @@ int main(int argc, char** argv){
 			}
 			state_flag = false;
 
+			srv_command.request.direction = 0;
+			srv_command.request.velocity = 0;
+			srv_command.request.rotation = 0;
+			
+			client.call(srv_command);
+
 			while(state_flag == false){
 				move_plan_r(target[0], target[1], target[2]);
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
 				srv_command.request.rotation = controller_msg[2];
+
+				//std::cout<<"rotation command = "<<controller_msg[0]<<" "<<controller_msg[1]<<" "<<controller_msg[2]<<" "<<controller_msg[3]<<std::endl;
 
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);

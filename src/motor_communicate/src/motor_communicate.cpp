@@ -226,7 +226,7 @@ bool robot::navCallback(nav::Service_msg::Request &request, nav::Service_msg::Re
         }
     }
 
-    ///ROS_INFO("After transform:  type is : %d velocity is : %d bias is %d\n", robot::nav_Command.type, robot::nav_Command.velocity, robot::nav_Command.bias);
+    //ROS_INFO("After transform:  type is : %d velocity is : %d bias is %d\n", robot::nav_Command.type, robot::nav_Command.velocity, robot::nav_Command.bias);
 
     if(robot::nav_Command.type == 0){
         robot::robotRotation(robot::nav_Command.velocity, robot::nav_Command.bias);
