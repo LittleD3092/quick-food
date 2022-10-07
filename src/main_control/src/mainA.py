@@ -3,14 +3,15 @@
 
 import rospy
 from std_msgs.msg import Empty, Int16, Bool
-from nav.srv import main2nav, main2navRequest, main2navResponse
+from navigation.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
-from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
-# from main_control.msg import main_status
+from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
+from main_control.msg import main_status
+from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
-# assert True # turn off this before race
+assert True # turn off this before race
 
 class AlphabetRecognize:
 	
@@ -81,11 +82,11 @@ class DotRecognize:
 	# 				 meaning the dot number in the middle 
 	#  				 of the camera.
 	def request(self):
-		rospy.wait_for_service('dot_recognize', 5)
+		rospy.wait_for_service('braille_recognize', 5)
 		try:
-			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
-			resp = dot_recognize(dotSrvRequest(position = 0))
-			return resp.dot_number
+			dot_recognize = rospy.ServiceProxy('braille_recognize', braille_request)
+			resp = dot_recognize(braille_requestRequest(req = 0))
+			return resp.array_length, resp.number, resp.position
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
@@ -102,7 +103,7 @@ class Navigation:
 	# Postcondition: Robot moves to the location and pose determined.
 	def move(self, req = (0, 0, 180, False)):
 		assert type(req) == tuple
-		assert len(req) == 4
+		assert len(req) == 3
 		req = main2navRequest(main_x = req[0], main_y = req[1], rotation = req[2], check_pose = req[3])
 		rospy.wait_for_service('/navigation', 5)
 		assert type(req) == main2navRequest
@@ -138,9 +139,9 @@ class UpperMechanism:
 			upper_mechanism = rospy.ServiceProxy('upper_mechanism', action)
 			resp = upper_mechanism(actionRequest(request = cmd))
 			if cmd == 3:
-				StatusPublisher().publish(True)
+				StatusPublisher().request(True)
 			elif cmd == 4:
-				StatusPublisher().publish(False)
+				StatusPublisher().request(False)
 			return resp.response
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
@@ -149,23 +150,24 @@ class UpperMechanism:
 class StatusPublisher:
 	
 	# Precondition: Nothing.
-	# Postcondition: The publisher is up. The topic is main_status.
+	# Postcondition: The object StatusPublisher is created.
 	def __init__(self):
-		self.pub = rospy.Publisher('main_status', Bool, queue_size = 100)
-		rospy.init_node("main_control", anonymous = True)
-		self.pub.publish(main_status(has_ball = False))
+		pass
 
 	# Precondition: Given a parameter status that indicates the current status.
 	#               Now is a boolean value that is either true or false.
 	#               True for the ball is in the upper mechanism.
 	#               False for the ball is not in the upper mechanism.
-	# Postcondition: Publish the status code.
-	def publish(self, status):
-		if type(status) == bool:
-			status = main_status(has_ball = status)
-		else:
-			assert type(status) == main_status()
-		self.pub.publish(status)
+	# Postcondition: Ping the server bowling_load to update the status.
+	def request(self, status):
+		rospy.wait_for_service('bowling_load', 5)
+		try:
+			bowling_load = rospy.ServiceProxy('bowling_load', bowling)
+			resp = bowling_load(bowlingRequest(load = status))
+			return resp.done
+		except rospy.ServiceException as e:
+			print("Service call failed: %s" %e)
+			return -1
 
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
