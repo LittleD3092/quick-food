@@ -8,7 +8,6 @@ from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
 from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
-from main_control.msg import main_status
 from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
 assert True # turn off this before race
@@ -168,144 +167,64 @@ class StatusPublisher:
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
+		
 
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
-	dotNode = DotRecognize()
+	# dotNode = DotRecognize()
 	alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
 	baseNode = Navigation()
 	upperNode = UpperMechanism()
+	# statusPub = StatusPublisher()
+
+	# test chassis
 	upperNode.move(0)
-	statusPub = StatusPublisher()
+	# -36 x
+	print("moving back...")
+	baseNode.move((-36, 0, 180, False))
+	# +85 y
+	print("moving right...")
+	baseNode.move((-36, 85, 180, True))
 
-	# # test ballNode
-	# print("Ball node test:")
-	# print(ballNode.request())
-
-	# test alphabet node
-	# print("Alphabet node test:")
-
-	# while True:
-	# 	req = alphabetNode.request()
-	# 	if req != (0, 0, 0):
-	# 		print(req)
-	# 		break
-
-	# while True:
-	# 	req = ballNode.request()
-	# 	if req != 0:
-	# 		print(req)
-	# 		break
-
-	# test dot node
-	# print("Dot node test:")
-	# while True:
-	# 	req = dotNode.request()
-	# 	if req != 0:
-	# 		print(req)
-	# 		break
-
-	# test navigation
-	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):
-	# 	print("not done")
-
-	# print("done")
-
-	######################################################################################
-	# main loop: This is the main loop that will be running on the race.
-	
-	# go to I
-	print("moving forward...")
-	baseNode.move((393, 0, 180))
-	print("moving sideways...")
-	baseNode.move((393, 40, 180))
-	print("moving sideways to basketball...")
-	baseNode.move((393, 90, 180, True))
-
-	# take basketball three times
-	basketballQueue = [] # record the queue of basketballs on the robot
-	basketballOptions = ("", "T", "D", "K") # the options of basketballs
+	# recognize and take ball
+	print("taking ball...")
+	qu = []
 	for i in range(3):
-		ballColor = 0
-		print("scanning ball...")
-		while ballColor == 0:
-			ballColor = ballNode.request()
-		print("ball scanned.")
-		basketballQueue.append(basketballOptions[ballColor])
+		qu.append(ballNode.request())
 		upperNode.move(1)
-	assert basketballQueue.count("T") == 1, "There should be one T in the stack."
-	assert basketballQueue.count("D") == 1, "There should be one D in the stack."
-	assert basketballQueue.count("K") == 1, "There should be one K in the stack."
-	assert len(basketballQueue) == 3, "There should be three basketballs in the stack."
-	print("basketballStack =", basketballQueue)
-
-	# go to G
-	print("moving sideways to intersection...")
-	baseNode.move((393, 40, 180))
-	print("moving forward...")
-	baseNode.move((900, 40, 180))
-	print("turning...")
-	baseNode.move((900, 40, 270))
-	print("moving to basketball...")
-	baseNode.move((900, -138, 270))
+	print("current ball queue has: ", qu, sep = "")
 	
+	# -160 y
+	print("moving left...")
+	baseNode.move((-36, -75, 180, False))
+	# heading 270 degree
+	print("turning...")
+	baseNode.move((-36, -75, 270, True))
+	# +49 x
+	print("moving forward...")
+	baseNode.move((13, -75, 270, False))
 
-	# throw the basketballs to three baskets marked T, D, K
-	POSE_BASKET = ((900, -208, 270, True), 
-				   (900, -138, 270, True), 
-				   (900, -68, 270, True))
-	# scan for board
-	chrs = alphabetNode.request()
-	print(chrs)
-	assert type(chrs) == list, "The characters should be a list."
-	for i in range(0, 3):
-		basketballQueue[basketballQueue.index(chrs[i])] = i
-	# remove the queue
-	for i in range(0, 3):
-		print("throwing to basket", chrs[i], "at", POSE_BASKET[ basketballQueue[i] ], "...")
-		baseNode.move(POSE_BASKET[ basketballQueue[i] ])
-		upperNode.move(2)
+	# scan alphabet
+	result = ()
+	while len(result) != 2:
+		_, _, result = alphabetNode.request()
+	print("result = ", result, sep = "")
 
 
-	# go to the front of B (checkpoint)
-	print("moving to checkpoint...")
-	baseNode.move((900, 138, 270))
-	baseNode.move((900, 138, 180))
-	baseNode.move((1000, 138, 180))
-	baseNode.move((1000, 138, 90))
-	print("moving to bowling...")
-	baseNode.move((1000, 373, 90, True))
-
-	# go to J
-
-	# take bowling three times
-	print("taking bowling...")
-	for i in range(3):
-		upperNode.move(3)
-
-	print("publish loaded...")
-	statusPub.publish(True)
-
-	# go to H
-	baseNode.move((930, 373, 90))
-
-	# release bowling to three goals marked in dot numbers
-	POSE_GOAL = ((935, 289, 90, True),
-				 (935, 331, 90, True),
-				 (935, 373, 90, True),
-				 (935, 415, 90, True),
-				 (935, 457, 90, True), 
-				 (935, 499, 90, True))
+	# 85-124 y
+	# 85-196 y
+	# 85-266 y
+	BASKET_POSE = [(13, -39, 270, True), (13, -111, 270, True), (13, -181, 270, True)]
 	dic = {}
-	nums = dotNode.request()
-	for i in range(6):
-		if nums[i] in range(1, 4):
-			dic[nums[i]] = POSE_GOAL[i]
+	alphabetLeft = 6
+	for i in range(2):
+		dic[result[i]] = BASKET_POSE[i + 1]
+		alphabetLeft -= result[i]
+	dic[alphabetLeft] = BASKET_POSE[0]
+	print("basket dic = ", dic, sep = "")
 
-	for i in range(0, 3):
-		baseNode.move(dic[i])
-		upperNode.move(4)
-
-	# # End of main loop
-	##############################################################
+	print("throwing to corresponding basket...")
+	for ele in qu:
+		baseNode.move(dic[ele])
+		upperNode.move(2)

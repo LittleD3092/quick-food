@@ -163,6 +163,7 @@ catkin_install_python(PROGRAMS
   src/mainA-reset.py
   src/mainB.py
   src/mainB-reset.py
+  src/test-script.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

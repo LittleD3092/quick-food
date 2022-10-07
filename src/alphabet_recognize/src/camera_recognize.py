@@ -102,11 +102,11 @@ def convert_to_flat(img):
 	# gray
 	img_gray = cv2.cvtColor(img_white_left, cv2.COLOR_BGR2GRAY)
 	# blur
-	img_blur = cv2.GaussianBlur(img_gray, (5, 5), 1)
+	img_blur = cv2.GaussianBlur(img_gray, (3, 3), 1)
 	# canny
-	threshold1, threshold2 = 200, 200
+	threshold1, threshold2 = 100, 200
 	img_canny = cv2.Canny(img_blur, threshold1, threshold2)
-	kernel = np.ones((5, 5))
+	kernel = np.ones((3, 3))
 	img_dial = cv2.dilate(img_canny, kernel, iterations = 2)
 	img_canny = cv2.erode(img_dial, kernel, iterations = 1)
 
@@ -116,7 +116,7 @@ def convert_to_flat(img):
 	# for display purposes
 	img_contours = img.copy()
 	contours, hierarchy = cv2.findContours(img_canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-	cv2.drawContours(img_contours, contours, -1, (0, 255, 0), 2)
+	# cv2.drawContours(img_contours, contours, -1, (0, 255, 0), 2)
 
 	# print("function convert_to_flat: flag 7")
 
@@ -125,55 +125,100 @@ def convert_to_flat(img):
 
 	# get biggest contour
 	# for display purposes
-	img_biggest_contour = img.copy()
-	biggest_contour, max_area = get_biggest_contour(contours)
+	# img_biggest_contour = img.copy()
+	# biggest_contour, max_area = get_biggest_contour(contours)
 
-	# print("function convert_to_flat: flag 8")
+	# # print("function convert_to_flat: flag 8")
 
-	# get warp perspective image
-	if biggest_contour.size == 0:
-		# print("no document found")
-		return 1
+	# # get warp perspective image
+	# if biggest_contour.size == 0:
+	# 	# print("no document found")
+	# 	return 1
 	
-	# print("function convert_to_flat: flag 9")
+	# # print("function convert_to_flat: flag 9")
 
-	biggest_contour = reorder_contour(biggest_contour)
-	cv2.drawContours(img_biggest_contour, biggest_contour, -1, (0, 255, 0), 20)
-	img_biggest_contour = drawRectangle(img_biggest_contour, biggest_contour, 2)
-	pts1 = np.float32(biggest_contour) # PREPARE POINTS FOR WARP
-	pts2 = np.float32([[0, 0],[img_width, 0], [0, img_height],[img_width, img_height]]) # PREPARE POINTS FOR WARP
-	matrix = cv2.getPerspectiveTransform(pts1, pts2)
-	img_warp_colored = cv2.warpPerspective(img, matrix, (img_width, img_height))
+	# biggest_contour = reorder_contour(biggest_contour)
+	# cv2.drawContours(img_biggest_contour, biggest_contour, -1, (0, 255, 0), 20)
+	# img_biggest_contour = drawRectangle(img_biggest_contour, biggest_contour, 2)
+	target_contour = []
+	count = 0
 
-	# print("function convert_to_flat: flag 10")
+	for i in contours:
+		count += 1
+		x,y,w,h = cv2.boundingRect(i)
+		rect_ratio = float(w)/h
+		rect_area = w*h
 
-	# get scanned paper
-	# remove 20 pixels from each side
-	img_warp_colored = img_warp_colored[20:img_warp_colored.shape[0] - 20, 20:img_warp_colored.shape[1] - 20]
-	img_warp_colored = cv2.resize(img_warp_colored,(img_width, img_height))
-	# # apply adaptive threshold
-	# imgWarpGray = cv2.cvtColor(img_warp_colored,cv2.COLOR_BGR2GRAY)
-	# imgAdaptiveThre = cv2.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
-	# imgAdaptiveThre = cv2.bitwise_not(imgAdaptiveThre)
-	# imgAdaptiveThre = cv2.medianBlur(imgAdaptiveThre,3)
+		# img_white_left = cv2.drawContours(img_white_left, contours, count - 1, (0, 255, 0), 2)
+		# cv2.imshow("convert_to_flat", img_white_left)
+		# cv2.waitKey(0)
+		# cv2.destroyAllWindows()
 
-	# print("function convert_to_flat: flag 11")
+		if(rect_ratio > 0.6 and rect_ratio < 1.4 and rect_area > 4000):
+			target_contour.append(i)
+	print("length of target_counter:", len(target_contour))
+	img_warp_list = []
+	img_warp_pos = []
 
-	img_blank = np.zeros((img_height, img_width, 3))
+	for i in target_contour:
 
-	# print("function convert_to_flat: flag 12")
+		x,y,w,h = cv2.boundingRect(i)
 
-	img_gray = cv2.cvtColor(img_gray, cv2.COLOR_GRAY2BGR)
-	img_blur = cv2.cvtColor(img_blur, cv2.COLOR_GRAY2BGR)
-	img_canny = cv2.cvtColor(img_canny, cv2.COLOR_GRAY2BGR)
-	images = np.hstack([img_white_left, img_gray, img_blur, img_canny,	img_contours, img_biggest_contour, img_warp_colored])
-	images = cv2.resize(images, (img_width * 7 // 3, img_height // 3))
+		pts1 = np.float32([[x,y],[x+w,y],[x,y+h],[x+w,y+h]]) # PREPARE POINTS FOR WARP
+		pts2 = np.float32([[0, 0],[img_width, 0], [0, img_height],[img_width, img_height]]) # PREPARE POINTS FOR WARP
+		matrix = cv2.getPerspectiveTransform(pts1, pts2)
+		img_warp_colored = cv2.warpPerspective(img, matrix, (img_width, img_height))
+
+		# print("function convert_to_flat: flag 10")
+
+		# get scanned paper
+		# remove 20 pixels from each side
+		img_warp_colored = img_warp_colored[20:img_warp_colored.shape[0] - 20, 20:img_warp_colored.shape[1] - 20]
+		img_warp_colored = cv2.resize(img_warp_colored,(img_width, img_height))
+		img_warp_list.append(img_warp_colored)
+		img_warp_pos.append(x)
+		# # apply adaptive threshold
+		# imgWarpGray = cv2.cvtColor(img_warp_colored,cv2.COLOR_BGR2GRAY)
+		# imgAdaptiveThre = cv2.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
+		# imgAdaptiveThre = cv2.bitwise_not(imgAdaptiveThre)
+		# imgAdaptiveThre = cv2.medianBlur(imgAdaptiveThre,3)
+
+		# print("function convert_to_flat: flag 11")
+
+		# img_blank = np.zeros((img_height, img_width, 3))
+
+		# # print("function convert_to_flat: flag 12")
+
+		# img_gray = cv2.cvtColor(img_gray, cv2.COLOR_GRAY2BGR)
+		# img_blur = cv2.cvtColor(img_blur, cv2.COLOR_GRAY2BGR)
+		# img_canny = cv2.cvtColor(img_canny, cv2.COLOR_GRAY2BGR)
+		# images = np.hstack([img_white_left, img_gray, img_blur, img_canny,	img_contours, img_biggest_contour, img_warp_colored])
+		# images = cv2.resize(images, (img_width * 7 // 3, img_height // 3))
 
 	# cv2.imshow('flaten process', images)
 
+	for i in range(len(img_warp_pos)):
+		for j in range(len(img_warp_pos) - 1):
+			if(img_warp_pos[j] > img_warp_pos[j+1]):
+				img_warp_pos[j], img_warp_pos[j + 1] = img_warp_pos[j + 1], img_warp_pos[j]
+				img_warp_list[j], img_warp_list[j + 1] = img_warp_list[j + 1], img_warp_list[j]
+
+	i = 1
+	while i < len(img_warp_list):
+		if img_warp_pos[i] - img_warp_pos[i - 1] < 100:
+			del img_warp_pos[i]
+			del img_warp_list[i]
+		else:
+			i += 1
+
+	# img_white_left = cv2.drawContours(img_white_left, target_contour, -1, (0, 255, 0), 2)
+	# cv2.imshow('flaten process', img_white_left)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
+
 	# return result
 	# print("function convert_to_flat returned.")
-	return img_warp_colored
+	return img_warp_list
 
 ######################################################
 
@@ -184,9 +229,9 @@ def guess_alphabet(img):
 
 	img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-	kernel = np.ones((1, 1), np.uint8)
-	img = cv2.dilate(img, kernel, iterations=1)
-	img = cv2.erode(img, kernel, iterations=1)
+	# kernel = np.ones((1, 1), np.uint8)
+	# img = cv2.dilate(img, kernel, iterations=1)
+	# img = cv2.erode(img, kernel, iterations=1)
 	tessdata_dir_config = ""
 	if sys.platform.startswith('linux'):
 		tessdata_dir_config = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" --psm 10  --oem 3 '
@@ -209,28 +254,32 @@ def detectpicture(send_message):
 #     frame: picture captured
 	# print("function detectpicture called.")
 	ret, frame = cap.read()
+	# cv2.imshow('frame', frame)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
 	if ret == False:
 		print("camera capture failed. please check your camera.")
 	# copy the frame
-	img_flat = convert_to_flat(frame.copy())
+	img_flat_list = convert_to_flat(frame.copy())
 	# print("function detectpicture: converted to flat.")
 	alphabetRecognize = 0
-	if type(img_flat) != type(int()):
-		alphabetRecognize = guess_alphabet(img_flat)
+	alphabet_list = []
+	for i in img_flat_list:
+		# cv2.imshow('i',i)
+		# cv2.waitKey(0)
+		# cv2.destroyAllWindows()
+		alphabetRecognize = guess_alphabet(i)
 		# print("I think it is \'", alphabetRecognize, "\'", sep='')
 		if alphabetRecognize == 'T':
-			send_message.alphabet_srv = 1
+			alphabet_list.append(1)
 		elif alphabetRecognize == 'D':
-			send_message.alphabet_srv = 2
+			alphabet_list.append(2)
 		elif alphabetRecognize == 'K':
-			send_message.alphabet_srv = 3
+			alphabet_list.append(3)
 		else:
-			send_message.alphabet_srv = 0
-	else:
-		# print("I can't recognize this alphabet")
-		send_message.alphabet_srv = 0
-	# print("function detectpicture: finish detection.")
-	# print("function detectpictrue return with value: \n", send_message)
+			continue
+	
+	send_message.alphabet_srv = alphabet_list
 	return send_message
 
 
@@ -272,7 +321,7 @@ def calculate_Distance(focalLength_value):
 	box = np.int0(box)
 	# print("Box = ", box)
 	cv2.circle(image, (int(center_x),int(center_y)), 3, (1, 227, 254), -1)
-	cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
+	# cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
 	cv2.putText(image, "%.2fcm" % (distance_cm),
 			(image.shape[1] - 300, image.shape[0] - 20), cv2.FONT_HERSHEY_SIMPLEX,
 			2.0, (0, 0, 255), 3)          
@@ -308,16 +357,16 @@ def main0(req):
 	send_message.distance_srv = int(distance_cm)
 	send_message.x_diff_srv = int(x_diff)
 
-	if send_message.alphabet_srv not in range(1, 4):
-		print("server responded with value: \n", alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0), end = "\n\n")
-		return alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0)
-	else:
-		print("server responded with value: \n", send_message, end = "\n\n")
-		return send_message
+	# if send_message.alphabet_srv not in range(1, 4):
+	# 	print("server responded with value: \n", alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0), end = "\n\n")
+	# 	return alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0)
+	# else:
+	print("server responded with value: \n", send_message, end = "\n\n")
+	return send_message
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached
-	captureSource = "/dev/video0"
+	captureSource = "/dev/camera2"
 	cap = cv2.VideoCapture(captureSource)
 	
 	# try camera on the first try
