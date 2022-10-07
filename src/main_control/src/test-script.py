@@ -7,7 +7,7 @@ from navigation.srv import main2nav, main2navRequest, main2navResponse
 from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
-from dot_recognize.srv import dotSrv, dotSrvRequest, dotSrvResponse
+from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
 from main_control.msg import main_status
 from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
@@ -82,11 +82,11 @@ class DotRecognize:
 	# 				 meaning the dot number in the middle 
 	#  				 of the camera.
 	def request(self):
-		rospy.wait_for_service('dot_recognize', 5)
+		rospy.wait_for_service('braille_recognize', 5)
 		try:
-			dot_recognize = rospy.ServiceProxy('dot_recognize', dotSrv)
-			resp = dot_recognize(dotSrvRequest(position = 0))
-			return resp.dot_number
+			dot_recognize = rospy.ServiceProxy('braille_recognize', braille_request)
+			resp = dot_recognize(braille_requestRequest(req = 0))
+			return resp.array_length, resp.number, resp.position
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
