@@ -1,2 +1,0 @@
-# TDK
-itron TDK competition
