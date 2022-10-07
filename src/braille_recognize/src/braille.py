@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("/dev/dot_camera")
 
 if(not cap.isOpened()):
 	cap.open()
@@ -139,8 +139,9 @@ def braille_callback(request):
 		x,y,w,h = cv2.boundingRect(contour)
 
 		aspect_ratio = float(w)/h
+		rect_area = w*h
 		
-		if (aspect_ratio<2 and 1<aspect_ratio):
+		if (aspect_ratio<2 and 1<aspect_ratio and rect_area > 10000):
 			rec_contour.append(contour)
 
 
@@ -149,14 +150,16 @@ def braille_callback(request):
 	count = 0
 	recognize_result = [[1, -1], [2, -1], [3, -1], [4, -1], [5, -1], [6, -1]]
 
-	img_copy = img.copy()
+	
 
 	if rec_contour is not None:
 
 		for contour in rec_contour:
 			count += 1
 			# using drawContours() function
+			img_copy = img.copy()
 			cv2.drawContours(img_copy, rec_contour, (count - 1), (0, 0, 255), 2)
+
 
 			x,y,w,h = cv2.boundingRect(contour)
 			
@@ -165,6 +168,10 @@ def braille_callback(request):
 			pts2 = np.float32([[0,0],[390,0],[0,290],[390,290]])
 			M=cv2.getPerspectiveTransform(pts1,pts2)
 			dst=cv2.warpPerspective(img.copy(),M,(390,290))
+
+			cv2.imshow('dst', dst)
+			cv2.waitKey(0)
+			cv2.destroyAllWindows()
 
 			dot_number = get_result(dst)
 			dot_position = x+(w/2)
@@ -203,9 +210,7 @@ def braille_callback(request):
 	response_msg.number = result_number
 	response_msg.position = result_position
 
-	cv2.imshow('result', img_copy)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+
 
 	return response_msg
 
@@ -214,6 +219,7 @@ if __name__ == "__main__":
 	rospy.init_node('braille_recognize')
 	braille_server = rospy.Service('braille_recognize', braille_request, braille_callback)
 	rospy.spin()
+	cap.release()
 
 
 		
