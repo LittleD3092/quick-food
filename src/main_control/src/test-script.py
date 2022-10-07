@@ -8,7 +8,6 @@ from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
 from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
-from main_control.msg import main_status
 from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
 assert True # turn off this before race
@@ -173,20 +172,21 @@ class StatusPublisher:
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
 	# dotNode = DotRecognize()
-	# alphabetNode = AlphabetRecognize()
+	alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
 	baseNode = Navigation()
 	upperNode = UpperMechanism()
-	upperNode.move(0)
-	statusPub = StatusPublisher()
+	# statusPub = StatusPublisher()
 
-	upperNode.request(0)
+	# test chassis
+	upperNode.move(0)
 	# -36 x
 	print("moving back...")
 	baseNode.move((-36, 0, 180, False))
 	# +85 y
 	print("moving right...")
 	baseNode.move((-36, 85, 180, True))
+
 	# recognize and take ball
 	print("taking ball...")
 	qu = []
@@ -194,13 +194,37 @@ if __name__ == '__main__': # main for B field.
 		qu.append(ballNode.request())
 		upperNode.move(1)
 	print("current ball queue has: ", qu, sep = "")
-	# +200 y
+	
+	# -160 y
 	print("moving left...")
-	baseNode.move((-36, -115, 180, False))
+	baseNode.move((-36, -75, 180, False))
 	# heading 270 degree
 	print("turning...")
-	baseNode.move((-36, -115, 270, True))
+	baseNode.move((-36, -75, 270, True))
 	# +49 x
 	print("moving forward...")
-	baseNode.move((13, -115, 270, False))
-	
+	baseNode.move((13, -75, 270, False))
+
+	# scan alphabet
+	result = ()
+	while len(result) != 2:
+		_, _, result = alphabetNode.request()
+	print("result = ", result, sep = "")
+
+
+	# 85-124 y
+	# 85-196 y
+	# 85-266 y
+	BASKET_POSE = [(13, -39, 270, True), (13, -111, 270, True), (13, -181, 270, True)]
+	dic = {}
+	alphabetLeft = 6
+	for i in range(2):
+		dic[result[i]] = BASKET_POSE[i + 1]
+		alphabetLeft -= result[i]
+	dic[alphabetLeft] = BASKET_POSE[0]
+	print("basket dic = ", dic, sep = "")
+
+	print("throwing to corresponding basket...")
+	for ele in qu:
+		baseNode.move(dic[ele])
+		upperNode.move(2)
