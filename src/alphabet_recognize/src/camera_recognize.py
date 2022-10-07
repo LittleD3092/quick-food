@@ -125,55 +125,85 @@ def convert_to_flat(img):
 
 	# get biggest contour
 	# for display purposes
-	img_biggest_contour = img.copy()
-	biggest_contour, max_area = get_biggest_contour(contours)
+	# img_biggest_contour = img.copy()
+	# biggest_contour, max_area = get_biggest_contour(contours)
 
-	# print("function convert_to_flat: flag 8")
+	# # print("function convert_to_flat: flag 8")
 
-	# get warp perspective image
-	if biggest_contour.size == 0:
-		# print("no document found")
-		return 1
+	# # get warp perspective image
+	# if biggest_contour.size == 0:
+	# 	# print("no document found")
+	# 	return 1
 	
-	# print("function convert_to_flat: flag 9")
+	# # print("function convert_to_flat: flag 9")
 
-	biggest_contour = reorder_contour(biggest_contour)
-	cv2.drawContours(img_biggest_contour, biggest_contour, -1, (0, 255, 0), 20)
-	img_biggest_contour = drawRectangle(img_biggest_contour, biggest_contour, 2)
-	pts1 = np.float32(biggest_contour) # PREPARE POINTS FOR WARP
-	pts2 = np.float32([[0, 0],[img_width, 0], [0, img_height],[img_width, img_height]]) # PREPARE POINTS FOR WARP
-	matrix = cv2.getPerspectiveTransform(pts1, pts2)
-	img_warp_colored = cv2.warpPerspective(img, matrix, (img_width, img_height))
+	# biggest_contour = reorder_contour(biggest_contour)
+	# cv2.drawContours(img_biggest_contour, biggest_contour, -1, (0, 255, 0), 20)
+	# img_biggest_contour = drawRectangle(img_biggest_contour, biggest_contour, 2)
+	target_contour = []
 
-	# print("function convert_to_flat: flag 10")
+	for i in contours:
+		x,y,w,h = cv2.boundingRect(i)
+		rect_ratio = float(w)/h
+		rect_area = w*h
 
-	# get scanned paper
-	# remove 20 pixels from each side
-	img_warp_colored = img_warp_colored[20:img_warp_colored.shape[0] - 20, 20:img_warp_colored.shape[1] - 20]
-	img_warp_colored = cv2.resize(img_warp_colored,(img_width, img_height))
-	# # apply adaptive threshold
-	# imgWarpGray = cv2.cvtColor(img_warp_colored,cv2.COLOR_BGR2GRAY)
-	# imgAdaptiveThre = cv2.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
-	# imgAdaptiveThre = cv2.bitwise_not(imgAdaptiveThre)
-	# imgAdaptiveThre = cv2.medianBlur(imgAdaptiveThre,3)
+		if(rect_ratio > 0.9 and rect_ratio < 1.1 and rect_area > 100000):
+			target_contour.append(i)
 
-	# print("function convert_to_flat: flag 11")
+	img_warp_list = []
+	img_warp_pos = []
 
-	img_blank = np.zeros((img_height, img_width, 3))
+	for i in target_contour:
 
-	# print("function convert_to_flat: flag 12")
+		x,y,w,h = cv2.boundingRect(i)
 
-	img_gray = cv2.cvtColor(img_gray, cv2.COLOR_GRAY2BGR)
-	img_blur = cv2.cvtColor(img_blur, cv2.COLOR_GRAY2BGR)
-	img_canny = cv2.cvtColor(img_canny, cv2.COLOR_GRAY2BGR)
-	images = np.hstack([img_white_left, img_gray, img_blur, img_canny,	img_contours, img_biggest_contour, img_warp_colored])
-	images = cv2.resize(images, (img_width * 7 // 3, img_height // 3))
+		pts1 = np.float32([x,y],[x+w,y],[x,y+h],[x+w,y+h]) # PREPARE POINTS FOR WARP
+		pts2 = np.float32([[0, 0],[img_width, 0], [0, img_height],[img_width, img_height]]) # PREPARE POINTS FOR WARP
+		matrix = cv2.getPerspectiveTransform(pts1, pts2)
+		img_warp_colored = cv2.warpPerspective(img, matrix, (img_width, img_height))
+
+		# print("function convert_to_flat: flag 10")
+
+		# get scanned paper
+		# remove 20 pixels from each side
+		img_warp_colored = img_warp_colored[20:img_warp_colored.shape[0] - 20, 20:img_warp_colored.shape[1] - 20]
+		img_warp_colored = cv2.resize(img_warp_colored,(img_width, img_height))
+		img_warp_list.append(img_warp_colored)
+		img_warp_pos.append(x)
+		# # apply adaptive threshold
+		# imgWarpGray = cv2.cvtColor(img_warp_colored,cv2.COLOR_BGR2GRAY)
+		# imgAdaptiveThre = cv2.adaptiveThreshold(imgWarpGray, 255, 1, 1, 7, 2)
+		# imgAdaptiveThre = cv2.bitwise_not(imgAdaptiveThre)
+		# imgAdaptiveThre = cv2.medianBlur(imgAdaptiveThre,3)
+
+		# print("function convert_to_flat: flag 11")
+
+		# img_blank = np.zeros((img_height, img_width, 3))
+
+		# # print("function convert_to_flat: flag 12")
+
+		# img_gray = cv2.cvtColor(img_gray, cv2.COLOR_GRAY2BGR)
+		# img_blur = cv2.cvtColor(img_blur, cv2.COLOR_GRAY2BGR)
+		# img_canny = cv2.cvtColor(img_canny, cv2.COLOR_GRAY2BGR)
+		# images = np.hstack([img_white_left, img_gray, img_blur, img_canny,	img_contours, img_biggest_contour, img_warp_colored])
+		# images = cv2.resize(images, (img_width * 7 // 3, img_height // 3))
 
 	# cv2.imshow('flaten process', images)
 
+	for i in range(len(img_warp_pos)):
+		for j in range(len(img_warp_pos) - 1):
+			if(img_warp_pos[j] > img_warp_pos[j+1]):
+				temp = img_warp_pos[j]
+				img_warp_pos[j] = img_warp_pos[j+1]
+				img_warp_pos[j+1] = temp
+
+				temp = img_warp_list[j]
+				img_warp_list[j] = img_warp_list[j+1]
+				img_warp_list[j+1] = temp
+
 	# return result
 	# print("function convert_to_flat returned.")
-	return img_warp_colored
+	return img_warp_list
 
 ######################################################
 
@@ -212,25 +242,23 @@ def detectpicture(send_message):
 	if ret == False:
 		print("camera capture failed. please check your camera.")
 	# copy the frame
-	img_flat = convert_to_flat(frame.copy())
+	img_flat_list = convert_to_flat(frame.copy())
 	# print("function detectpicture: converted to flat.")
 	alphabetRecognize = 0
-	if type(img_flat) != type(int()):
-		alphabetRecognize = guess_alphabet(img_flat)
+	alphabet_list = []
+	for i in img_flat_list:
+		alphabetRecognize = guess_alphabet(i)
 		# print("I think it is \'", alphabetRecognize, "\'", sep='')
 		if alphabetRecognize == 'T':
-			send_message.alphabet_srv = 1
+			alphabet_list.append(1)
 		elif alphabetRecognize == 'D':
-			send_message.alphabet_srv = 2
+			alphabet_list.append(2)
 		elif alphabetRecognize == 'K':
-			send_message.alphabet_srv = 3
+			alphabet_list.append(3)
 		else:
-			send_message.alphabet_srv = 0
-	else:
-		# print("I can't recognize this alphabet")
-		send_message.alphabet_srv = 0
-	# print("function detectpicture: finish detection.")
-	# print("function detectpictrue return with value: \n", send_message)
+			continue
+	
+	send_message.alphabet_srv = alphabet_list
 	return send_message
 
 
@@ -308,12 +336,12 @@ def main0(req):
 	send_message.distance_srv = int(distance_cm)
 	send_message.x_diff_srv = int(x_diff)
 
-	if send_message.alphabet_srv not in range(1, 4):
-		print("server responded with value: \n", alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0), end = "\n\n")
-		return alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0)
-	else:
-		print("server responded with value: \n", send_message, end = "\n\n")
-		return send_message
+	# if send_message.alphabet_srv not in range(1, 4):
+	# 	print("server responded with value: \n", alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0), end = "\n\n")
+	# 	return alphabetSrvResponse(alphabet_srv = 0, distance_srv = 0, x_diff_srv = 0)
+	# else:
+	print("server responded with value: \n", send_message, end = "\n\n")
+	return send_message
 
 if __name__ == '__main__':
 	# capture from camera, 0 means first camera attached

@@ -3,6 +3,6 @@ int16 position_req
 
 ---
 
-int16 alphabet_srv
+int16[] alphabet_srv
 int16 distance_srv
 int16 x_diff_srv
