@@ -7,10 +7,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-cap = cv2.VideoCapture("/dev/dot_camera")
-
-if(not cap.isOpened()):
-	cap.open()
+cap = cv2.VideoCapture(0)
 
 def calculate_circle(img):
 	n=[]
@@ -94,6 +91,10 @@ def braille_callback(request):
 	print("---------------",end="\n\n")
 	_ , img = cap.read()
 
+	cv2.imshow('img',img)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
+
 	rec_contour=[]
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 	
@@ -157,8 +158,8 @@ def braille_callback(request):
 		for contour in rec_contour:
 			count += 1
 			# using drawContours() function
-			img_copy = img.copy()
-			cv2.drawContours(img_copy, rec_contour, (count - 1), (0, 0, 255), 2)
+			# img_copy = img.copy()
+			# cv2.drawContours(img_copy, rec_contour, (count - 1), (0, 0, 255), 2)
 
 
 			x,y,w,h = cv2.boundingRect(contour)
@@ -169,9 +170,9 @@ def braille_callback(request):
 			M=cv2.getPerspectiveTransform(pts1,pts2)
 			dst=cv2.warpPerspective(img.copy(),M,(390,290))
 
-			cv2.imshow('dst', dst)
-			cv2.waitKey(0)
-			cv2.destroyAllWindows()
+			# cv2.imshow('dst', dst)
+			# cv2.waitKey(0)
+			# cv2.destroyAllWindows()
 
 			dot_number = get_result(dst)
 			dot_position = x+(w/2)
