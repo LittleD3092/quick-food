@@ -171,15 +171,15 @@ class StatusPublisher:
 
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
-	# dotNode = DotRecognize()
+	dotNode = DotRecognize()
 	alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
 	baseNode = Navigation()
-	upperNode = UpperMechanism()
+	# upperNode = UpperMechanism()
 	# statusPub = StatusPublisher()
 
 	# test chassis
-	upperNode.move(0)
+	# upperNode.move(0)
 	# -36 x
 	print("moving back...")
 	baseNode.move((-36, 0, 180, False))
@@ -188,12 +188,12 @@ if __name__ == '__main__': # main for B field.
 	baseNode.move((-36, 85, 180, True))
 
 	# recognize and take ball
-	print("taking ball...")
-	qu = []
-	for i in range(3):
-		qu.append(ballNode.request())
-		upperNode.move(1)
-	print("current ball queue has: ", qu, sep = "")
+	# print("taking ball...")
+	# qu = []
+	# for i in range(3):
+	# 	qu.append(ballNode.request())
+	# 	upperNode.move(1)
+	# print("current ball queue has: ", qu, sep = "")
 	
 	# -160 y
 	print("moving left...")
@@ -206,6 +206,7 @@ if __name__ == '__main__': # main for B field.
 	baseNode.move((13, -75, 270, False))
 
 	# scan alphabet
+	print("scanning alphabet...")
 	result = ()
 	while len(result) != 2:
 		_, _, result = alphabetNode.request()
@@ -224,7 +225,47 @@ if __name__ == '__main__': # main for B field.
 	dic[alphabetLeft] = BASKET_POSE[0]
 	print("basket dic = ", dic, sep = "")
 
-	print("throwing to corresponding basket...")
-	for ele in qu:
-		baseNode.move(dic[ele])
-		upperNode.move(2)
+	# print("throwing to corresponding basket...")
+	# for ele in qu:
+	# 	baseNode.move(dic[ele])
+	# 	upperNode.move(2)
+
+	dotResult = []
+
+	print("moving back...")
+
+	baseNode.move((-36, 85, 180, True))
+	print("seeing dots...")
+	dotNum = []
+	while len(dotNum) != 3:
+		_, dotNum, dotPos = dotNode.request()
+		i = 0
+		while i < len(dotNum) - 1:
+			if abs(dotPos[i] - dotPos[i + 1]) < 5:
+				dotNum.pop(i)
+				dotPos.pop(i)
+			else:
+				i += 1
+
+	dotResult = dotNum
+
+	print("going to another side...")
+
+	# -130 x
+	baseNode.move((-166, 85, 180, True))
+	print("seeing dots...")
+	dotNum = []
+	while len(dotNum) != 3:
+		_, dotNum, dotPos = dotNode.request()
+		i = 0
+		while i < len(dotNum) - 1:
+			if abs(dotPos[i] - dotPos[i + 1]) < 5:
+				dotNum.pop(i)
+				dotPos.pop(i)
+			else:
+				i += 1
+
+	for i in dotNum:
+		dotResult.append(i)
+
+	print("dot result = ", dotResult, sep = "")
