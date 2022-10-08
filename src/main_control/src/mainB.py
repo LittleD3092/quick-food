@@ -8,7 +8,7 @@ from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
 from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
-from main_control.msg import main_status
+# from main_control.msg import main_status
 from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
 
 assert True # turn off this before race

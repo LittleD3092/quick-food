@@ -1,0 +1,11 @@
+<launch>
+
+    <include file = "$(find motor_communicate)/launch/base.launch" />
+
+    <node name = "alphabet" pkg = "alphabet_recognize" type = "camera_recognize.py" />
+    <node name = "color_detect" pkg = "color_detect_srvs" type = "color_detect_srv.py" />
+    <node name = "braille" pkg = "braille_recognize" type = "braille_recognize.py" />
+    <node name = "upper_control" pkg = "upper_control" type = "arduino_command_server.py" />
+    <node name = "main_control" pkg = "main_control" type = "test-script.py" output = "screen" />
+
+</launch>
