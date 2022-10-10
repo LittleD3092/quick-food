@@ -167,7 +167,6 @@ class StatusPublisher:
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
-		
 
 if __name__ == '__main__': # main for B field.
 	# init all nodes, uncomment the node you needed
@@ -175,11 +174,11 @@ if __name__ == '__main__': # main for B field.
 	alphabetNode = AlphabetRecognize()
 	ballNode = ColorDetect()
 	baseNode = Navigation()
-	# upperNode = UpperMechanism()
+	upperNode = UpperMechanism()
 	# statusPub = StatusPublisher()
 
 	# test chassis
-	# upperNode.move(0)
+	upperNode.move(0)
 	# -36 x
 	print("moving back...")
 	baseNode.move((-36, 0, 180, False))
