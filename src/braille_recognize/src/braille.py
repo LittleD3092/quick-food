@@ -6,9 +6,30 @@ from braille_recognize.srv import braille_request,braille_requestResponse
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge, CvBridgeError
 
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture("/dev/dot_camera")
+# # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
+# # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1200)
+# # cap.set(cv2.CAP_PROP_EXPOSURE, -8)
 
+class image_subscribe:
+
+	def __init__(self):
+		self.bridge = CvBridge()
+		self.image_sub = rospy.Subscriber("/usb_cam/image_raw", Image, self.callback)
+		self.__image = np.array([])
+
+	def callback(self, data):
+		try:
+			self.__image = self.bridge.imgmsg_to_cv2(data, 'bgr8')
+		except CvBridgeError as e:
+			print(e)
+	
+	def get_image(self):
+		return self.__image
+			
 def calculate_circle(img):
 	n=[]
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -29,7 +50,6 @@ def calculate_circle(img):
 			# 在原圖用指定顏色標記出圓的位置
 			img = cv2.circle(img, (x, y), r, (0, 0, 255), 3)
 			return (len(circles[0]))
-
 
 def get_result(img):
 	
@@ -89,11 +109,27 @@ def get_result(img):
 def braille_callback(request):
 	
 	print("---------------",end="\n\n")
-	_ , img = cap.read()
+	img = img_sub.get_image()
+	# cv2.imshow('img',img)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
 
-	cv2.imshow('img',img)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()
+	# img = cv2.imread("/home/itron/quick-food/pics/side-perspective.jpg")
+
+	# crop image for c310, if you use other camera, please change the value
+	# x = 100
+	# y = 300
+	# width = 400
+	# height = 100
+	# img = img[y:y+height, x:x+width]
+	# cv2.imwrite("/home/itron/quick-food/pics/dot-crop-test.jpg",img)
+
+	# if suc == False:
+	# 	print("braille.py: camera cannot read picture.")
+
+	# cv2.imshow('img',img)
+	# cv2.waitKey(0)
+	# cv2.destroyAllWindows()
 
 	rec_contour=[]
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -126,7 +162,7 @@ def braille_callback(request):
 	# cv2.destroyWindow('canny')
 	
 	# using a findContours() function
-	contours, _ = cv2.findContours(canny_img.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	contours, _ = cv2.findContours(canny_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	print("contours number :")
 	print(len(contours))
 
@@ -142,7 +178,7 @@ def braille_callback(request):
 		aspect_ratio = float(w)/h
 		rect_area = w*h
 		
-		if (aspect_ratio<2 and 1<aspect_ratio and rect_area > 10000):
+		if (aspect_ratio<2 and 1<aspect_ratio and rect_area > 3000):
 			rec_contour.append(contour)
 
 
@@ -150,8 +186,6 @@ def braille_callback(request):
 
 	count = 0
 	recognize_result = [[1, -1], [2, -1], [3, -1], [4, -1], [5, -1], [6, -1]]
-
-	
 
 	if rec_contour is not None:
 
@@ -211,16 +245,16 @@ def braille_callback(request):
 	response_msg.number = result_number
 	response_msg.position = result_position
 
-
+	print("result_number = ", result_number, sep = "")
 
 	return response_msg
 
-		
 if __name__ == "__main__":
 	rospy.init_node('braille_recognize')
+	img_sub = image_subscribe()	
 	braille_server = rospy.Service('braille_recognize', braille_request, braille_callback)
 	rospy.spin()
-	cap.release()
+	
 
 
 		

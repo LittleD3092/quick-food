@@ -8,8 +8,9 @@ from color_detect_srvs.srv import colorSrv, colorSrvRequest, colorSrvResponse
 from alphabet_recognize.srv import alphabetSrv, alphabetSrvRequest, alphabetSrvResponse
 from upper_control.srv import action, actionRequest, actionResponse
 from braille_recognize.srv import braille_request, braille_requestRequest, braille_requestResponse
-# from main_control.msg import main_status
+from main_control.msg import main_status
 from motor_communicate.srv import bowling, bowlingRequest, bowlingResponse
+import time
 
 assert True # turn off this before race
 
@@ -86,6 +87,15 @@ class DotRecognize:
 		try:
 			dot_recognize = rospy.ServiceProxy('braille_recognize', braille_request)
 			resp = dot_recognize(braille_requestRequest(req = 0))
+			# if position[i] is too close to position[i+1],
+			# delete position[i+1] and number[i + 1].
+			i = 0
+			for j in range(len(resp.position) - 1):
+				if resp.position[i] + 10 >= resp.position[i + 1]:
+					del resp.position[i + 1]
+					del resp.number[i + 1]
+					i -= 1
+				i += 1
 			return resp.array_length, resp.number, resp.position
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
@@ -288,7 +298,7 @@ if __name__ == '__main__': # main for B field.
 	statusPub.publish(True)
 
 	# go to H
-	baseNode.move((930, 373, 90))
+	baseNode.move((895, 373, 90))
 
 	# release bowling to three goals marked in dot numbers
 	POSE_GOAL = ((935, 289, 90, True),

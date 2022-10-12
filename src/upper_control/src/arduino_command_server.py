@@ -17,14 +17,17 @@ from upper_control.srv import action,actionResponse
 '''
 
 def callback(request):
-    actions = [0,1,2,3,41,43]
-    if(request.request in actions): 
+    motion_pkg = [0,1,2,3,4]
+    action = [51,52,53,61,62,63,71,72,73,81,82,83]
+    if(request.request in motion_pkg): 
     
         # 如果 client 的 request 滿足要求 , send it to arduino
         ser.write(bytes(str(request.request), 'utf-8'))
         arduino_echo = ''
         while arduino_echo == '' :
             arduino_echo = ser.readline().decode('utf').strip()
+    elif(request.request in action):
+        ser.write(bytes(str(request.request), 'utf-8'))
     else :
         print('Arduino :invalid command')
         request.request = -1
@@ -40,7 +43,6 @@ if __name__ == '__main__':
     # connect to arduino board
     ser = serial.Serial('/dev/arduino_control',57600)
     ser.timeout = 3
-    sleep(3)
 
     # if arduino is ready , we will received "Ready"
     arduino_echo = "Arduino :" + ser.readline().decode('utf').strip()

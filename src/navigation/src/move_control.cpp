@@ -51,7 +51,7 @@ int target[3] = {0, 0, 180};
 int last_target[3] = {0, 0, 180};
 
 //error
-int point_error = 3;
+int point_error = 2;
 int rotate_error = 2;
 
 int distence_to_target_max = 250;
@@ -113,7 +113,7 @@ int main(int argc, char** argv){
 		while(done_flag == false){
 			while(state_flag == false){
 				move_plan_x(target[0], target[1], target[2]);
-				std::cout << "move_plan_x finished." << std::endl;
+				// std::cout << "move_plan_x finished." << std::endl;
 
 				srv_command.request.direction = controller_msg[0];
 				srv_command.request.velocity = controller_msg[1];
@@ -125,7 +125,7 @@ int main(int argc, char** argv){
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
-					ROS_INFO("connect fail");
+					// ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce(); 
@@ -146,7 +146,7 @@ int main(int argc, char** argv){
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
-					ROS_INFO("connect fail");
+					// ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce();
@@ -172,7 +172,7 @@ int main(int argc, char** argv){
 				if(client.call(srv_command)){
 					ROS_INFO("connect success x %f y %f", robot_now_point_x, robot_now_point_y);
 				}else{
-					ROS_INFO("connect fail");
+					// ROS_INFO("connect fail");
 				}
 
 				ros::spinOnce();
@@ -232,7 +232,7 @@ bool Srv_Callback(nav::main2nav::Request& req, nav::main2nav::Response& res){
 			last_target[i] = target[i];
 		}
 	}
-	std::cout << "function Srv_Callback has return value true.\n";
+	// std::cout << "function Srv_Callback has return value true.\n";
 	return true;
 }
 
@@ -385,12 +385,12 @@ void move_plan_r(int set_point_x, int set_point_y, int set_pose){
 		controller_msg[1] = 0;
 
 	}else if(deg_to_set_pose > 0 ){
-		std::cout << " plan_r_turn_ccw"<<std::endl;
+		// std::cout << " plan_r_turn_ccw"<<std::endl;
 		controller_msg[2] = 2;
 		controller_msg[1] = 1;
 
 	}else{
-		std::cout << " plan_r_turn_cw  "<<std::endl;
+		// std::cout << " plan_r_turn_cw  "<<std::endl;
 		controller_msg[2] = 1;
 		controller_msg[1] = 1;
 	}
