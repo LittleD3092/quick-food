@@ -187,141 +187,11 @@ if __name__ == '__main__': # main for B field.
 	baseNode = Navigation()
 	upperNode = UpperMechanism()
 	upperNode.move(0)
-	# statusPub = StatusPublisher()
-
-	# # test ballNode
-	# print("Ball node test:")
-	# print(ballNode.request())
-
-	# test alphabet node
-	# print("Alphabet node test:")
-
-	# while True:
-	# 	req = alphabetNode.request()
-	# 	if req != (0, 0, 0):
-	# 		print(req)
-	# 		break
-
-	# while True:
-	# 	req = ballNode.request()
-	# 	if req != 0:
-	# 		print(req)
-	# 		break
-
-	# test dot node
-	# print("Dot node test:")
-	# while True:
-	# 	req = dotNode.request()
-	# 	if req != 0:
-	# 		print(req)
-	# 		break
-
-	# test navigation
-	# while(not(nav.move(main2navRequest(main_x = 5, main_y = 0, rotation = 180)))):
-	# 	print("not done")
-
-	# print("done")
-
-	######################################################################################
-	# main loop: This is the main loop that will be running on the race.
-	
-	# go to I
-
-
-	# print("moving forward...")
-	# baseNode.move((-425, 0, 180, False))
-	# print("moving sideways...")
-	# baseNode.move((-425, 83, 180, True))
-	# print("moving sideways to basketball...")
-	# baseNode.move((-425, 88, 180, False))
-
-	# print("taking ball")
-	# rospy.sleep(3.0)
-
-
-	# take basketball three times
-	# basketballQueue = [] # record the queue of basketballs on the robot
-	# basketballOptions = ("", "T", "D", "K") # the options of basketballs
-	# for i in range(3):
-	# 	ballColor = 0
-	# 	print("scanning ball...")
-	# 	while ballColor == 0:
-	# 		ballColor = ballNode.request()
-	# 	print("ball scanned.")
-	# 	basketballQueue.append(basketballOptions[ballColor])
-	# 	upperNode.move(1)
-	# assert basketballQueue.count("T") == 1, "There should be one T in the stack."
-	# assert basketballQueue.count("D") == 1, "There should be one D in the stack."
-	# assert basketballQueue.count("K") == 1, "There should be one K in the stack."
-	# assert len(basketballQueue) == 3, "There should be three basketballs in the stack."
-	# print("basketballStack =", basketballQueue)
-
-	# go to G
-	# print("moving sideways to intersection...")
-	# # baseNode.move((-425, 0, 180, False))
-	# print("moving forward...")
-	# baseNode.move((-850, 0, 180, False))
-	# print("turning...")
-	# baseNode.move((-850, 0, 90, False))
-
-
-	# print("moving to basketball_1...")
-	# baseNode.move((-850, -190 , 90, False))
-	# rospy.sleep(3.0)
-	# print("moving to basketball_2...")
-	# baseNode.move((-850, -120, 90, False))
-	# rospy.sleep(3.0)
-	# print("moving to basketball1_3...")
-	# baseNode.move((-850, -50, 90, False))
-	# rospy.sleep(3.0)
-
-	
-	
-
-	# # throw the basketballs to three baskets marked T, D, K
-	# POSE_BASKET = ((-900, -208, 90, True), 
-	# 			   (-900, -138, 90, True), 
-	# 			   (-900, -68,  90, True))
-	# # scan for board
-	# chrs = ()
-	# time1 = time.time()
-	# while len(chrs) != 2:
-	# 	chrs = alphabetNode.request()
-	# 	if time.time() - time1 > 40:
-	# 		print("time out")
-	# 		break
-	# print(chrs)
-	# assert type(chrs) == list, "The characters should be a list."
-	# for i in range(0, 3):
-	# 	basketballQueue[basketballQueue.index(chrs[i])] = i
-	# # remove the queue
-	# for i in range(0, 3):
-	# 	print("throwing to basket", chrs[i], "at", POSE_BASKET[ basketballQueue[i] ], "...")
-	# 	baseNode.move(POSE_BASKET[ basketballQueue[i] ])
-	# 	upperNode.move(2)
-
-	# print("moving to reset zone")
-	# baseNode.move((-850, 150, 90, False))
-	# print("turning to 270")
-	# baseNode.move((-850, 150, 270, False))
-
-
-	# go to the front of B (checkpoint)
-	# print("moving to checkpoint...")
-	# baseNode.move((-900,  138,  90))
-	# baseNode.move((-900,  138, 270))
-	# print("moving to bowling...")
-	# baseNode.move((-1000, 373, 270, True))
-
-	# go to J
 
 	print("moving to get bowling")
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-850, 0, 270, False))
-	baseNode.move((-850, 150, 270, False))
-	baseNode.move((-1000, 150, 270, False))
-	baseNode.move((-1000, 390, 270, True))
-	baseNode.move((-1008, 390, 270, True))
+	baseNode.move((0, 150, 180, False))
+	baseNode.move((220, 150, 180, True))
+	baseNode.move((220, 158, 180, True))
 
 	# take bowling three times
 	print("taking bowling...")
@@ -331,15 +201,15 @@ if __name__ == '__main__': # main for B field.
 	# go to H
 	# baseNode.move((-895, 373, 270))
 	print("reach red line")
-	baseNode.move((-913, 390, 270, False))
+	baseNode.move((220, 63, 180, False))
 
 	# # release bowling to three goals marked in dot numbers
-	BOWLING_GOAL_COOR = ((-913, 285, 270, True),
-				         (-913, 327, 270, True),
-				         (-913, 369, 270, True),
-				         (-913, 411, 270, True),
-				         (-913, 453, 270, True), 
-				         (-913, 495, 270, True))
+	BOWLING_GOAL_COOR = ((115, 63, 180, True),
+				         (157, 63, 180, True),
+				         (199, 63, 180, True),
+				         (241, 63, 180, True),
+				         (283, 63, 180, True), 
+				         (324, 63, 180, True))
 
 	## scan for dot
 	dotResult = []
@@ -353,7 +223,7 @@ if __name__ == '__main__': # main for B field.
 	for atmp in range(3):
 		
 		print("seeing dots...")
-		baseNode.move((-913, 453, 270, True))
+		baseNode.move((283, 63, 180, True))
 		print("move to first place")
 		
 		flag = False
@@ -372,7 +242,7 @@ if __name__ == '__main__': # main for B field.
 		print(f"dot num is {dotNum}")
 
 		print("seeing dots on the other side...")
-		baseNode.move((-913, 327, 270, True))
+		baseNode.move((157, 63, 180, True))
 		print("move to 2nd place")
 		
 		flag = False
@@ -419,24 +289,24 @@ if __name__ == '__main__': # main for B field.
 
 	# going back to take basketball
 	print("Going back to take basketball...")
-	baseNode.move((-1000, 390, 270, False))
-	baseNode.move((-1000, 150, 270, False))
-	baseNode.move((-850, 150, 270, False))
-	baseNode.move((-850, 0, 270, False))
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-425, 0, 180, True))
-	baseNode.move((-425, 98, 180, True))
+	baseNode.move((220, 150, 180, False))
+	baseNode.move((-20, 150, 180, False))
+	baseNode.move((-20, 0, 180, False))
+	baseNode.move((-170, 0, 180, False))
+	baseNode.move((-170, 0, 90, False))
+	baseNode.move((-170, -425, 90, True))
+	baseNode.move((-72, -425, 90, True))
 
 	print("taking basketball three times...")
 	for i in range(3):
 		upperNode.move(1)
 
 	print("going to intersection...")
-	baseNode.move((-425, 0, 180, False))
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-850, 0, 90, False))
-	baseNode.move((-850, -50, 90, True))
-	baseNode.move((-926, -50, 90, True))
+	baseNode.move((-170, -425, 90, False))
+	baseNode.move((-170, 0, 90, False))
+	baseNode.move((-170, 0, 0, False))
+	baseNode.move((-220, 0, 0, True))
+	baseNode.move((-220, 77, 0, True))
 	upperNode.move(2)
 
 	print("This program ended successfully.")

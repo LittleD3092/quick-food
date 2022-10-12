@@ -7,6 +7,9 @@
     <node name = "alphabet" pkg = "alphabet_recognize" type = "camera_recognize.py" output = "screen"/>
     <node name = "color_detect" pkg = "color_detect_srvs" type = "color_detect_srv.py" />
     <node name = "braille" pkg = "braille_recognize" type = "braille.py"/>
+    <!-- NOTE: the two running files are `mainA_test.py`,       `mainB_test.py`,       -->
+    <!--                                 `mainA_test_reset.py`, `mainB_test_reset.py`  -->
+    <!--       To change the field, change the `type` parameter to corresponding file. -->
     <node name = "main_control" pkg = "main_control" type = "mainA_test.py" output = "screen" />
 
 </launch>

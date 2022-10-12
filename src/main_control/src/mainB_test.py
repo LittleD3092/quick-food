@@ -316,12 +316,12 @@ if __name__ == '__main__': # main for B field.
 	# go to J
 
 	print("moving to get bowling")
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-850, 0, 270, False))
-	baseNode.move((-850, 150, 270, False))
-	baseNode.move((-1000, 150, 270, False))
-	baseNode.move((-1000, 390, 270, True))
-	baseNode.move((-1008, 390, 270, True))
+	baseNode.move((850, 0, 180, False))
+	baseNode.move((850, 0, 90, False))
+	baseNode.move((850, 150, 90, False))
+	baseNode.move((1000, 150, 90, False))
+	baseNode.move((1000, 390, 90, True))
+	baseNode.move((1008, 390, 90, True))
 
 	# take bowling three times
 	print("taking bowling...")
@@ -331,15 +331,15 @@ if __name__ == '__main__': # main for B field.
 	# go to H
 	# baseNode.move((-895, 373, 270))
 	print("reach red line")
-	baseNode.move((-913, 390, 270, False))
+	baseNode.move((913, 390, 90, False))
 
 	# # release bowling to three goals marked in dot numbers
-	BOWLING_GOAL_COOR = ((-913, 285, 270, True),
-				         (-913, 327, 270, True),
-				         (-913, 369, 270, True),
-				         (-913, 411, 270, True),
-				         (-913, 453, 270, True), 
-				         (-913, 495, 270, True))
+	BOWLING_GOAL_COOR = ((913, 495, 90, True),
+				         (913, 453, 90, True), 
+				         (913, 411, 90, True),
+				         (913, 369, 90, True),
+				         (913, 327, 90, True),
+                         (913, 285, 90, True))
 
 	## scan for dot
 	dotResult = []
@@ -353,7 +353,7 @@ if __name__ == '__main__': # main for B field.
 	for atmp in range(3):
 		
 		print("seeing dots...")
-		baseNode.move((-913, 453, 270, True))
+		baseNode.move((913, 327, 90, True))
 		print("move to first place")
 		
 		flag = False
@@ -372,7 +372,7 @@ if __name__ == '__main__': # main for B field.
 		print(f"dot num is {dotNum}")
 
 		print("seeing dots on the other side...")
-		baseNode.move((-913, 327, 270, True))
+		baseNode.move((913, 453, 90, True))
 		print("move to 2nd place")
 		
 		flag = False
@@ -419,24 +419,24 @@ if __name__ == '__main__': # main for B field.
 
 	# going back to take basketball
 	print("Going back to take basketball...")
-	baseNode.move((-1000, 390, 270, False))
-	baseNode.move((-1000, 150, 270, False))
-	baseNode.move((-850, 150, 270, False))
-	baseNode.move((-850, 0, 270, False))
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-425, 0, 180, True))
-	baseNode.move((-425, 98, 180, True))
+	baseNode.move((1000, 390, 90, False))
+	baseNode.move((1000, 150, 90, False))
+	baseNode.move((850, 150, 90, False))
+	baseNode.move((850, 0, 90, False))
+	baseNode.move((850, 0, 180, False))
+	baseNode.move((425, 0, 180, True))
+	baseNode.move((425, 98, 180, True))
 
 	print("taking basketball three times...")
 	for i in range(3):
 		upperNode.move(1)
 
 	print("going to intersection...")
-	baseNode.move((-425, 0, 180, False))
-	baseNode.move((-850, 0, 180, False))
-	baseNode.move((-850, 0, 90, False))
-	baseNode.move((-850, -50, 90, True))
-	baseNode.move((-926, -50, 90, True))
+	baseNode.move((425, 0, 180, False))
+	baseNode.move((850, 0, 180, False))
+	baseNode.move((850, 0, 270, False))
+	baseNode.move((850, -50, 270, True))
+	baseNode.move((926, -50, 270, True))
 	upperNode.move(2)
 
 	print("This program ended successfully.")
