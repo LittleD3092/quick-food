@@ -178,7 +178,6 @@ class StatusPublisher:
 		except rospy.ServiceException as e:
 			print("Service call failed: %s" %e)
 			return -1
-		
 
 if __name__ == '__main__': # main for B field.
 	
@@ -254,6 +253,10 @@ if __name__ == '__main__': # main for B field.
 	# # 		break
 	# # print("result = ", result, sep = "")
 
+	# # print("throwing to corresponding basket...")
+	# # for ele in qu:
+	# # 	baseNode.move(dic[ele])
+	# # 	upperNode.move(2)
 
 	# # # 85-124 y
 	# # # 85-196 y
