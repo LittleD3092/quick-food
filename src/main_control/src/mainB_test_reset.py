@@ -211,81 +211,84 @@ if __name__ == '__main__': # main for B field.
 				         (-157, 63, 180, True),
                          (-115, 63, 180, True))
 
-	## scan for dot
-	dotResult = []
+	# NOTE: Abandon dot recognize
+	# ## scan for dot
+	# dotResult = []
 
-	read_dot = True
-	dotNum = []
-	dotNum2 = []
-	dot_length = 0
-	dot_length2 = 0
-	check_length = 0
-	for atmp in range(3):
+	# read_dot = True
+	# dotNum = []
+	# dotNum2 = []
+	# dot_length = 0
+	# dot_length2 = 0
+	# check_length = 0
+	# for atmp in range(3):
 		
-		print("seeing dots...")
-		baseNode.move((-157, 63, 180, True))
-		print("move to first place")
+	# 	print("seeing dots...")
+	# 	baseNode.move((-157, 63, 180, True))
+	# 	print("move to first place")
 		
-		flag = False
+	# 	flag = False
 		
-		while flag != True:
-			rospy.sleep(2.0)
-			dot_length, dotNum, dotPos = dotNode.request()
-			print(dotNum)
-			print(dotPos)
-			i = 0
-			flag = True
-			for i in range(len(dotNum) - 1):
-				if ((abs(dotPos[i] - dotPos[i + 1]) < 5) and (dotNum[i] != dotNum[i + 1])):
-					flag = False
+	# 	while flag != True:
+	# 		rospy.sleep(2.0)
+	# 		dot_length, dotNum, dotPos = dotNode.request()
+	# 		print(dotNum)
+	# 		print(dotPos)
+	# 		i = 0
+	# 		flag = True
+	# 		for i in range(len(dotNum) - 1):
+	# 			if ((abs(dotPos[i] - dotPos[i + 1]) < 5) and (dotNum[i] != dotNum[i + 1])):
+	# 				flag = False
 
-		print(f"dot num is {dotNum}")
+	# 	print(f"dot num is {dotNum}")
 
-		print("seeing dots on the other side...")
-		baseNode.move((-283, 63, 180, True))
-		print("move to 2nd place")
+	# 	print("seeing dots on the other side...")
+	# 	baseNode.move((-283, 63, 180, True))
+	# 	print("move to 2nd place")
 		
-		flag = False
-		while flag != True:
-			rospy.sleep(2.0)
-			dot_length2, dotNum2, dotPos2 = dotNode.request()
-			print(dotNum2)
-			print(dotPos2)
-			i = 0
-			flag = True
-			for i in range(len(dotNum2) - 1):
-				if ((abs(dotPos2[i] - dotPos2[i + 1]) < 5) and (dotNum2[i] != dotNum2[i + 1])):
-					flag = False
+	# 	flag = False
+	# 	while flag != True:
+	# 		rospy.sleep(2.0)
+	# 		dot_length2, dotNum2, dotPos2 = dotNode.request()
+	# 		print(dotNum2)
+	# 		print(dotPos2)
+	# 		i = 0
+	# 		flag = True
+	# 		for i in range(len(dotNum2) - 1):
+	# 			if ((abs(dotPos2[i] - dotPos2[i + 1]) < 5) and (dotNum2[i] != dotNum2[i + 1])):
+	# 				flag = False
 
-		print(f"dot num2 is {dotNum2}")
+	# 	print(f"dot num2 is {dotNum2}")
 
-		if ((dot_length + dot_length2) < 6):
-			continue
+	# 	if ((dot_length + dot_length2) < 6):
+	# 		continue
 
-		check_length = (dot_length + dot_length2) - 6
+	# 	check_length = (dot_length + dot_length2) - 6
 
-		if(dotNum[:check_length] == dotNum2[-1*check_length:]):
-			read_dot = False
+	# 	if(dotNum[:check_length] == dotNum2[-1*check_length:]):
+	# 		read_dot = False
 		
-		if read_dot == False:
-			break
-		elif atmp == 2:
-			dotResult = [1, 2, 3, 4, 5, 6]
+	# 	if read_dot == False:
+	# 		break
+	# 	elif atmp == 2:
+	# 		dotResult = [1, 2, 3, 4, 5, 6]
 
-	for ele in dotNum2:
-		dotResult.append(ele)
-	for i in range(check_length , len(dotNum)):
-		dotResult.append(dotNum[i])
+	# for ele in dotNum2:
+	# 	dotResult.append(ele)
+	# for i in range(check_length , len(dotNum)):
+	# 	dotResult.append(dotNum[i])
 
-	print("dot result = ", dotResult, sep = "")
+	# print("dot result = ", dotResult, sep = "")
 
+	baseNode.move(BOWLING_GOAL_COOR[3])
 	for i in range(1, 4):
-		print("throwing to goal ", i, "...", sep = "")
-		for j in range(len(dotResult)):
-			if dotResult[j] == i:
-				baseNode.move(BOWLING_GOAL_COOR[j])
-				upperNode.move(4)
-				break
+		# print("throwing to goal ", i, "...", sep = "")
+		# for j in range(len(dotResult)):
+		# 	if dotResult[j] == i:
+		# 		baseNode.move(BOWLING_GOAL_COOR[j])
+		# 		upperNode.move(4)
+		# 		break
+		upperNode.move(4)
 
 	# going back to take basketball
 	print("Going back to take basketball...")
